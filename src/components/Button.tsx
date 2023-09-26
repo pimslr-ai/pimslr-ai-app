@@ -5,11 +5,15 @@ interface ButtonProps {
   label?: string
   labelStyle?: TextStyle
   containerStyle?: ViewStyle
+  onClick?: () => void
 }
 
 export default (props: ButtonProps) => {
   return (
-    <TouchableOpacity style={[styles.container, props?.containerStyle]}>
+    <TouchableOpacity
+      style={[styles.container, props?.containerStyle]}
+      onPress={() => props.onClick && props.onClick()}
+    >
       <Text style={[styles.label, props?.labelStyle]}>{props?.label ?? 'Button'}</Text>
     </TouchableOpacity>
   )

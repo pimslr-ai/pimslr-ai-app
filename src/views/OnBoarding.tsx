@@ -1,20 +1,40 @@
 import { View, Text, StyleSheet } from 'react-native'
+import { useState } from 'react'
 import { FONTS, THEME } from '../constants'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
+import Pages from '../components/Pages'
 
 export default () => {
+  const [pageIndex, setPageIndex] = useState(0)
+
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <SecondaryButton label='Back' />
-        <Text style={styles.headerTitle}>1/3</Text>
+        <Text style={styles.headerTitle}>{pageIndex + 1}/3</Text>
         <SecondaryButton label='Skip' noticeMe />
       </View>
-      <Text style={styles.title}>What language would you like to learn?</Text>
-      <Input style={styles.input} />
-      <PrimaryButton label='Next' containerStyle={styles.button} />
+      <Pages pageIndex={pageIndex}>
+        <View style={styles.page}>
+          <Text style={styles.title}>What language would you like to learn?</Text>
+          <Input style={styles.input} placeholder='English' />
+        </View>
+        <View style={styles.page}>
+          <Text style={styles.title}>What's your level?</Text>
+          <Input style={styles.input} placeholder='I can understand some of it...' />
+        </View>
+        <View style={styles.page}>
+          <Text style={styles.title}>Tell us about yourself</Text>
+          <Input style={styles.input} placeholder='Im an exchange student...' />
+        </View>
+      </Pages>
+      <PrimaryButton
+        label='Next'
+        containerStyle={styles.button}
+        onClick={() => setPageIndex(page => page + 1)}
+      />
     </View>
   )
 }
@@ -23,17 +43,14 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     alignContent: 'center',
-    padding: 16,
   },
   header: {
-    width: '100%',
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    paddingLeft: 20,
-    paddingRight: 20,
-    marginTop: 30,
+    margin: 50,
+    marginTop: 50,
     marginBottom: 30,
   },
   headerTitle: {
@@ -48,9 +65,8 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 27,
     textAlign: 'center',
-    paddingLeft: 40,
-    paddingRight: 40,
-    marginTop: 20,
+    paddingLeft: 30,
+    paddingRight: 30,
     marginBottom: 20,
   },
   input: {
@@ -60,5 +76,8 @@ const styles = StyleSheet.create({
   button: {
     position: 'absolute',
     bottom: 70,
+  },
+  page: {
+    padding: 16,
   },
 })

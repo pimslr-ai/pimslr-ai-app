@@ -6,6 +6,7 @@ interface ButtonProps {
   label?: string
   labelStyle?: TextStyle
   containerStyle?: ViewStyle
+  onClick?: () => void
 }
 
 export default (props: ButtonProps) => {
@@ -14,6 +15,7 @@ export default (props: ButtonProps) => {
       label={props.label}
       labelStyle={{ ...props.labelStyle, ...styles.label }}
       containerStyle={{ ...props.containerStyle, ...styles.container }}
+      onClick={props.onClick}
     />
   )
 }

@@ -11,7 +11,8 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 const interpolatedColor = new Animated.Value(ORIGINAL_VALUE)
 
 interface InputProps {
-  style?: TextStyle,
+  placeholder?: string
+  style?: TextStyle
 }
 
 export default (props: InputProps) => {
@@ -21,19 +22,19 @@ export default (props: InputProps) => {
 
   let borderColor = interpolatedColor.interpolate({
     inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
-    outputRange: [originalColor, mainColor]
+    outputRange: [originalColor, mainColor],
   })
 
   let placeholderTextColor = interpolatedColor.interpolate({
     inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
-    outputRange: [animatedPlaceholderTextColor, mainColor]
+    outputRange: [animatedPlaceholderTextColor, mainColor],
   })
 
   const showFocusColor = () => {
     Animated.timing(interpolatedColor, {
       duration: 450,
       toValue: ANIMATED_VALUE,
-      useNativeDriver: false
+      useNativeDriver: false,
     }).start()
   }
 
@@ -41,14 +42,14 @@ export default (props: InputProps) => {
     Animated.timing(interpolatedColor, {
       duration: 350,
       toValue: ORIGINAL_VALUE,
-      useNativeDriver: false
+      useNativeDriver: false,
     }).start()
   }
 
   return (
     <AnimatedTextInput
       placeholderTextColor={placeholderTextColor}
-      placeholder='English'
+      placeholder={props.placeholder ?? "Enter something..."}
       style={[textInputStyle(borderColor), props?.style]}
       onFocus={showFocusColor}
       onBlur={showOriginColor}
@@ -59,7 +60,7 @@ export default (props: InputProps) => {
 export const textInputStyle = (borderColor: any): TextStyle => ({
   height: 55,
   width: '100%',
-  borderWidth: 1,
+  borderWidth: 2,
   paddingLeft: 16,
   paddingRight: 16,
   borderRadius: 16,

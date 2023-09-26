@@ -1,8 +1,11 @@
-import AppContext from './contexts/AppContext'
+import AppContext from './contexts/app-context'
 import { StatusBar } from 'expo-status-bar'
 import { View, StyleSheet } from 'react-native'
-import OnBoarding from './views/OnBoarding'
 import { THEME } from './constants'
+import { createNativeStackNavigator } from '@react-navigation/native-stack'
+import OnBoarding from './views/OnBoarding'
+
+const Stack = createNativeStackNavigator()
 
 export default () => {
   return (
@@ -19,6 +22,6 @@ const styles = StyleSheet.create({
   body: {
     flex: 1,
     paddingTop: 30,
-    backgroundColor: THEME.BACKGROUND
-  }
+    backgroundColor: THEME.BACKGROUND,
+  },
 })
