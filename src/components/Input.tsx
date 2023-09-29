@@ -34,7 +34,6 @@ export default (props: InputProps) => {
   })
 
   const showFocusColor = () => {
-    console.log('focused')
     Animated.timing(interpolatedColor, {
       duration: 350,
       toValue: ANIMATED_VALUE,
@@ -43,7 +42,6 @@ export default (props: InputProps) => {
   }
 
   const showOriginColor = () => {
-    console.log('blurred')
     Animated.timing(interpolatedColor, {
       duration: 200,
       toValue: ORIGINAL_VALUE,
