@@ -1,57 +1,77 @@
-import React, { useEffect, useRef } from 'react'
-import { PropsWithChildren } from 'react'
+import React, { Component, PropsWithChildren, createRef, useCallback } from 'react'
 import { ScrollView, View, Dimensions } from 'react-native'
 
 const screen = Dimensions.get('screen')
 
-export interface PageViewProps extends PropsWithChildren {
+interface PageViewProps extends PropsWithChildren {
   enabledUserInputs?: boolean
   startingPageIndex?: number
-  pageIndex: number
   onPageChange?: (pageNumber: number) => void
+  onLastPage?: (pageNumber: number) => void
+  onStartingPage?: (pageNumber: number) => void
 }
 
-export default (props: PageViewProps) => {
-  const { pageIndex, enabledUserInputs, startingPageIndex, children, onPageChange } = props
-  const pageCount = React.Children.count(children)
+class PageView extends Component<PageViewProps> {
+  private scrollView = createRef<ScrollView>()
 
-  // const [pageIndex, setPageIndex] = useState<number>(startingPageIndex ?? 0)
-  const scrollViewRef = useRef<ScrollView>(null)
+  state = {
+    pageIndex: this.props.startingPageIndex ?? 0,
+  }
 
-  useEffect(() => {
-    scrollViewRef.current?.scrollTo({
+  componentDidMount() {
+    this.scrollToPage(this.state.pageIndex)
+  }
+
+  turnNext = () => {
+    this.changePage(this.state.pageIndex + 1)
+  }
+
+  turnPrevious = () => {
+    this.changePage(this.state.pageIndex - 1)
+  }
+
+  turnToPage = (index: number) => {
+    this.changePage(index)
+  }
+
+  private changePage = (index: number) => {
+    const { onPageChange } = this.props
+    const pageCount = React.Children.count(this.props.children)
+
+    if (index >= 0 && index < pageCount) {
+      this.setState({ pageIndex: index }, () => {
+        this.scrollToPage(index)
+        onPageChange && onPageChange(index + 1)
+      })
+    }
+
+    if (index == pageCount && this.props.onLastPage) {
+      this.props.onLastPage(index + 1)
+    } else if (index == this.props.startingPageIndex && this.props.onStartingPage) {
+      this.props.onStartingPage(index + 1)
+    }
+  }
+
+  private scrollToPage = (pageIndex: number) => {
+    this.scrollView.current?.scrollTo({
       x: pageIndex * screen.width,
       animated: true,
     })
+  }
 
-    onPageChange && onPageChange(pageIndex + 1)
-  }, [props, pageIndex])
+  render() {
+    const { enabledUserInputs, children } = this.props
 
-  // const turnNext = () => {
-  //   if (pageIndex + 1 < pageCount) {
-  //     setPageIndex(prev => prev + 1)
-  //   }
-  // }
-
-  // const turnPrevious = () => {
-  //   if (pageIndex > 0) {
-  //     setPageIndex(prev => prev - 1)
-  //   }
-  // }
-
-  // const turnToPage = (index: number) => {
-  //   if (index >= 0 && index + 1 <= pageCount) {
-  //     setPageIndex(index)
-  //   }
-  // }
-
-  return (
-    <ScrollView scrollEnabled={enabledUserInputs ?? false} horizontal ref={scrollViewRef}>
-      {React.Children.map(children, (child, index) => (
-        <View key={index} style={{ width: screen.width }}>
-          {child}
-        </View>
-      ))}
-    </ScrollView>
-  )
+    return (
+      <ScrollView scrollEnabled={enabledUserInputs ?? false} horizontal ref={this.scrollView}>
+        {React.Children.map(children, (child, index) => (
+          <View key={index} style={{ width: screen.width }}>
+            {child}
+          </View>
+        ))}
+      </ScrollView>
+    )
+  }
 }
+
+export default PageView

@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FONTS, THEME } from '../constants'
 import Input from '../components/Input'
@@ -12,54 +12,46 @@ interface UserInputs {
   context?: string
 }
 
-export default ({ onComplete }: { onComplete: (data: UserInputs) => void }) => {
-  const [pageNumber, setPageNumber] = useState<number>(0)
+export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => {
+  const [pageNumber, setPageNumber] = useState<number>(1)
+  const [pageView, setPageView] = useState<PageView | null>()
   const [isOptional, setOptional] = useState<boolean>(false)
-  // const [pageIndex, setPageIndex] = useState<number>(0)
-  // const ref = useRef<PageViewRef | null>(null)
 
   useEffect(() => {
     switch (pageNumber) {
-      case 0:
+      case 1:
         setOptional(false)
 
         break
-      case 1:
-        setOptional(true)
-
-        break
       case 2:
-        setOptional(true)
+        setOptional(false)
 
         break
       case 3:
-        onComplete &&
-          onComplete({
-            lang: '',
-            profeciency: '',
-            context: '',
-          })
+        setOptional(true)
+
         break
     }
-  }, [pageNumber])
+  }, [pageNumber, pageView])
+
+  const handleCompletion = () => {
+    if (onComplete) {
+      onComplete({
+        lang: '',
+        profeciency: '',
+        context: '',
+      })
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SecondaryButton
-          hide={pageNumber <= 0}
-          label='Back'
-          onClick={() => setPageNumber(page => page - 1)}
-        />
-        <Text style={styles.headerTitle}>{pageNumber + 1}/3</Text>
-        <SecondaryButton
-          label='Skip'
-          noticeMe
-          hide={!isOptional}
-          onClick={() => setPageNumber(page => page + 1)}
-        />
+        <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
+        <Text style={styles.headerTitle}>{pageNumber}/3</Text>
+        <SecondaryButton label='Skip' noticeMe hide={!isOptional} onClick={pageView?.turnNext} />
       </View>
-      <PageView pageIndex={pageNumber}>
+      <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
         <View style={styles.page}>
           <Text style={styles.title}>What language would you like to learn?</Text>
           <Input style={styles.langageInput} placeholder='French' />
@@ -80,9 +72,9 @@ export default ({ onComplete }: { onComplete: (data: UserInputs) => void }) => {
         </View>
       </PageView>
       <PrimaryButton
-        label={pageNumber + 1 >= 3 ? 'Complete' : 'Next'}
+        label={pageNumber >= 3 ? 'Complete' : 'Next'}
         containerStyle={styles.button}
-        onClick={() => setPageNumber(page => page + 1)}
+        onClick={pageView?.turnNext}
       />
     </View>
   )

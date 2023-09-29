@@ -9,7 +9,7 @@ export default () => {
     <AppContext>
       <View style={styles.body}>
         <StatusBar style='auto' />
-        <OnBoarding />
+        <OnBoarding onComplete={console.log} />
       </View>
     </AppContext>
   )
