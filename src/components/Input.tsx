@@ -1,5 +1,5 @@
 import { TextInput, Animated, TextStyle, TouchableOpacity } from 'react-native'
-import { FONTS, THEME } from '../constants'
+import { FONTS } from '../constants'
 
 const MAIN_COLOR = 'rgba(0, 0, 0, 0.5)'
 const ORIGINAL_COLOR = 'transparent'
