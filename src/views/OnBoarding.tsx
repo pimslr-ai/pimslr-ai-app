@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FONTS, THEME } from '../constants'
 import Input from '../components/Input'
@@ -6,22 +6,57 @@ import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 
-export default () => {
+interface UserInputs {
+  lang: string
+  profeciency?: string
+  context?: string
+}
+
+export default ({ onComplete }: { onComplete: (data: UserInputs) => void }) => {
   const [pageNumber, setPageNumber] = useState<number>(0)
+  const [isOptional, setOptional] = useState<boolean>(false)
   // const [pageIndex, setPageIndex] = useState<number>(0)
   // const ref = useRef<PageViewRef | null>(null)
-  const optionalPages = [2]
+
+  useEffect(() => {
+    switch (pageNumber) {
+      case 0:
+        setOptional(false)
+
+        break
+      case 1:
+        setOptional(true)
+
+        break
+      case 2:
+        setOptional(true)
+
+        break
+      case 3:
+        onComplete &&
+          onComplete({
+            lang: '',
+            profeciency: '',
+            context: '',
+          })
+        break
+    }
+  }, [pageNumber])
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SecondaryButton hide={pageNumber <= 0} label='Back' onClick={() => setPageNumber(p => p - 1)} />
+        <SecondaryButton
+          hide={pageNumber <= 0}
+          label='Back'
+          onClick={() => setPageNumber(page => page - 1)}
+        />
         <Text style={styles.headerTitle}>{pageNumber + 1}/3</Text>
         <SecondaryButton
           label='Skip'
           noticeMe
-          hide={!optionalPages.includes(pageNumber)}
-          onClick={() => setPageNumber(p => p + 1)}
+          hide={!isOptional}
+          onClick={() => setPageNumber(page => page + 1)}
         />
       </View>
       <PageView pageIndex={pageNumber}>
@@ -47,7 +82,7 @@ export default () => {
       <PrimaryButton
         label={pageNumber + 1 >= 3 ? 'Complete' : 'Next'}
         containerStyle={styles.button}
-        onClick={() => setPageNumber(p => p + 1)}
+        onClick={() => setPageNumber(page => page + 1)}
       />
     </View>
   )
@@ -100,6 +135,7 @@ const styles = StyleSheet.create({
     bottom: 70,
   },
   page: {
-    padding: 16,
+    paddingHorizontal: 25,
+    paddingVertical: 16,
   },
 })

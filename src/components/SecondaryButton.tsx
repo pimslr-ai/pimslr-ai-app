@@ -1,5 +1,5 @@
 import { TextStyle, ViewStyle } from 'react-native'
-import { FONTS } from '../constants'
+import { FONTS, THEME } from '../constants'
 import Button from './Button'
 
 interface SecondaryButtonProps {
@@ -15,11 +15,11 @@ export default ({ label, noticeMe, hide, labelStyle, containerStyle, onClick }: 
   const labelStyle_ = {
     ...labelStyle,
     fontFamily: noticeMe ? FONTS.POPPINS.MEDIUM : FONTS.POPPINS.SEMI_BOLD,
-    color: hide ?? false ? 'transparent' : labelStyle?.color,
+    color: hide ?? false ? 'transparent' : noticeMe ? 'white' : 'black',
   }
   const containerStyle_ = {
     ...containerStyle,
-    backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : 'white',
+    backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.CTA,
   }
   return (
     <Button

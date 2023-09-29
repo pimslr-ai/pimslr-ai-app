@@ -1,9 +1,14 @@
 const THEME = {
-  BACKGROUND: '#FFF2D8',
-  COLOR: '#4D4637',
+  // BACKGROUND: '#FFF2D8',
+  // COLOR: '#4D4637',
+  // COLOR_ALT: '#0F2C59',
+  // CTA: '#FF7C7C',
+  // ACCENT: '#1A936F'
+  BACKGROUND: 'white',
+  COLOR: '#001524',
   COLOR_ALT: '#0F2C59',
-  CTA: '#FF7C7C',
-  ACCENT: '1A936F'
+  CTA: '#219C90',
+  ACCENT: '#1A936F',
 }
 
 const FONTS = {
@@ -25,8 +30,8 @@ const FONTS = {
     EXTRA_BOLD: 'Poppins_800ExtraBold',
     EXTRA_BOLD_ITALIC: 'Poppins_800ExtraBold_Italic',
     BLACK: 'Poppins_900Black',
-    BLACK_ITALIC: 'Poppins_900Black_Italic'
-  }
+    BLACK_ITALIC: 'Poppins_900Black_Italic',
+  },
 }
 
 export { THEME, FONTS }

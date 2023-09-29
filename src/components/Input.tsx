@@ -1,9 +1,9 @@
-import { TextInput, Animated, TextStyle, ViewStyle } from 'react-native'
+import { TextInput, Animated, TextStyle } from 'react-native'
 import { FONTS, THEME } from '../constants'
 
 const MAIN_COLOR = THEME.COLOR
 const ORIGINAL_COLOR = 'transparent'
-const PLACEHOLDER_COLOR = '#918366'
+const PLACEHOLDER_COLOR = 'rgba(0, 0, 0, 0.5)'
 const ORIGINAL_VALUE = 0
 const ANIMATED_VALUE = 1
 
@@ -67,7 +67,7 @@ export const textInputStyle = (borderColor: any): TextStyle => ({
   borderWidth: 2,
   borderRadius: 16,
   borderColor: borderColor,
-  backgroundColor: 'white',
+  backgroundColor: 'rgba(0, 0, 0, 0.07)',
   fontFamily: FONTS.POPPINS.MEDIUM,
   fontSize: 16,
 })
