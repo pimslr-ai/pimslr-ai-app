@@ -13,6 +13,8 @@ const interpolatedColor = new Animated.Value(ORIGINAL_VALUE)
 interface InputProps {
   placeholder?: string
   style?: TextStyle
+  multiline?: boolean
+  onChange?: (input: string) => void
 }
 
 export default (props: InputProps) => {
@@ -48,24 +50,23 @@ export default (props: InputProps) => {
 
   return (
     <AnimatedTextInput
+      multiline={props.multiline ?? false}
       placeholderTextColor={placeholderTextColor}
-      placeholder={props.placeholder ?? "Enter something..."}
+      placeholder={props.placeholder ?? 'Enter something...'}
       style={[textInputStyle(borderColor), props?.style]}
       onFocus={showFocusColor}
       onBlur={showOriginColor}
+      onChange={e => props.onChange && props.onChange(e.nativeEvent.text)}
     />
   )
 }
 
 export const textInputStyle = (borderColor: any): TextStyle => ({
-  height: 55,
   width: '100%',
+  padding: 16,
   borderWidth: 2,
-  paddingLeft: 16,
-  paddingRight: 16,
   borderRadius: 16,
   borderColor: borderColor,
-  justifyContent: 'center',
   backgroundColor: 'white',
   fontFamily: FONTS.POPPINS.MEDIUM,
   fontSize: 16,

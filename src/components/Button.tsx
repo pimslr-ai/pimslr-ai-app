@@ -3,18 +3,20 @@ import { FONTS, THEME } from '../constants'
 
 interface ButtonProps {
   label?: string
+  disable?: boolean
   labelStyle?: TextStyle
   containerStyle?: ViewStyle
   onClick?: () => void
 }
 
-export default (props: ButtonProps) => {
+export default ({ label, disable, labelStyle, containerStyle, onClick }: ButtonProps) => {
   return (
     <TouchableOpacity
-      style={[styles.container, props?.containerStyle]}
-      onPress={() => props.onClick && props.onClick()}
+      disabled={disable ?? false}
+      style={[styles.container, containerStyle, { opacity: disable ? 0.7 : 1 }]}
+      onPress={() => onClick && onClick()}
     >
-      <Text style={[styles.label, props?.labelStyle]}>{props?.label ?? 'Button'}</Text>
+      <Text style={[styles.label, labelStyle]}>{label ?? 'Button'}</Text>
     </TouchableOpacity>
   )
 }

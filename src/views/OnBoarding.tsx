@@ -1,39 +1,53 @@
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { useState } from 'react'
 import { FONTS, THEME } from '../constants'
 import Input from '../components/Input'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
-import Pages from '../components/Pages'
+import PageView from '../components/PageView'
 
 export default () => {
-  const [pageIndex, setPageIndex] = useState(0)
+  const [pageNumber, setPageNumber] = useState<number>(0)
+  // const [pageIndex, setPageIndex] = useState<number>(0)
+  // const ref = useRef<PageViewRef | null>(null)
+  const optionalPages = [2]
 
   return (
     <View style={styles.container}>
       <View style={styles.header}>
-        <SecondaryButton label='Back' />
-        <Text style={styles.headerTitle}>{pageIndex + 1}/3</Text>
-        <SecondaryButton label='Skip' noticeMe />
+        <SecondaryButton hide={pageNumber <= 0} label='Back' onClick={() => setPageNumber(p => p - 1)} />
+        <Text style={styles.headerTitle}>{pageNumber + 1}/3</Text>
+        <SecondaryButton
+          label='Skip'
+          noticeMe
+          hide={!optionalPages.includes(pageNumber)}
+          onClick={() => setPageNumber(p => p + 1)}
+        />
       </View>
-      <Pages pageIndex={pageIndex}>
+      <PageView pageIndex={pageNumber}>
         <View style={styles.page}>
           <Text style={styles.title}>What language would you like to learn?</Text>
-          <Input style={styles.input} placeholder='English' />
+          <Input style={styles.langageInput} placeholder='French' />
         </View>
         <View style={styles.page}>
           <Text style={styles.title}>What's your level?</Text>
-          <Input style={styles.input} placeholder='I can understand some of it...' />
+          <Text style={styles.subtitle}>
+            This information is used to generate sentences that match your current level.
+          </Text>
+          <Input multiline style={styles.input} placeholder='I can understand some of it...' />
         </View>
         <View style={styles.page}>
           <Text style={styles.title}>Tell us about yourself</Text>
-          <Input style={styles.input} placeholder='Im an exchange student...' />
+          <Text style={styles.subtitle}>
+            This information is used to generate sentences that relate to your desires.
+          </Text>
+          <Input multiline style={styles.input} placeholder='I am an exchange student...' />
         </View>
-      </Pages>
+      </PageView>
       <PrimaryButton
-        label='Next'
+        label={pageNumber + 1 >= 3 ? 'Complete' : 'Next'}
         containerStyle={styles.button}
-        onClick={() => setPageIndex(page => page + 1)}
+        onClick={() => setPageNumber(p => p + 1)}
       />
     </View>
   )
@@ -49,9 +63,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    margin: 50,
+    margin: 30,
     marginTop: 50,
-    marginBottom: 30,
   },
   headerTitle: {
     fontSize: 16,
@@ -65,12 +78,21 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 27,
     textAlign: 'center',
-    paddingLeft: 30,
-    paddingRight: 30,
+    paddingHorizontal: 30,
     marginBottom: 20,
   },
-  input: {
+  subtitle: {
     textAlign: 'center',
+    paddingHorizontal: 30,
+    fontSize: 15,
+    fontFamily: FONTS.POPPINS.REGULAR,
+  },
+  langageInput: {
+    textAlign: 'center',
+    marginTop: 40,
+  },
+  input: {
+    height: '40%',
     marginTop: 40,
   },
   button: {

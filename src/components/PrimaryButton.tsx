@@ -2,20 +2,22 @@ import { TextStyle, StyleSheet, ViewStyle } from 'react-native'
 import { FONTS, THEME } from '../constants'
 import Button from './Button'
 
-interface ButtonProps {
+interface PrimaryButtonProps {
   label?: string
   labelStyle?: TextStyle
   containerStyle?: ViewStyle
+  disable?: boolean
   onClick?: () => void
 }
 
-export default (props: ButtonProps) => {
+export default ({ label, labelStyle, containerStyle, disable, onClick }: PrimaryButtonProps) => {
   return (
     <Button
-      label={props.label}
-      labelStyle={{ ...props.labelStyle, ...styles.label }}
-      containerStyle={{ ...props.containerStyle, ...styles.container }}
-      onClick={props.onClick}
+      label={label}
+      labelStyle={{ ...labelStyle, ...styles.label }}
+      containerStyle={{ ...containerStyle, ...styles.container }}
+      onClick={onClick}
+      disable={disable}
     />
   )
 }
@@ -23,7 +25,7 @@ export default (props: ButtonProps) => {
 const styles = StyleSheet.create({
   container: {
     height: 55,
-    width: '80%',
+    width: '70%',
     borderRadius: 16,
     alignSelf: 'center',
     justifyContent: 'center',
