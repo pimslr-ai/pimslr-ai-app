@@ -21,15 +21,12 @@ export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => 
     switch (pageNumber) {
       case 1:
         setOptional(false)
-
         break
       case 2:
         setOptional(false)
-
         break
       case 3:
         setOptional(true)
-
         break
     }
   }, [pageNumber, pageView])
@@ -54,6 +51,7 @@ export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => 
       <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
         <View style={styles.page}>
           <Text style={styles.title}>What language would you like to learn?</Text>
+          <Input style={styles.langageInput} placeholder='French' />
           <Input style={styles.langageInput} placeholder='French' />
         </View>
         <View style={styles.page}>

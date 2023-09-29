@@ -1,14 +1,13 @@
-import { TextInput, Animated, TextStyle } from 'react-native'
+import { TextInput, Animated, TextStyle, TouchableOpacity } from 'react-native'
 import { FONTS, THEME } from '../constants'
 
-const MAIN_COLOR = THEME.COLOR
+const MAIN_COLOR = 'rgba(0, 0, 0, 0.5)'
 const ORIGINAL_COLOR = 'transparent'
 const PLACEHOLDER_COLOR = 'rgba(0, 0, 0, 0.5)'
 const ORIGINAL_VALUE = 0
-const ANIMATED_VALUE = 1
+const ANIMATED_VALUE = 0.5
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
-const interpolatedColor = new Animated.Value(ORIGINAL_VALUE)
 
 interface InputProps {
   placeholder?: string
@@ -22,27 +21,31 @@ export default (props: InputProps) => {
   const originalColor = ORIGINAL_COLOR
   const animatedPlaceholderTextColor = PLACEHOLDER_COLOR
 
-  let borderColor = interpolatedColor.interpolate({
+  const interpolatedColor = new Animated.Value(ORIGINAL_VALUE)
+
+  const borderColor = interpolatedColor.interpolate({
     inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
     outputRange: [originalColor, mainColor],
   })
 
-  let placeholderTextColor = interpolatedColor.interpolate({
+  const placeholderTextColor = interpolatedColor.interpolate({
     inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
     outputRange: [animatedPlaceholderTextColor, mainColor],
   })
 
   const showFocusColor = () => {
+    console.log('focused')
     Animated.timing(interpolatedColor, {
-      duration: 450,
+      duration: 350,
       toValue: ANIMATED_VALUE,
       useNativeDriver: false,
     }).start()
   }
 
   const showOriginColor = () => {
+    console.log('blurred')
     Animated.timing(interpolatedColor, {
-      duration: 350,
+      duration: 200,
       toValue: ORIGINAL_VALUE,
       useNativeDriver: false,
     }).start()
