@@ -16,7 +16,7 @@ export default function useAppStorage() {
       const json = JSON.stringify(value)
       await AsyncStorage.setItem(key, json)
     } catch (error) {
-      console.error('Error fetching data from AsyncStorage:', error)
+      console.error('Error setting data from AsyncStorage:', error)
       throw error
     }
   }
@@ -25,7 +25,7 @@ export default function useAppStorage() {
     try {
       await AsyncStorage.removeItem(key)
     } catch (error) {
-      console.error('Error fetching data from AsyncStorage:', error)
+      console.error('Error removing data from AsyncStorage:', error)
       throw error
     }
   }
