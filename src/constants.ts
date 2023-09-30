@@ -40,4 +40,8 @@ const SCREENS = {
   SETTINGS: 'Settings' as never,
 }
 
-export { THEME, FONTS, SCREENS }
+const DATA = {
+  USER_LANGUAGE_PREF: 'user:preferences',
+}
+
+export { THEME, FONTS, SCREENS, DATA }

@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
-import { FONTS, SCREENS, THEME } from '../constants'
+import { DATA, FONTS, SCREENS, THEME } from '../constants'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
@@ -8,9 +8,10 @@ import PageView from '../components/PageView'
 import AppScreen from './AppScreen'
 import { OnboardingData } from '../types/User'
 import { useNavigation } from '@react-navigation/native'
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import useAppStorage from '../hooks/use-app-storage'
 
 export default () => {
+  const { set } = useAppStorage()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
 
@@ -25,24 +26,10 @@ export default () => {
       language,
       profeciency,
       context,
-    };
-  
-    try {
-      // Serialize the data to JSON
-      const jsonData = JSON.stringify(data);
-  
-      // Store the data in AsyncStorage
-      await AsyncStorage.setItem('userData', jsonData);
-  
-      console.log('Data stored successfully:', data);
-  
-      // Navigate to the "Dashboard" screen
-      navigation.navigate(SCREENS.DASHBOARD);
-    } catch (error) {
-      console.error('Error storing data:', error);
     }
-  };
-  
+    await set<OnboardingData>(DATA.USER_LANGUAGE_PREF, data)
+    navigation.navigate(SCREENS.DASHBOARD)
+  }
 
   return (
     <AppScreen>
