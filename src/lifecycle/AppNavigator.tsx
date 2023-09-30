@@ -1,15 +1,15 @@
 import { NavigationContainer } from '@react-navigation/native'
 import { createNativeStackNavigator } from '@react-navigation/native-stack'
-import OnBoarding from '../screens/OnBoarding'
+import OnBoardingScreen from '../screens/OnBoardingScreen'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
 export default () => {
   return (
     <NavigationContainer>
-      <Navigator initialRouteName='OnBoarding'>
-        <Screen name='OnBoarding' options={{ headerShown: false }}>
-          {props => <OnBoarding {...props} onCompletion={console.log} />}
+      <Navigator initialRouteName='OnBoardingScreen'>
+        <Screen name='OnBoardingScreen' options={{ headerShown: false }}>
+          {props => <OnBoardingScreen {...props} onCompletion={console.log} />}
         </Screen>
       </Navigator>
     </NavigationContainer>
