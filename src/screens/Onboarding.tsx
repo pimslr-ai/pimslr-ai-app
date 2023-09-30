@@ -5,29 +5,28 @@ import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
-import { OnBoardingData } from '../types/User'
 import AppScreen from './AppScreen'
+import { OnboardingData } from '../types/User'
+import { useNavigation } from '@react-navigation/native'
 
-interface OnBoardingProps {
-  onCompletion?: (data: OnBoardingData) => void
-}
-
-export default ({ onCompletion: onComplete }: OnBoardingProps) => {
+export default () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
 
-  const [language, setLanguage] = useState('')
+  const navigation = useNavigation()
+
+  const [language, setLanguage] = useState('French')
   const [profeciency, setProficiency] = useState('')
   const [context, setContext] = useState('')
 
   const handleCompletion = () => {
-    if (onComplete) {
-      onComplete({
-        language,
-        profeciency,
-        context,
-      })
+    const data: OnboardingData = {
+      language,
+      profeciency,
+      context,
     }
+    console.log(data)
+    navigation.navigate('Dashboard' as never)
   }
 
   return (
@@ -42,7 +41,12 @@ export default ({ onCompletion: onComplete }: OnBoardingProps) => {
         <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
           <View style={styles.page}>
             <Text style={styles.title}>What language would you like to learn?</Text>
-            <InteractiveInput style={styles.langageInput} placeholder='French' onChange={setLanguage} />
+            <InteractiveInput
+              disable
+              style={styles.langageInput}
+              placeholder='French'
+              onChange={setLanguage}
+            />
           </View>
           <View style={styles.page}>
             <Text style={styles.title}>What's your level?</Text>

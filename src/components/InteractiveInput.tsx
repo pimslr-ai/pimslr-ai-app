@@ -10,6 +10,8 @@ const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
 interface InteractiveInputProps {
   placeholder?: string
+  value?: string
+  disable?: boolean
   style?: TextStyle
   multiline?: boolean
   onChange?: (input: string) => void
@@ -50,6 +52,8 @@ export default (props: InteractiveInputProps) => {
 
   return (
     <AnimatedTextInput
+      value={props.value}
+      editable={!props.disable ?? false}
       multiline={props.multiline ?? false}
       placeholderTextColor={placeholderTextColor}
       placeholder={props.placeholder ?? 'Enter something...'}
