@@ -1,4 +1,4 @@
-export interface OnboardingData {
+export interface UserData {
   language: string
   profeciency?: string
   context?: string

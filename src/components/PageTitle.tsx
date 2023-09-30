@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 32,
+    padding: 16,
+    paddingBottom: 28,
   },
   title: {
     fontFamily: FONTS.POPPINS.MEDIUM,

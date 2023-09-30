@@ -6,7 +6,7 @@ import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 import AppScreen from './AppScreen'
-import { OnboardingData } from '../types/User'
+import { UserData } from '../types/User'
 import { useNavigation } from '@react-navigation/native'
 import useAppStorage from '../hooks/use-app-storage'
 
@@ -22,12 +22,12 @@ export default () => {
   const [context, setContext] = useState('')
 
   const handleCompletion = async () => {
-    const data: OnboardingData = {
+    const data: UserData = {
       language,
       profeciency,
       context,
     }
-    await set<OnboardingData>(DATA.USER_LANGUAGE_PREF, data)
+    await set<UserData>(DATA.USER_LANGUAGE_PREF, data)
     navigation.navigate(SCREENS.DASHBOARD)
   }
 
