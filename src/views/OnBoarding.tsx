@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FONTS, THEME } from '../constants'
-import Input from '../components/Input'
+import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 
 interface UserInputs {
-  lang: string
+  language: string
   profeciency?: string
   context?: string
 }
@@ -15,28 +15,17 @@ interface UserInputs {
 export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
-  const [isOptional, setOptional] = useState<boolean>(false)
 
-  useEffect(() => {
-    switch (pageNumber) {
-      case 1:
-        setOptional(false)
-        break
-      case 2:
-        setOptional(false)
-        break
-      case 3:
-        setOptional(true)
-        break
-    }
-  }, [pageNumber, pageView])
+  const [language, setLanguage] = useState('')
+  const [profeciency, setProficiency] = useState('')
+  const [context, setContext] = useState('')
 
   const handleCompletion = () => {
     if (onComplete) {
       onComplete({
-        lang: '',
-        profeciency: '',
-        context: '',
+        language,
+        profeciency,
+        context,
       })
     }
   }
@@ -46,27 +35,36 @@ export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => 
       <View style={styles.header}>
         <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
         <Text style={styles.headerTitle}>{pageNumber}/3</Text>
-        <SecondaryButton label='Skip' noticeMe hide={!isOptional} onClick={pageView?.turnNext} />
+        <SecondaryButton label='Skip' noticeMe hide={pageNumber != 3} onClick={pageView?.turnNext} />
       </View>
       <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
         <View style={styles.page}>
           <Text style={styles.title}>What language would you like to learn?</Text>
-          <Input style={styles.langageInput} placeholder='French' />
-          <Input style={styles.langageInput} placeholder='French' />
+          <InteractiveInput style={styles.langageInput} placeholder='French' onChange={setLanguage} />
         </View>
         <View style={styles.page}>
           <Text style={styles.title}>What's your level?</Text>
           <Text style={styles.subtitle}>
             This information is used to generate sentences that match your current level.
           </Text>
-          <Input multiline style={styles.input} placeholder='I can understand some of it...' />
+          <InteractiveInput
+            multiline
+            style={styles.input}
+            placeholder='I can understand some of it...'
+            onChange={setProficiency}
+          />
         </View>
         <View style={styles.page}>
           <Text style={styles.title}>Tell us about yourself</Text>
           <Text style={styles.subtitle}>
             This information is used to generate sentences that relate to your desires.
           </Text>
-          <Input multiline style={styles.input} placeholder='I am an exchange student...' />
+          <InteractiveInput
+            multiline
+            style={styles.input}
+            placeholder='I am an exchange student...'
+            onChange={setContext}
+          />
         </View>
       </PageView>
       <PrimaryButton
