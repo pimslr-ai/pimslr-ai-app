@@ -1,18 +1,17 @@
-import React, { useEffect, useState } from 'react'
+import React, { useState } from 'react'
 import { View, Text, StyleSheet } from 'react-native'
 import { FONTS, THEME } from '../constants'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
+import { OnBoardingData } from '../types/User'
 
-interface UserInputs {
-  language: string
-  profeciency?: string
-  context?: string
+interface OnBoardingProps {
+  onComplete?: (data: OnBoardingData) => void
 }
 
-export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => {
+export default ({ onComplete }: OnBoardingProps) => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
 
@@ -37,6 +36,7 @@ export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => 
         <Text style={styles.headerTitle}>{pageNumber}/3</Text>
         <SecondaryButton label='Skip' noticeMe hide={pageNumber != 3} onClick={pageView?.turnNext} />
       </View>
+
       <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
         <View style={styles.page}>
           <Text style={styles.title}>What language would you like to learn?</Text>
@@ -67,6 +67,7 @@ export default ({ onComplete }: { onComplete?: (data: UserInputs) => void }) => 
           />
         </View>
       </PageView>
+      
       <PrimaryButton
         label={pageNumber >= 3 ? 'Complete' : 'Next'}
         containerStyle={styles.button}
