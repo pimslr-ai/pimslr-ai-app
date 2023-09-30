@@ -1,42 +1,37 @@
-import { TextInput, Animated, TextStyle, TouchableOpacity } from 'react-native'
+import React, { useRef } from 'react'
+import { TextInput, Animated, TextStyle } from 'react-native'
 import { FONTS } from '../constants'
 
-const MAIN_COLOR = 'rgba(0, 0, 0, 0.5)'
-const ORIGINAL_COLOR = 'transparent'
+const INITIAL_COLOR = 'transparent'
+const TARGET_COLOR = 'rgba(0, 0, 0, 0.5)'
 const PLACEHOLDER_COLOR = 'rgba(0, 0, 0, 0.5)'
-const ORIGINAL_VALUE = 0
-const ANIMATED_VALUE = 0.5
 
 const AnimatedTextInput = Animated.createAnimatedComponent(TextInput)
 
-interface InputProps {
+interface InteractiveInputProps {
   placeholder?: string
   style?: TextStyle
   multiline?: boolean
   onChange?: (input: string) => void
 }
 
-export default (props: InputProps) => {
-  const mainColor = MAIN_COLOR
-  const originalColor = ORIGINAL_COLOR
-  const animatedPlaceholderTextColor = PLACEHOLDER_COLOR
-
-  const interpolatedColor = new Animated.Value(ORIGINAL_VALUE)
+export default (props: InteractiveInputProps) => {
+  const interpolatedColor = useRef(new Animated.Value(0)).current
 
   const borderColor = interpolatedColor.interpolate({
-    inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
-    outputRange: [originalColor, mainColor],
+    inputRange: [0, 1],
+    outputRange: [INITIAL_COLOR, TARGET_COLOR],
   })
 
   const placeholderTextColor = interpolatedColor.interpolate({
-    inputRange: [ORIGINAL_VALUE, ANIMATED_VALUE],
-    outputRange: [animatedPlaceholderTextColor, mainColor],
+    inputRange: [0, 1],
+    outputRange: [PLACEHOLDER_COLOR, TARGET_COLOR],
   })
 
   const showFocusColor = () => {
     Animated.timing(interpolatedColor, {
       duration: 350,
-      toValue: ANIMATED_VALUE,
+      toValue: 1,
       useNativeDriver: false,
     }).start()
   }
@@ -44,9 +39,13 @@ export default (props: InputProps) => {
   const showOriginColor = () => {
     Animated.timing(interpolatedColor, {
       duration: 200,
-      toValue: ORIGINAL_VALUE,
+      toValue: 1,
       useNativeDriver: false,
     }).start()
+  }
+
+  const handleChange = (input: string) => {
+    props.onChange && props.onChange(input)
   }
 
   return (
@@ -57,7 +56,7 @@ export default (props: InputProps) => {
       style={[textInputStyle(borderColor), props?.style]}
       onFocus={showFocusColor}
       onBlur={showOriginColor}
-      onChange={e => props.onChange && props.onChange(e.nativeEvent.text)}
+      onChangeText={handleChange}
     />
   )
 }
