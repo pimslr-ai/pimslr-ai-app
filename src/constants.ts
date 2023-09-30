@@ -34,4 +34,10 @@ const FONTS = {
   },
 }
 
-export { THEME, FONTS }
+const SCREENS = {
+  ONBOARDING: 'Onboarding' as never,
+  DASHBOARD: 'Dashboard' as never,
+  SETTINGS: 'Settings' as never,
+}
+
+export { THEME, FONTS, SCREENS }
