@@ -14,7 +14,7 @@ export default () => {
   return (
     loaded && (
       <NavigationContainer>
-        <Navigator initialRouteName={SCREENS.ONBOARDING}>
+        <Navigator initialRouteName={SCREENS.DASHBOARD}>
           <Screen name={SCREENS.ONBOARDING} component={Onboarding} options={{ headerShown: false }} />
           <Screen name={SCREENS.DASHBOARD} component={Dashboard} options={{ headerShown: false }} />
         </Navigator>
