@@ -11,7 +11,7 @@ export default () => {
   const [userData, setUserData] = useState<UserData | null>(null)
 
   useEffect(() => {
-    get<UserData>(DATA.USER_LANGUAGE_PREF).then(setUserData)
+    get<UserData>(DATA.USER_DATA).then(setUserData)
   }, [])
 
   return (

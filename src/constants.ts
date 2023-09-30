@@ -41,7 +41,8 @@ const SCREENS = {
 }
 
 const DATA = {
-  USER_LANGUAGE_PREF: 'user:preferences',
+  USER_DATA: 'user:preferences',
+  SETUP_COMPLETE: 'onboarding:complete',
 }
 
 export { THEME, FONTS, SCREENS, DATA }

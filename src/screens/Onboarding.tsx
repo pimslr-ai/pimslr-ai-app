@@ -27,7 +27,8 @@ export default () => {
       profeciency,
       context,
     }
-    await set<UserData>(DATA.USER_LANGUAGE_PREF, data)
+    await set<UserData>(DATA.USER_DATA, data)
+    await set<boolean>(DATA.SETUP_COMPLETE, true)
     navigation.navigate(SCREENS.DASHBOARD)
   }
 
