@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import AppScreen from './AppScreen'
-import { UserData } from '../types/User'
-import useAppStorage from '../hooks/use-app-storage'
-import { DATA } from '../constants'
+import { DATA, SCREENS } from '../constants'
 import PageTitle from '../components/PageTitle'
+import useAppStorage from '../hooks/use-app-storage'
+import { UserData } from '../types/User'
+import SectionView from '../components/SectionView'
+import ScreenView from '../components/ScreenView'
+import SecondaryButton from '../components/SecondaryButton'
 
 export default () => {
   const { get } = useAppStorage()
@@ -15,30 +17,32 @@ export default () => {
   }, [])
 
   return (
-    <AppScreen>
+    <ScreenView>
       <View style={styles.container}>
         <PageTitle label='DittoAI'>
-          <Text>ICON</Text>
+          <SecondaryButton icon='settings' />
         </PageTitle>
 
-        {userData && (
-          <Text>
-            User Data:
-            {'\n'}
-            Language: {userData.language}
-            {'\n'}
-            Proficiency: {userData.profeciency}
-            {'\n'}
-            Context: {userData.context}
-          </Text>
-        )}
+        <SectionView name='Scenarios' redirection={SCREENS.ONBOARDING} redirectionLabel='More'>
+          {userData && (
+            <Text>
+              User Data:
+              {'\n'}
+              Language: {userData.language}
+              {'\n'}
+              Proficiency: {userData.profeciency}
+              {'\n'}
+              Context: {userData.context}
+            </Text>
+          )}
+        </SectionView>
       </View>
-    </AppScreen>
+    </ScreenView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16,
+    // padding: 16,
   },
 })

@@ -5,16 +5,15 @@ import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
-import AppScreen from './AppScreen'
 import { UserData } from '../types/User'
 import { useNavigation } from '@react-navigation/native'
 import useAppStorage from '../hooks/use-app-storage'
+import ScreenView from '../components/ScreenView'
 
 export default () => {
   const { set } = useAppStorage()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
-
   const navigation = useNavigation()
 
   const [language, setLanguage] = useState('French')
@@ -33,7 +32,7 @@ export default () => {
   }
 
   return (
-    <AppScreen>
+    <ScreenView>
       <View style={styles.container}>
         <View style={styles.header}>
           <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
@@ -83,7 +82,7 @@ export default () => {
           onClick={pageView?.turnNext}
         />
       </View>
-    </AppScreen>
+    </ScreenView>
   )
 }
 

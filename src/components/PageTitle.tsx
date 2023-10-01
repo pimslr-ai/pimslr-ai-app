@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react'
 import { Text, View, StyleSheet, ViewStyle } from 'react-native'
-import { FONTS } from '../constants'
+import { FONTS, THEME } from '../constants'
 
 interface PageTitleProps extends PropsWithChildren {
   label?: string
@@ -23,11 +23,13 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
-    paddingBottom: 28,
+    paddingHorizontal: 16,
+    paddingTop: 32,
+    paddingBottom: 8,
   },
   title: {
-    fontFamily: FONTS.POPPINS.MEDIUM,
-    fontSize: 27,
+    fontFamily: FONTS.POPPINS.BOLD,
+    fontSize: 36,
+    color: THEME.CTA
   },
 })
