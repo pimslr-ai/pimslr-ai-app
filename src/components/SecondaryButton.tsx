@@ -1,33 +1,24 @@
-import { TextStyle, ViewStyle } from 'react-native'
 import { FONTS, THEME } from '../constants'
-import Button from './Button'
+import Button, { ButtonProps } from './Button'
 
-interface SecondaryButtonProps {
-  label?: string
+interface SecondaryButtonProps extends ButtonProps {
   noticeMe?: boolean
   hide?: boolean
-  labelStyle?: TextStyle
-  containerStyle?: ViewStyle
-  onClick?: () => void
 }
 
-export default ({ label, noticeMe, hide, labelStyle, containerStyle, onClick }: SecondaryButtonProps) => {
+export default (props: SecondaryButtonProps) => {
+  const { noticeMe, hide, labelStyle, containerStyle } = props
+
   const labelStyle_ = {
     ...labelStyle,
-    fontFamily: noticeMe ? FONTS.POPPINS.MEDIUM : FONTS.POPPINS.SEMI_BOLD,
+    fontFamily: FONTS.POPPINS.SEMI_BOLD,
     color: hide ?? false ? 'transparent' : noticeMe ? 'white' : 'black',
   }
+
   const containerStyle_ = {
     ...containerStyle,
     backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.CTA,
   }
-  return (
-    <Button
-      label={label}
-      disable={hide}
-      labelStyle={labelStyle_}
-      containerStyle={containerStyle_}
-      onClick={onClick}
-    />
-  )
+
+  return <Button disable={hide} labelStyle={labelStyle_} containerStyle={containerStyle_} {...props} />
 }

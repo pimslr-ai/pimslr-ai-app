@@ -1,23 +1,17 @@
-import { TextStyle, StyleSheet, ViewStyle } from 'react-native'
+import { StyleSheet } from 'react-native'
 import { FONTS, THEME } from '../constants'
-import Button from './Button'
+import Button, { ButtonProps } from './Button'
 
-interface PrimaryButtonProps {
-  label?: string
-  labelStyle?: TextStyle
-  containerStyle?: ViewStyle
-  disable?: boolean
-  onClick?: () => void
-}
+interface PrimaryButtonProps extends ButtonProps {}
 
-export default ({ label, labelStyle, containerStyle, disable, onClick }: PrimaryButtonProps) => {
+export default (props: PrimaryButtonProps) => {
+  const { labelStyle, containerStyle } = props
+  
   return (
     <Button
-      label={label}
       labelStyle={{ ...labelStyle, ...styles.label }}
       containerStyle={{ ...containerStyle, ...styles.container }}
-      onClick={onClick}
-      disable={disable}
+      {...props}
     />
   )
 }
