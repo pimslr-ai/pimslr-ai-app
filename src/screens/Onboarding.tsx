@@ -110,7 +110,6 @@ const styles = StyleSheet.create({
   title: {
     color: THEME.COLOR,
     fontFamily: FONTS.POPPINS.BOLD,
-    fontWeight: 'bold',
     fontSize: 27,
     textAlign: 'center',
     paddingHorizontal: 30,

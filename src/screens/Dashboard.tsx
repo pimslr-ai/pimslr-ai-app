@@ -22,7 +22,7 @@ export default () => {
   return (
     <ScreenView>
       <View style={styles.container}>
-        <PageTitle label='DittoAI'>
+        <PageTitle label='Pimslr'>
           <SecondaryButton
             icon='settings'
             label='Settings'
@@ -30,9 +30,9 @@ export default () => {
           />
         </PageTitle>
 
-        <SecondaryButton noticeMe label='To course' onClick={() => navigation.navigate(SCREENS.COURSE.MAIN)} />
+        <SecondaryButton label='Onboarding' onClick={() => navigation.navigate(SCREENS.ONBOARDING)} />
 
-        <SectionView name='Scenarios' redirection={SCREENS.ONBOARDING}>
+        <SectionView name='Scenarios' redirection={SCREENS.COURSE.MAIN}>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
 

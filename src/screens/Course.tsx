@@ -1,11 +1,68 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, View, Text } from 'react-native'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
+import CardView from '../components/CardView'
+import { useState } from 'react'
+
+interface Sentence {
+  id: any
+  translation?: string
+  original?: string
+}
+
+const sentences: Sentence[] = [
+  {
+    id: 1,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 2,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 3,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 1,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 2,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 3,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 1,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 2,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+  {
+    id: 3,
+    translation: 'Pourriez-vous recommander une bière locale ?',
+    original: 'Could you recommend a local brew?',
+  },
+]
 
 export default () => {
   const navigation = useNavigation()
+  const [cardView, setCardView] = useState<CardView | null>()
 
   return (
     <ScreenView>
@@ -20,9 +77,31 @@ export default () => {
             labelFirst
             noticeMe
             label='Refine Scenario'
-            //   icon='edit'
             onClick={() => navigation.navigate(SCREENS.COURSE.REFINE_SCENARIO)}
           />
+        </View>
+
+        <Text style={styles.title}>You're at a bar...</Text>
+
+        <View style={styles.cards}>
+          <CardView ref={setCardView}>
+            {sentences.map(sentence => (
+              <View key={sentence.id}>
+                <Text style={styles.translation}>{sentence.translation}</Text>
+                <Text style={styles.original}>{sentence.original}</Text>
+              </View>
+            ))}
+          </CardView>
+          <View style={styles.cardControls}>
+            <SecondaryButton
+              hide={0 <= 1}
+              label='Back'
+              labelStyle={{ opacity: 0.7 }}
+              onClick={cardView?.flipPrevious}
+            />
+            <Text style={styles.cardControlPagination}>{1}/3</Text>
+            <SecondaryButton label='Next' labelStyle={{ opacity: 0.7 }} onClick={cardView?.flipNext} />
+          </View>
         </View>
       </View>
     </ScreenView>
@@ -42,37 +121,41 @@ const styles = StyleSheet.create({
     margin: 30,
     marginTop: 50,
   },
-  headerTitle: {
-    fontSize: 16,
-    color: THEME.COLOR,
-    alignSelf: 'center',
-    textAlign: 'center',
-  },
   title: {
     color: THEME.COLOR,
     fontFamily: FONTS.POPPINS.BOLD,
-    fontWeight: 'bold',
     fontSize: 27,
     textAlign: 'center',
     paddingHorizontal: 30,
-    marginBottom: 20,
+    marginVertical: 40,
   },
-  subtitle: {
+  cards: {
+    padding: 16,
+    position: 'relative',
+  },
+  translation: {
     textAlign: 'center',
-    paddingHorizontal: 30,
-    fontSize: 15,
-    fontFamily: FONTS.POPPINS.REGULAR,
+    fontFamily: FONTS.POPPINS.BOLD,
+    fontSize: 20,
+    marginBottom: 24,
   },
-  input: {
-    height: '40%',
+  original: {
+    textAlign: 'center',
+    fontFamily: FONTS.POPPINS.REGULAR,
+    fontSize: 16,
+    opacity: 0.5,
+  },
+  cardControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
     marginTop: 40,
   },
-  button: {
-    position: 'absolute',
-    bottom: 70,
-  },
-  page: {
-    paddingHorizontal: 25,
-    paddingVertical: 16,
+  cardControlPagination: {
+    fontSize: 12,
+    color: THEME.COLOR,
+    alignSelf: 'center',
+    textAlign: 'center',
   },
 })
