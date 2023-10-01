@@ -11,6 +11,8 @@ interface CardViewProps extends PropsWithChildren {
 }
 
 class CardView extends Component<CardViewProps> {
+  private cardCount = React.Children.count(this.props.children)
+
   state = {
     cardIndex: 0,
     selectionAmount: 3,
@@ -36,10 +38,7 @@ class CardView extends Component<CardViewProps> {
     const { children } = this.props
 
     const startIndex = Math.max(0, this.state.cardIndex - this.state.selectionAmount)
-    const endIndex = Math.min(
-      React.Children.count(children) - 1,
-      this.state.cardIndex + this.state.selectionAmount - 1,
-    )
+    const endIndex = Math.min(this.cardCount - 1, this.state.cardIndex + this.state.selectionAmount - 1)
 
     return (
       <View style={styles.container}>
