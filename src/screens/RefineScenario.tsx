@@ -13,6 +13,10 @@ interface RefineScenarioProps {
 export default ({ scenario }: RefineScenarioProps) => {
   const navigation = useNavigation()
 
+  const handleRefining = () => {
+    navigation.navigate(SCREENS.COURSE.MAIN)
+  }
+
   return (
     <ScreenView>
       <View style={styles.container}>
@@ -36,7 +40,7 @@ export default ({ scenario }: RefineScenarioProps) => {
           />
         </View>
 
-        <PrimaryButton label='Refine Scenario' containerStyle={styles.button} />
+        <PrimaryButton label='Refine Scenario' containerStyle={styles.button} onClick={handleRefining} />
       </View>
     </ScreenView>
   )
