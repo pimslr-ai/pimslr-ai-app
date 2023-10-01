@@ -7,7 +7,7 @@ interface PageViewProps extends PropsWithChildren {
   startingIndex?: number
   onPageChange?: (pageNumber: number) => void
   onLastPage?: (pageNumber: number) => void
-  onStartingPage?: (pageNumber: number) => void
+  onFirstPage?: (pageNumber: number) => void
 }
 
 class PageView extends Component<PageViewProps> {
@@ -34,7 +34,7 @@ class PageView extends Component<PageViewProps> {
   }
 
   private changePage = (index: number) => {
-    const { startingIndex, children, onPageChange, onStartingPage, onLastPage } = this.props
+    const { startingIndex, children, onPageChange, onFirstPage, onLastPage } = this.props
     const pageCount = React.Children.count(children)
 
     if (index >= 0 && index < pageCount) {
@@ -46,8 +46,8 @@ class PageView extends Component<PageViewProps> {
 
     if (index == pageCount && onLastPage) {
       onLastPage(index + 1)
-    } else if (index == startingIndex && onStartingPage) {
-      onStartingPage(index + 1)
+    } else if (index == startingIndex && onFirstPage) {
+      onFirstPage(index + 1)
     }
   }
 

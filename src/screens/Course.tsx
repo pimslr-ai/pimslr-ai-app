@@ -5,6 +5,7 @@ import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
 import CardView from '../components/CardView'
 import { useState } from 'react'
+import PageView from '../components/PageView'
 
 interface Sentence {
   id: any
@@ -62,7 +63,8 @@ const sentences: Sentence[] = [
 
 export default () => {
   const navigation = useNavigation()
-  const [cardView, setCardView] = useState<CardView | null>()
+  const [pageView, setPageView] = useState<PageView | null>()
+  const [pageNumber, setPageNumber] = useState<number>(1)
 
   return (
     <ScreenView>
@@ -84,23 +86,33 @@ export default () => {
         <Text style={styles.title}>You're at a bar...</Text>
 
         <View style={styles.cards}>
-          <CardView ref={setCardView}>
+          <PageView ref={setPageView} onPageChange={setPageNumber}>
             {sentences.map(sentence => (
-              <View key={sentence.id}>
-                <Text style={styles.translation}>{sentence.translation}</Text>
-                <Text style={styles.original}>{sentence.original}</Text>
+              <View key={sentence.id} style={styles.card}>
+                <View key={sentence.id} style={styles.cardContent}>
+                  <Text style={styles.translation}>{sentence.translation}</Text>
+                  <Text style={styles.original}>{sentence.original}</Text>
+                </View>
               </View>
             ))}
-          </CardView>
+          </PageView>
+
           <View style={styles.cardControls}>
             <SecondaryButton
-              hide={0 <= 1}
+              hide={pageNumber <= 1}
               label='Back'
               labelStyle={{ opacity: 0.7 }}
-              onClick={cardView?.flipPrevious}
+              onClick={pageView?.turnPrevious}
             />
-            <Text style={styles.cardControlPagination}>{1}/3</Text>
-            <SecondaryButton label='Next' labelStyle={{ opacity: 0.7 }} onClick={cardView?.flipNext} />
+            <Text style={styles.cardControlPagination}>
+              {pageNumber}/{sentences.length}
+            </Text>
+            <SecondaryButton
+              hide={pageNumber >= sentences.length}
+              label='Next'
+              labelStyle={{ opacity: 0.7 }}
+              onClick={pageView?.turnNext}
+            />
           </View>
         </View>
       </View>
@@ -130,8 +142,21 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   cards: {
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.1,
+    shadowRadius: 20,
+    elevation: 5,
+  },
+  card: {
     padding: 16,
-    position: 'relative',
+  },
+  cardContent: {
+    borderRadius: 20,
+    width: '100%',
+    backgroundColor: 'white',
+    overflow: 'hidden',
+    paddingVertical: 70,
+    paddingHorizontal: 32,
   },
   translation: {
     textAlign: 'center',
@@ -150,7 +175,8 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignContent: 'center',
-    marginTop: 40,
+    marginTop: 20,
+    paddingHorizontal: 30
   },
   cardControlPagination: {
     fontSize: 12,
