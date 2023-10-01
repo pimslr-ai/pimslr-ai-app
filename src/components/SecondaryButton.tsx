@@ -11,13 +11,13 @@ export default (props: SecondaryButtonProps) => {
 
   const labelStyle_ = {
     ...labelStyle,
-    fontFamily: FONTS.POPPINS.SEMI_BOLD,
+    fontFamily: noticeMe ? FONTS.POPPINS.MEDIUM : FONTS.POPPINS.SEMI_BOLD,
     color: hide ?? false ? 'transparent' : noticeMe ? 'white' : 'black',
   }
 
   const containerStyle_ = {
     ...containerStyle,
-    backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.CTA,
+    backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.ACCENT,
   }
 
   return <Button {...props} disable={hide} labelStyle={labelStyle_} containerStyle={containerStyle_} />

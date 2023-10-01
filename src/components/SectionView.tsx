@@ -46,6 +46,7 @@ const styles = StyleSheet.create({
     width: '100%',
     display: 'flex',
     flexDirection: 'row',
+    marginBottom: 16,
   },
   headerName: {
     fontSize: 20,

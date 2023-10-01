@@ -46,13 +46,13 @@ export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, 
 
 const styles = StyleSheet.create({
   container: {
-    flex: 0,
     borderRadius: 99,
     paddingTop: 5,
     paddingBottom: 5,
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: 'white',
+    alignSelf: 'flex-start'
   },
   label: {
     flexDirection: 'row',

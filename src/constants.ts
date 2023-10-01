@@ -7,8 +7,8 @@ const THEME = {
   BACKGROUND: 'white',
   COLOR: '#001524',
   COLOR_ALT: '#0F2C59',
-  CTA: '#219C90',
-  ACCENT: '#1A936F',
+  CTA: '#713ABE',
+  ACCENT: '#FF9501',
 }
 
 const FONTS = {
@@ -35,9 +35,13 @@ const FONTS = {
 }
 
 const SCREENS = {
-  ONBOARDING: 'Onboarding' as never,
-  DASHBOARD: 'Dashboard' as never,
-  SETTINGS: 'Settings' as never,
+  ONBOARDING: 'onboarding' as never,
+  DASHBOARD: 'dashboard' as never,
+  SETTINGS: 'settings' as never,
+  COURSE: {
+    MAIN: 'course:home' as never,
+    REFINE_SCENARIO: 'course:refine_scenario' as never,
+  }
 }
 
 const DATA = {

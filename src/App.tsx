@@ -4,8 +4,11 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import useAppFonts from './hooks/use-app-fonts'
 import Onboarding from './screens/Onboarding'
 import Dashboard from './screens/Dashboard'
+import Settings from './screens/Settings'
 import { DATA, SCREENS } from './constants'
 import useAppStorage from './hooks/use-app-storage'
+import Course from './screens/Course'
+import RefineScenario from './screens/RefineScenario'
 
 const { Navigator, Screen } = createNativeStackNavigator()
 
@@ -23,9 +26,16 @@ export default () => {
   return (
     loaded && (
       <NavigationContainer>
-        <Navigator initialRouteName={SCREENS.ONBOARDING}>
+        <Navigator initialRouteName={SCREENS.COURSE.REFINE_SCENARIO}>
           <Screen name={SCREENS.ONBOARDING} component={Onboarding} options={{ headerShown: false }} />
           <Screen name={SCREENS.DASHBOARD} component={Dashboard} options={{ headerShown: false }} />
+          <Screen name={SCREENS.SETTINGS} component={Settings} options={{ headerShown: false }} />
+          <Screen name={SCREENS.COURSE.MAIN} component={Course} options={{ headerShown: false }} />
+          <Screen
+            name={SCREENS.COURSE.REFINE_SCENARIO}
+            component={RefineScenario}
+            options={{ headerShown: false }}
+          />
         </Navigator>
       </NavigationContainer>
     )

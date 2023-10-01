@@ -7,8 +7,11 @@ import { UserData } from '../types/User'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
+import { useNavigation } from '@react-navigation/native'
+import Button from '../components/Button'
 
 export default () => {
+  const navigation = useNavigation()
   const { get } = useAppStorage()
   const [userData, setUserData] = useState<UserData | null>(null)
 
@@ -20,21 +23,25 @@ export default () => {
     <ScreenView>
       <View style={styles.container}>
         <PageTitle label='DittoAI'>
-          <SecondaryButton icon='settings' />
+          <SecondaryButton
+            icon='settings'
+            label='Settings'
+            onClick={() => navigation.navigate(SCREENS.SETTINGS)}
+          />
         </PageTitle>
 
+        <SecondaryButton noticeMe label='To course' onClick={() => navigation.navigate(SCREENS.COURSE.MAIN)} />
+
         <SectionView name='Scenarios' redirection={SCREENS.ONBOARDING}>
-          {userData && (
-            <Text>
-              User Data:
-              {'\n'}
-              Language: {userData.language}
-              {'\n'}
-              Proficiency: {userData.profeciency}
-              {'\n'}
-              Context: {userData.context}
-            </Text>
-          )}
+          {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
+        </SectionView>
+
+        <SectionView name='Saved Sentences' redirection={SCREENS.ONBOARDING}>
+          {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
+        </SectionView>
+
+        <SectionView name='Recent Sentences' redirection={SCREENS.ONBOARDING}>
+          {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
       </View>
     </ScreenView>
