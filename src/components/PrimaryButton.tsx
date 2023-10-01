@@ -6,12 +6,12 @@ interface PrimaryButtonProps extends ButtonProps {}
 
 export default (props: PrimaryButtonProps) => {
   const { labelStyle, containerStyle } = props
-  
+
   return (
     <Button
+      {...props}
       labelStyle={{ ...labelStyle, ...styles.label }}
       containerStyle={{ ...containerStyle, ...styles.container }}
-      {...props}
     />
   )
 }

@@ -20,5 +20,5 @@ export default (props: SecondaryButtonProps) => {
     backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.CTA,
   }
 
-  return <Button disable={hide} labelStyle={labelStyle_} containerStyle={containerStyle_} {...props} />
+  return <Button {...props} disable={hide} labelStyle={labelStyle_} containerStyle={containerStyle_} />
 }

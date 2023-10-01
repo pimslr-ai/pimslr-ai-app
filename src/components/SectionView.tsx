@@ -23,7 +23,7 @@ export default ({ name, redirection, redirectionLabel, children }: SectionViewPr
       <View style={[styles.header, { justifyContent: redirectionLabel ? 'space-between' : 'flex-start' }]}>
         <Text style={styles.headerName}>{name ?? 'Section'}</Text>
         {redirection && (
-          <SecondaryButton
+          <Button
             labelFirst
             label={redirectionLabel}
             icon='keyboard-arrow-right'

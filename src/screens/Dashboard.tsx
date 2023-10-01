@@ -23,7 +23,7 @@ export default () => {
           <SecondaryButton icon='settings' />
         </PageTitle>
 
-        <SectionView name='Scenarios' redirection={SCREENS.ONBOARDING} redirectionLabel='More'>
+        <SectionView name='Scenarios' redirection={SCREENS.ONBOARDING}>
           {userData && (
             <Text>
               User Data:
