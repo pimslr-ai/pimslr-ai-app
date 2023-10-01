@@ -1,6 +1,8 @@
 import { PropsWithChildren } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { View, StyleSheet, Dimensions } from 'react-native'
 import { THEME } from '../constants'
+
+const screen = Dimensions.get('screen')
 
 export default ({ children }: PropsWithChildren) => {
   return <View style={styles.body}>{children}</View>
