@@ -23,6 +23,7 @@ export default () => {
       <View style={styles.container}>
         <PageTitle label='Pimslr'>
           <SecondaryButton
+            labelFirst
             icon='settings'
             label='Settings'
             onClick={() => navigation.navigate(SCREENS.SETTINGS)}

@@ -1,12 +1,12 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import { Text, TouchableOpacity, TextStyle, StyleSheet, ViewStyle, View, Image } from 'react-native'
 import { FONTS, THEME } from '../constants'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export interface ButtonProps {
   label?: string
-  icon?: string
   labelFirst?: boolean
+  icon?: string
   disable?: boolean
   labelStyle?: TextStyle
   containerStyle?: ViewStyle
@@ -28,17 +28,7 @@ export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, 
       ]}
       onPress={handleClick}
     >
-      {icon && (
-        <Icon.Button
-          color={labelStyle?.color ?? styles.label.color}
-          backgroundColor='transparent'
-          name={icon}
-          style={styles.icon}
-          activeOpacity={1}
-          underlayColor='transparent'
-          onPress={handleClick}
-        />
-      )}
+      {icon && <Icon name={icon} style={[styles.icon, labelStyle, { marginLeft: label ? 8 : 0 }]} />}
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
     </TouchableOpacity>
   )
@@ -52,7 +42,7 @@ const styles = StyleSheet.create({
     paddingLeft: 16,
     paddingRight: 16,
     backgroundColor: 'white',
-    alignSelf: 'flex-start'
+    alignSelf: 'flex-start',
   },
   label: {
     flexDirection: 'row',
@@ -64,7 +54,7 @@ const styles = StyleSheet.create({
   icon: {
     padding: 0,
     margin: 0,
-    marginLeft: 8,
     alignSelf: 'center',
+    transform: [{ scale: 1.4 }],
   },
 })

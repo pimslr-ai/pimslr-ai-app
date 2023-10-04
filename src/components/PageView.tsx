@@ -62,7 +62,7 @@ class PageView extends Component<PageViewProps> {
     const { children } = this.props
 
     return (
-      <ScrollView horizontal ref={this.scrollView}>
+      <ScrollView scrollEnabled={false} horizontal ref={this.scrollView}>
         {React.Children.map(children, (child, index) => (
           <View key={index} style={{ width: screen.width }}>
             {child}

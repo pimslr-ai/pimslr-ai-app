@@ -3,9 +3,15 @@ import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
-import CardView from '../components/CardView'
 import { useState } from 'react'
 import PageView from '../components/PageView'
+import Button from '../components/Button'
+
+interface Course {
+  id: any
+  scenario: string
+  sentences: Sentence[]
+}
 
 interface Sentence {
   id: any
@@ -13,53 +19,27 @@ interface Sentence {
   original?: string
 }
 
-const sentences: Sentence[] = [
-  {
-    id: 1,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 2,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 3,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 1,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 2,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 3,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 1,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 2,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-  {
-    id: 3,
-    translation: 'Pourriez-vous recommander une bière locale ?',
-    original: 'Could you recommend a local brew?',
-  },
-]
+const course: Course = {
+  id: 1,
+  scenario: 'You are at a bar...',
+  sentences: [
+    {
+      id: 1,
+      translation: 'Pourriez-vous recommander une bière locale ?',
+      original: 'Could you recommend a local brew?',
+    },
+    {
+      id: 2,
+      translation: 'Pourriez-vous recommander une bière locale ?',
+      original: 'Could you recommend a local brew?',
+    },
+    {
+      id: 3,
+      translation: 'Pourriez-vous recommander une bière locale ?',
+      original: 'Could you recommend a local brew?',
+    },
+  ],
+}
 
 export default () => {
   const navigation = useNavigation()
@@ -79,15 +59,16 @@ export default () => {
             labelFirst
             noticeMe
             label='Refine Scenario'
+            icon='edit'
             onClick={() => navigation.navigate(SCREENS.COURSE.REFINE_SCENARIO)}
           />
         </View>
 
-        <Text style={styles.title}>You're at a bar...</Text>
+        <Text style={styles.title}></Text>
 
         <View style={styles.cards}>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {sentences.map(sentence => (
+            {course.sentences.map(sentence => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>{sentence.translation}</Text>
@@ -105,15 +86,33 @@ export default () => {
               onClick={pageView?.turnPrevious}
             />
             <Text style={styles.cardControlPagination}>
-              {pageNumber}/{sentences.length}
+              {pageNumber}/{course.sentences.length}
             </Text>
             <SecondaryButton
-              hide={pageNumber >= sentences.length}
+              hide={pageNumber >= course.sentences.length}
               label='Next'
               labelStyle={{ opacity: 0.7 }}
               onClick={pageView?.turnNext}
             />
           </View>
+        </View>
+
+        <View style={styles.courseControls}>
+          <Button
+            labelStyle={{ ...styles.courseControlButtonIcon, color: 'white' }}
+            containerStyle={{ ...styles.courseControlButton, backgroundColor: THEME.CTA }}
+            icon='audiotrack'
+          />
+          <Button
+            labelStyle={styles.courseControlButtonIcon}
+            containerStyle={styles.courseControlButton}
+            icon='mic'
+          />
+          <Button
+            labelStyle={styles.courseControlButtonIcon}
+            containerStyle={styles.courseControlButton}
+            icon='star'
+          />
         </View>
       </View>
     </ScreenView>
@@ -121,6 +120,28 @@ export default () => {
 }
 
 const styles = StyleSheet.create({
+  courseControls: {
+    width: '100%',
+    position: 'absolute',
+    display: 'flex',
+    flexDirection: 'row',
+    bottom: 70,
+    justifyContent: 'space-around',
+    paddingHorizontal: 70,
+  },
+  courseControlButton: {
+    aspectRatio: 1,
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    transform: [{ scale: 1.7 }],
+  },
+  activeCourseControlButton: {
+    backgroundColor: THEME.CTA,
+  },
+  courseControlButtonIcon: {
+    color: 'grey',
+  },
   container: {
     flex: 1,
     alignContent: 'center',
@@ -176,7 +197,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignContent: 'center',
     marginTop: 20,
-    paddingHorizontal: 30
+    paddingHorizontal: 30,
   },
   cardControlPagination: {
     fontSize: 12,
