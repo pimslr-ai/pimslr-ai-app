@@ -1,8 +1,8 @@
 {
   "expo": {
     "entryPoint": "./src/index.tsx",
-    "name": "wildlifenl-app",
-    "slug": "wildlifenl-app",
+    "name": "pimslr-ai",
+    "slug": "pimslr-ai",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -16,7 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "bundleIdentifier": "nl.chandler23.LagoAI"
     },
     "android": {
       "adaptiveIcon": {
@@ -26,6 +27,12 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    }
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0198d5ea-e57b-4dac-a697-5bff55527d5f"
+      }
+    },
+    "owner": "ichandler"
   }
 }
