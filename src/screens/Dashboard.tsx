@@ -8,7 +8,6 @@ import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
-import Button from '../components/Button'
 
 export default () => {
   const navigation = useNavigation()
@@ -32,15 +31,15 @@ export default () => {
 
         <SecondaryButton label='Onboarding' onClick={() => navigation.navigate(SCREENS.ONBOARDING)} />
 
-        <SectionView name='Scenarios' redirection={SCREENS.COURSE.MAIN}>
+        <SectionView name='Scenarios' redirectionLabel='More' redirection={SCREENS.COURSE.MAIN}>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
 
-        <SectionView name='Saved Sentences' redirection={SCREENS.ONBOARDING}>
+        <SectionView name='Saved Sentences' redirectionLabel='More' redirection={SCREENS.ONBOARDING}>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
 
-        <SectionView name='Recent Sentences' redirection={SCREENS.ONBOARDING}>
+        <SectionView name='Recent Sentences' redirectionLabel='More' redirection={SCREENS.ONBOARDING}>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
       </View>

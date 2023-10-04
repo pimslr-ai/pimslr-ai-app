@@ -1,6 +1,5 @@
 {
   "expo": {
-    "entryPoint": "./src/index.tsx",
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
     "version": "1.0.0",

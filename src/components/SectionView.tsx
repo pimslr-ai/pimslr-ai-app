@@ -3,7 +3,6 @@ import { StyleSheet, View, Text } from 'react-native'
 import { FONTS } from '../constants'
 import { useNavigation } from '@react-navigation/native'
 import Button from './Button'
-import SecondaryButton from './SecondaryButton'
 
 interface SectionViewProps extends PropsWithChildren {
   name?: string
@@ -26,7 +25,7 @@ export default ({ name, redirection, redirectionLabel, children }: SectionViewPr
           <Button
             labelFirst
             label={redirectionLabel}
-            icon='keyboard-arrow-right'
+            icon='arrow-forward'
             onClick={handleRedirection}
           />
         )}

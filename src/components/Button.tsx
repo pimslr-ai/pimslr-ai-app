@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
   icon: {
     padding: 0,
     margin: 0,
-    // marginLeft: 8,
+    marginLeft: 8,
     alignSelf: 'center',
   },
 })
