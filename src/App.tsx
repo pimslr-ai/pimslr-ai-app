@@ -26,16 +26,12 @@ export default () => {
   return (
     loaded && (
       <NavigationContainer>
-        <Navigator initialRouteName={SCREENS.COURSE.MAIN}>
-          <Screen name={SCREENS.ONBOARDING} component={Onboarding} options={{ headerShown: false }} />
-          <Screen name={SCREENS.DASHBOARD} component={Dashboard} options={{ headerShown: false }} />
-          <Screen name={SCREENS.SETTINGS} component={Settings} options={{ headerShown: false }} />
-          <Screen name={SCREENS.COURSE.MAIN} component={Course} options={{ headerShown: false }} />
-          <Screen
-            name={SCREENS.COURSE.REFINE_SCENARIO}
-            component={RefineScenario}
-            options={{ headerShown: false }}
-          />
+        <Navigator screenOptions={{ headerShown: false }} initialRouteName={SCREENS.COURSE.MAIN}>
+          <Screen name={SCREENS.ONBOARDING} component={Onboarding} />
+          <Screen name={SCREENS.DASHBOARD} component={Dashboard} />
+          <Screen name={SCREENS.SETTINGS} component={Settings} />
+          <Screen name={SCREENS.COURSE.MAIN} component={Course} />
+          <Screen name={SCREENS.COURSE.REFINE_SCENARIO} component={RefineScenario} />
         </Navigator>
       </NavigationContainer>
     )
