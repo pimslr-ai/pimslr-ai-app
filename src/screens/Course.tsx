@@ -3,9 +3,11 @@ import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
+import { Audio } from 'expo-av'
+import PrimaryButton from '../components/PrimaryButton'
 
 interface Course {
   id: any
@@ -45,6 +47,14 @@ export default () => {
   const navigation = useNavigation()
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
+  const [hasStarted, setHasStarted] = useState(false)
+
+  async function playSound() {
+    const file = require('../../assets/audio/question1.m4a')
+    const { sound } = await Audio.Sound.createAsync(file)
+    await sound.playAsync()
+    // await sound.unloadAsync()
+  }
 
   return (
     <ScreenView>
@@ -64,7 +74,7 @@ export default () => {
           />
         </View>
 
-        <Text style={styles.title}></Text>
+        <Text style={styles.title}>{course.scenario}</Text>
 
         <View style={styles.cards}>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
@@ -97,23 +107,32 @@ export default () => {
           </View>
         </View>
 
-        <View style={styles.courseControls}>
-          <Button
-            labelStyle={{ ...styles.courseControlButtonIcon, color: 'white' }}
-            containerStyle={{ ...styles.courseControlButton, backgroundColor: THEME.CTA }}
-            icon='audiotrack'
+        {!hasStarted ? (
+          <PrimaryButton
+            containerStyle={styles.courseControls}
+            label='Start!'
+            onClick={() => setHasStarted(true)}
           />
-          <Button
-            labelStyle={styles.courseControlButtonIcon}
-            containerStyle={styles.courseControlButton}
-            icon='mic'
-          />
-          <Button
-            labelStyle={styles.courseControlButtonIcon}
-            containerStyle={styles.courseControlButton}
-            icon='star'
-          />
-        </View>
+        ) : (
+          <View style={{ ...styles.courseControls, paddingHorizontal: 70 }}>
+            <Button
+              labelStyle={{ ...styles.courseControlButtonIcon, color: 'white' }}
+              containerStyle={{ ...styles.courseControlButton, backgroundColor: THEME.CTA }}
+              icon='audiotrack'
+              onClick={playSound}
+            />
+            <Button
+              labelStyle={styles.courseControlButtonIcon}
+              containerStyle={styles.courseControlButton}
+              icon='mic'
+            />
+            <Button
+              labelStyle={styles.courseControlButtonIcon}
+              containerStyle={styles.courseControlButton}
+              icon='star'
+            />
+          </View>
+        )}
       </View>
     </ScreenView>
   )
@@ -127,7 +146,6 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     bottom: 70,
     justifyContent: 'space-around',
-    paddingHorizontal: 70,
   },
   courseControlButton: {
     aspectRatio: 1,
@@ -163,10 +181,10 @@ const styles = StyleSheet.create({
     marginVertical: 40,
   },
   cards: {
+    elevation: 5,
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
-    elevation: 5,
   },
   card: {
     padding: 16,

@@ -55,6 +55,6 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     alignSelf: 'center',
-    transform: [{ scale: 1.4 }],
+    fontSize: 17,
   },
 })
