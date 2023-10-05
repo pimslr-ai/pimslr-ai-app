@@ -1,10 +1,11 @@
 import React, { Component, PropsWithChildren, createRef, useCallback } from 'react'
-import { ScrollView, View, Dimensions } from 'react-native'
+import { ScrollView, View, Dimensions, ViewStyle } from 'react-native'
 
 const screen = Dimensions.get('screen')
 
 interface PageViewProps extends PropsWithChildren {
   startingIndex?: number
+  style?: ViewStyle
   onPageChange?: (pageNumber: number) => void
   onLastPage?: (pageNumber: number) => void
   onFirstPage?: (pageNumber: number) => void
@@ -59,10 +60,17 @@ class PageView extends Component<PageViewProps> {
   }
 
   render() {
-    const { children } = this.props
+    const { children, style } = this.props
 
     return (
-      <ScrollView scrollEnabled={false} horizontal ref={this.scrollView}>
+      <ScrollView
+        style={style}
+        scrollEnabled={false}
+        horizontal
+        ref={this.scrollView}
+        showsVerticalScrollIndicator={false}
+        showsHorizontalScrollIndicator={false}
+      >
         {React.Children.map(children, (child, index) => (
           <View key={index} style={{ width: screen.width }}>
             {child}
