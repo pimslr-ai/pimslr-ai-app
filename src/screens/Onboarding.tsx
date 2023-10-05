@@ -128,6 +128,7 @@ const styles = StyleSheet.create({
   input: {
     height: '40%',
     marginTop: 40,
+    textAlignVertical: 'top',
   },
   button: {
     position: 'absolute',
