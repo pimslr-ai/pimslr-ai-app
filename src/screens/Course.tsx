@@ -3,7 +3,7 @@ import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
 import { Audio } from 'expo-av'
@@ -53,7 +53,7 @@ export default () => {
     const file = require('../../assets/audio/question1.m4a')
     const { sound } = await Audio.Sound.createAsync(file)
     await sound.playAsync()
-    // await sound.unloadAsync()
+    await sound.unloadAsync()
   }
 
   return (
@@ -109,18 +109,19 @@ export default () => {
 
         {!hasStarted ? (
           <PrimaryButton
-            containerStyle={styles.courseControls}
+            containerStyle={styles.startButton}
             label='Start!'
             onClick={() => setHasStarted(true)}
           />
         ) : (
-          <View style={{ ...styles.courseControls, paddingHorizontal: 70 }}>
+          <View style={styles.courseControls}>
             <Button
               labelStyle={{ ...styles.courseControlButtonIcon, color: 'white' }}
               containerStyle={{ ...styles.courseControlButton, backgroundColor: THEME.CTA }}
               icon='audiotrack'
               onClick={playSound}
             />
+
             <Button
               labelStyle={styles.courseControlButtonIcon}
               containerStyle={styles.courseControlButton}
@@ -142,17 +143,22 @@ const styles = StyleSheet.create({
   courseControls: {
     width: '100%',
     position: 'absolute',
+    bottom: 70,
+    paddingHorizontal: 70,
     display: 'flex',
     flexDirection: 'row',
-    bottom: 70,
     justifyContent: 'space-around',
+  },
+  startButton: {
+    position: 'absolute',
+    bottom: 70,
   },
   courseControlButton: {
     aspectRatio: 1,
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
-    transform: [{ scale: 1.7 }],
+    transform: [{ scale: 1.4 }],
   },
   activeCourseControlButton: {
     backgroundColor: THEME.CTA,
