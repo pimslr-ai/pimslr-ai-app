@@ -6,7 +6,7 @@ import { FONTS, SCREENS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
-import { AVPlaybackStatus, AVPlaybackStatusSuccess, Audio } from 'expo-av'
+import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PrimaryButton from '../components/PrimaryButton'
 
 interface Course {
@@ -48,51 +48,65 @@ export default () => {
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
 
-  const [state, setState] = useState<'ready' | 'playing' | 'standby' | 'listening'>('ready')
+  const [isReady, setIsReady] = useState(false)
+  const [isPlaying, setIsPlaying] = useState(false)
+  const [isRecording, setIsRecording] = useState(false)
+  const [recording, setRecording] = useState<Audio.Recording>()
 
   useEffect(() => {
-    switch (state) {
-      default:
-      case 'ready':
-        break
-      case 'listening':
-        recordAudio()
-        break
-      case 'playing':
-        playAudio()
-        break
-      case 'standby':
-        break
-    }
-  }, [state])
+    if (isReady) playAudio()
+  }, [isReady])
 
   const recordAudio = () => {
-    setOnStandby()
-  }
-
-  const playAudio = () => {
-    const file = require('../../assets/audio/question1.m4a')
-    let sound: Audio.Sound | null = null
-
-    const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
-      if ((status as AVPlaybackStatusSuccess).didJustFinish) {
-        setOnStandby()
+    if (!isPlaying) {
+      if (isRecording) {
+        stopRecording()
+        setIsRecording(false)
+      } else {
+        startRecording()
+        setIsRecording(true)
       }
     }
-
-    Audio.Sound.createAsync(file)
-      .then(audio => {
-        setOnPlaying()
-        sound = audio.sound
-        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
-        sound.playAsync()
-      })
-      .catch(console.log)
   }
 
-  const setOnPlaying = () => setState('playing')
-  const setOnStandby = () => setState('standby')
-  const setOnListening = () => state !== 'playing' && setState('listening')
+  async function startRecording() {
+    console.log('Requesting permissions..')
+    await Audio.requestPermissionsAsync()
+    await Audio.setAudioModeAsync({
+      allowsRecordingIOS: true,
+      playsInSilentModeIOS: true,
+    })
+
+    console.log('Starting recording..')
+    const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+    setRecording(recording)
+    console.log('Recording started')
+  }
+
+  async function stopRecording() {
+    if (recording) {
+      console.log('Stopping recording..')
+      setRecording(undefined)
+      await recording.stopAndUnloadAsync()
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+      })
+      const uri = recording.getURI()
+      console.log('Recording stopped and stored at', uri)
+    }
+  }
+
+  const playAudio = async () => {
+    if (!isPlaying && !isRecording) {
+      const file = require('../../assets/audio/question1.m4a')
+      const { sound } = await Audio.Sound.createAsync(file)
+      sound.setOnPlaybackStatusUpdate(
+        status => (status as AVPlaybackStatusSuccess).didJustFinish && setIsPlaying(false),
+      )
+      sound.playAsync()
+      setIsPlaying(true)
+    }
+  }
 
   return (
     <ScreenView>
@@ -145,12 +159,16 @@ export default () => {
           </View>
         </View>
 
-        {state === 'ready' ? (
-          <PrimaryButton containerStyle={styles.startButton} label='Start!' onClick={setOnPlaying} />
+        {!isReady ? (
+          <PrimaryButton
+            containerStyle={styles.startButton}
+            label='Start!'
+            onClick={() => setIsReady(true)}
+          />
         ) : (
           <View style={styles.courseControls}>
-            <CourseButton icon='audiotrack' toggle={state === 'playing'} onClick={setOnPlaying} />
-            <CourseButton icon='mic' toggle={state === 'standby'} onClick={setOnListening} />
+            <CourseButton icon='audiotrack' toggle={isPlaying} onClick={playAudio} />
+            <CourseButton icon={isRecording ? 'pause' : 'mic'} toggle={!isPlaying} onClick={recordAudio} />
             <Button labelStyle={{ color: 'grey' }} containerStyle={styles.courseControlButton} icon='star' />
           </View>
         )}
