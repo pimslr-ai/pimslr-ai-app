@@ -3,10 +3,10 @@ import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
-import { Audio } from 'expo-av'
+import { AVPlaybackStatus, AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PrimaryButton from '../components/PrimaryButton'
 
 interface Course {
@@ -47,14 +47,52 @@ export default () => {
   const navigation = useNavigation()
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const [hasStarted, setHasStarted] = useState(false)
 
-  async function playSound() {
-    const file = require('../../assets/audio/question1.m4a')
-    const { sound } = await Audio.Sound.createAsync(file)
-    await sound.playAsync()
-    await sound.unloadAsync()
+  const [state, setState] = useState<'ready' | 'playing' | 'standby' | 'listening'>('ready')
+
+  useEffect(() => {
+    switch (state) {
+      default:
+      case 'ready':
+        break
+      case 'listening':
+        recordAudio()
+        break
+      case 'playing':
+        playAudio()
+        break
+      case 'standby':
+        break
+    }
+  }, [state])
+
+  const recordAudio = () => {
+    setOnStandby()
   }
+
+  const playAudio = () => {
+    const file = require('../../assets/audio/question1.m4a')
+    let sound: Audio.Sound | null = null
+
+    const onPlaybackStatusUpdate = (status: AVPlaybackStatus) => {
+      if ((status as AVPlaybackStatusSuccess).didJustFinish) {
+        setOnStandby()
+      }
+    }
+
+    Audio.Sound.createAsync(file)
+      .then(audio => {
+        setOnPlaying()
+        sound = audio.sound
+        sound.setOnPlaybackStatusUpdate(onPlaybackStatusUpdate)
+        sound.playAsync()
+      })
+      .catch(console.log)
+  }
+
+  const setOnPlaying = () => setState('playing')
+  const setOnStandby = () => setState('standby')
+  const setOnListening = () => state !== 'playing' && setState('listening')
 
   return (
     <ScreenView>
@@ -107,35 +145,31 @@ export default () => {
           </View>
         </View>
 
-        {!hasStarted ? (
-          <PrimaryButton
-            containerStyle={styles.startButton}
-            label='Start!'
-            onClick={() => setHasStarted(true)}
-          />
+        {state === 'ready' ? (
+          <PrimaryButton containerStyle={styles.startButton} label='Start!' onClick={setOnPlaying} />
         ) : (
           <View style={styles.courseControls}>
-            <Button
-              labelStyle={{ ...styles.courseControlButtonIcon, color: 'white' }}
-              containerStyle={{ ...styles.courseControlButton, backgroundColor: THEME.CTA }}
-              icon='audiotrack'
-              onClick={playSound}
-            />
-
-            <Button
-              labelStyle={styles.courseControlButtonIcon}
-              containerStyle={styles.courseControlButton}
-              icon='mic'
-            />
-            <Button
-              labelStyle={styles.courseControlButtonIcon}
-              containerStyle={styles.courseControlButton}
-              icon='star'
-            />
+            <CourseButton icon='audiotrack' toggle={state === 'playing'} onClick={setOnPlaying} />
+            <CourseButton icon='mic' toggle={state === 'standby'} onClick={setOnListening} />
+            <Button labelStyle={{ color: 'grey' }} containerStyle={styles.courseControlButton} icon='star' />
           </View>
         )}
       </View>
     </ScreenView>
+  )
+}
+
+const CourseButton = ({ icon, toggle, onClick }: { icon: string; toggle: boolean; onClick: () => void }) => {
+  return (
+    <Button
+      labelStyle={{ color: toggle ? 'white' : 'grey' }}
+      containerStyle={{
+        ...styles.courseControlButton,
+        backgroundColor: toggle ? THEME.CTA : 'transparent',
+      }}
+      icon={icon}
+      onClick={onClick}
+    />
   )
 }
 
@@ -159,12 +193,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     transform: [{ scale: 1.4 }],
-  },
-  activeCourseControlButton: {
-    backgroundColor: THEME.CTA,
-  },
-  courseControlButtonIcon: {
-    color: 'grey',
   },
   container: {
     flex: 1,

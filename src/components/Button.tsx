@@ -28,7 +28,17 @@ export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, 
       ]}
       onPress={handleClick}
     >
-      {icon && <Icon name={icon} style={[styles.icon, labelStyle, { marginLeft: label ? 8 : 0 }]} />}
+      {icon && (
+        <Icon
+          size={17}
+          name={icon}
+          style={[
+            styles.icon,
+            labelStyle,
+            { marginLeft: label && labelFirst ? 8 : 0, marginRight: label && !labelFirst ? 8 : 0 },
+          ]}
+        />
+      )}
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
     </TouchableOpacity>
   )
@@ -55,6 +65,5 @@ const styles = StyleSheet.create({
     padding: 0,
     margin: 0,
     alignSelf: 'center',
-    fontSize: 17,
   },
 })
