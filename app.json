@@ -1,5 +1,14 @@
 {
   "expo": {
+    "plugins": [
+      [
+        "@react-native-voice/voice",
+        {
+          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
+          "speechRecogntionPermission": "Allow $(PRODUCT_NAME) to securely recognize user speech"
+        }
+      ]
+    ],
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
     "version": "1.0.2",
