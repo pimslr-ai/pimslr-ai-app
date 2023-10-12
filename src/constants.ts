@@ -1,16 +1,3 @@
-const THEME = {
-  // BACKGROUND: '#FFF2D8',
-  // COLOR: '#4D4637',
-  // COLOR_ALT: '#0F2C59',
-  // CTA: '#FF7C7C',
-  // ACCENT: '#1A936F'
-  BACKGROUND: 'white',
-  COLOR: '#001524',
-  COLOR_ALT: '#0F2C59',
-  CTA: '#713ABE',
-  ACCENT: '#FF9501',
-}
-
 const FONTS = {
   POPPINS: {
     THIN: 'Poppins_100Thin',
@@ -34,19 +21,4 @@ const FONTS = {
   },
 }
 
-const SCREENS = {
-  ONBOARDING: 'onboarding' as never,
-  DASHBOARD: 'dashboard' as never,
-  SETTINGS: 'settings' as never,
-  COURSE: {
-    MAIN: 'course:home' as never,
-    REFINE_SCENARIO: 'course:refine_scenario' as never,
-  }
-}
-
-const DATA = {
-  USER_DATA: 'user:preferences',
-  SETUP_COMPLETE: 'onboarding:complete',
-}
-
-export { THEME, FONTS, SCREENS, DATA }
+export { FONTS }
