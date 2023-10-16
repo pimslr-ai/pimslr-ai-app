@@ -5,7 +5,7 @@ export default () => {
   const { startRecording, stopRecording, audioTranscript, isRecording } = useSpeech('en-US')
 
   return (
-    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center' }}>
+    <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white' }}>
       <Text style={{ textAlign: 'center', fontSize: 20, paddingVertical: 20 }}>
         {isRecording ? 'Listening...' : audioTranscript ? audioTranscript : 'Waiting for input'}
       </Text>
