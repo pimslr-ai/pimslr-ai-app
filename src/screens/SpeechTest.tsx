@@ -1,5 +1,6 @@
 import { View, Text, Button } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
+import useMic from '../hooks/useMic'
 
 export default () => {
   const { startRecording, stopRecording, audioTranscript, isRecording } = useSpeech('en-US')
@@ -10,9 +11,7 @@ export default () => {
         {isRecording ? 'Listening...' : audioTranscript ? audioTranscript : 'Waiting for input'}
       </Text>
 
-      <View
-        style={{ display: 'flex', paddingVertical: 20, flexDirection: 'row', justifyContent: 'space-evenly' }}
-      >
+      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <Button
           title={isRecording ? 'Stop recording' : 'Start recording'}
           onPress={isRecording ? stopRecording : startRecording}
