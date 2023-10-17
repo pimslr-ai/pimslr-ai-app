@@ -1,6 +1,5 @@
 import { View, Text, Button } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
-import useMic from '../hooks/useMic'
 
 export default () => {
   const { startRecording, stopRecording, audioTranscript, isRecording } = useSpeech('en-US')
