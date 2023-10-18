@@ -8,7 +8,7 @@ import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
 import PrimaryButton from '../components/PrimaryButton'
-import useRecognition from '../hooks/useRecognition'
+import useSpeechToText from '../hooks/useSpeechToText'
 
 const course: Course = {
   id: 1,
@@ -36,10 +36,19 @@ export default () => {
   const navigation = useNavigation()
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
-  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } =
-    useRecognition('en-US')
+
   const [isReady, setIsReady] = useState(false)
+
   const [isPlaying, setIsPlaying] = useState(false)
+  
+  const {
+    startRecording,
+    stopRecording,
+    recognition,
+    hasFailed,
+    isRecording,
+    isLoading,
+  } = useSpeechToText('en-US')
 
   useEffect(() => {
     if (isReady) playAudio()
@@ -60,7 +69,8 @@ export default () => {
       const file = require('../../assets/audio/question1.m4a')
       const { sound } = await Audio.Sound.createAsync(file)
       sound.setOnPlaybackStatusUpdate(
-        status => (status as AVPlaybackStatusSuccess).didJustFinish && setIsPlaying(false),
+        status =>
+          (status as AVPlaybackStatusSuccess).didJustFinish && setIsPlaying(false),
       )
       sound.playAsync()
       setIsPlaying(true)
@@ -128,8 +138,16 @@ export default () => {
         ) : (
           <View style={styles.courseControls}>
             <CourseButton icon='audiotrack' toggle={isPlaying} onClick={playAudio} />
-            <CourseButton icon={isRecording ? 'pause' : 'mic'} toggle={!isPlaying} onClick={recordAudio} />
-            <Button labelStyle={{ color: 'grey' }} containerStyle={styles.courseControlButton} icon='star' />
+            <CourseButton
+              icon={isRecording ? 'pause' : 'mic'}
+              toggle={!isPlaying}
+              onClick={recordAudio}
+            />
+            <Button
+              labelStyle={{ color: 'grey' }}
+              containerStyle={styles.courseControlButton}
+              icon='star'
+            />
           </View>
         )}
       </View>
@@ -137,7 +155,15 @@ export default () => {
   )
 }
 
-const CourseButton = ({ icon, toggle, onClick }: { icon: string; toggle: boolean; onClick: () => void }) => {
+const CourseButton = ({
+  icon,
+  toggle,
+  onClick,
+}: {
+  icon: string
+  toggle: boolean
+  onClick: () => void
+}) => {
   return (
     <Button
       labelStyle={{ color: toggle ? 'white' : 'grey' }}
