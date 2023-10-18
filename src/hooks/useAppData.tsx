@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react'
 import { NativeEventEmitter } from 'react-native'
-import useAppStorage from './use-app-storage'
+import useStorage from './useStorage'
 
 const emitter = new NativeEventEmitter()
 
 export default function useAppData<T>(key: string, initialValue?: T) {
   const [data, setData] = useState<T | null | undefined>(initialValue)
-  const { get, set, remove } = useAppStorage()
+  const { get, set, remove } = useStorage()
 
   useEffect(() => {
     get<T>(key).then(setData)

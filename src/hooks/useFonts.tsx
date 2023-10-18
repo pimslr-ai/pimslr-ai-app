@@ -17,10 +17,10 @@ import {
   Poppins_800ExtraBold,
   Poppins_800ExtraBold_Italic,
   Poppins_900Black,
-  Poppins_900Black_Italic
+  Poppins_900Black_Italic,
 } from '@expo-google-fonts/poppins'
 
-export default function useAppFonts() {
+export default () => {
   const [fontsLoaded, fontError] = useFonts({
     Poppins_100Thin,
     Poppins_100Thin_Italic,
@@ -39,7 +39,7 @@ export default function useAppFonts() {
     Poppins_800ExtraBold,
     Poppins_800ExtraBold_Italic,
     Poppins_900Black,
-    Poppins_900Black_Italic
+    Poppins_900Black_Italic,
   })
   return { loaded: fontsLoaded && !fontError }
 }

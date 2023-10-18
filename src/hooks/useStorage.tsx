@@ -1,6 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
-export default function useAppStorage() {
+export default () => {
   async function get<T>(key: string): Promise<T> {
     try {
       const json = await AsyncStorage.getItem(key)

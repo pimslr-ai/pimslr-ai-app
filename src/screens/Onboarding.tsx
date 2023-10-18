@@ -7,7 +7,7 @@ import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 import { UserData } from '../types/User'
 import { useNavigation } from '@react-navigation/native'
-import useAppStorage from '../hooks/use-app-storage'
+import useAppStorage from '../hooks/useStorage'
 import ScreenView from '../components/ScreenView'
 
 export default () => {
