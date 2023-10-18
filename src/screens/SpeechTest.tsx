@@ -7,7 +7,11 @@ export default () => {
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white' }}>
       <Text style={{ textAlign: 'center', fontSize: 20, paddingVertical: 20 }}>
-        {isRecording ? 'Listening...' : audioTranscript ? audioTranscript : 'Waiting for input'}
+        {isRecording
+          ? 'Listening...'
+          : audioTranscript
+          ? audioTranscript.results[0].alternatives[0].transcript
+          : 'Waiting for input'}
       </Text>
 
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
