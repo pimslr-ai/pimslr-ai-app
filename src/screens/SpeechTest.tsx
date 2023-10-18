@@ -2,7 +2,7 @@ import { View, Text, Button } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
 
 export default () => {
-  const { startRecording, stopRecording, audioTranscript, isRecording, isLoading } = useSpeech('en-US')
+  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } = useSpeech('en-US')
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white' }}>
@@ -11,8 +11,10 @@ export default () => {
           ? 'Listening...'
           : isLoading
           ? 'Loading...'
-          : audioTranscript
-          ? audioTranscript.results[0].alternatives[0].transcript
+          : hasFailed
+          ? 'Recognition failed.'
+          : recognition
+          ? recognition.transcript
           : 'Waiting for input'}
       </Text>
 

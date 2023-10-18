@@ -6,14 +6,18 @@ import axios from 'axios'
 export default (language: string) => {
   const { startRecording, stopRecording, audioRecording, isRecording } = useMic()
   const [state, setState] = useState<{
-    transcript?: RecognizeResponse
+    transcript?: Alternative | null
     isLoading: boolean
+    hasFailed?: boolean
   }>({ isLoading: false })
 
   useEffect(() => {
     if (audioRecording) {
-      setState({ isLoading: true })
-      speechToText(audioRecording).finally(() => FileSystem.deleteAsync(audioRecording!))
+      setState({ transcript: null, isLoading: true })
+
+      speechToText(audioRecording)
+        .then(data => setState({ transcript: data, isLoading: false, hasFailed: data === null }))
+        .finally(() => FileSystem.deleteAsync(audioRecording!))
     }
   }, [audioRecording])
 
@@ -23,17 +27,16 @@ export default (language: string) => {
     })
     const url = 'http://localhost:5102/speech/recognize/' + language
     const response = await axios.post<RecognizeResponse>(url, { audio })
-    setState({ transcript: response.data, isLoading: false })
+    return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
-
-  console.log(JSON.stringify(state, null, 2))
 
   return {
     startRecording,
     stopRecording,
     isRecording,
     isLoading: state.isLoading,
-    audioTranscript: state.transcript,
+    recognition: state.transcript,
+    hasFailed: state.hasFailed,
   }
 }
 
