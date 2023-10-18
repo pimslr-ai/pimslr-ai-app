@@ -6,7 +6,7 @@ export default () => {
 
   return (
     <View style={{ flex: 1, justifyContent: 'center', alignContent: 'center', backgroundColor: 'white' }}>
-      <Text style={{ textAlign: 'center', fontSize: 20, paddingVertical: 20 }}>
+      <Text style={{ textAlign: 'center', fontSize: 20, padding: 20 }}>
         {isRecording
           ? 'Listening...'
           : isLoading
@@ -14,7 +14,8 @@ export default () => {
           : hasFailed
           ? 'Recognition failed.'
           : recognition
-          ? recognition.transcript
+          ? `${recognition.transcript} (${Math.ceil(recognition.confidence * 100) / 100}) \n\n` +
+            recognition.words.map(w => `${w.word} (${Math.ceil(w.confidence * 100) / 100})`).join(' ')
           : 'Waiting for input'}
       </Text>
 

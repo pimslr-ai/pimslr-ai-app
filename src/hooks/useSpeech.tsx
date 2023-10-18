@@ -25,7 +25,7 @@ export default (language: string) => {
     const audio = await FileSystem.readAsStringAsync(audioFile, {
       encoding: FileSystem.EncodingType.Base64,
     })
-    const url = 'http://localhost:5102/speech/recognize/' + language
+    const url = 'http://pimslrai.greffchandler.net/speech/recognize/' + language
     const response = await axios.post<RecognizeResponse>(url, { audio })
     return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
