@@ -4,10 +4,11 @@ import SecondaryButton from '../components/SecondaryButton'
 import { useNavigation } from '@react-navigation/native'
 import { FONTS, SCREENS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
+import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PageView from '../components/PageView'
 import Button from '../components/Button'
-import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PrimaryButton from '../components/PrimaryButton'
+import useRecognition from '../hooks/useRecognition'
 
 const course: Course = {
   id: 1,
@@ -35,11 +36,10 @@ export default () => {
   const navigation = useNavigation()
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
-
+  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } =
+    useRecognition('en-US')
   const [isReady, setIsReady] = useState(false)
   const [isPlaying, setIsPlaying] = useState(false)
-  const [isRecording, setIsRecording] = useState(false)
-  const [recording, setRecording] = useState<Audio.Recording>()
 
   useEffect(() => {
     if (isReady) playAudio()
@@ -49,38 +49,9 @@ export default () => {
     if (!isPlaying) {
       if (isRecording) {
         stopRecording()
-        setIsRecording(false)
       } else {
         startRecording()
-        setIsRecording(true)
       }
-    }
-  }
-
-  async function startRecording() {
-    console.log('Requesting permissions..')
-    await Audio.requestPermissionsAsync()
-    await Audio.setAudioModeAsync({
-      allowsRecordingIOS: true,
-      playsInSilentModeIOS: true,
-    })
-
-    console.log('Starting recording..')
-    const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
-    setRecording(recording)
-    console.log('Recording started')
-  }
-
-  async function stopRecording() {
-    if (recording) {
-      console.log('Stopping recording..')
-      setRecording(undefined)
-      await recording.stopAndUnloadAsync()
-      await Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
-      })
-      const uri = recording.getURI()
-      console.log('Recording stopped and stored at', uri)
     }
   }
 
@@ -123,6 +94,7 @@ export default () => {
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>{sentence.translation}</Text>
                   <Text style={styles.original}>{sentence.original}</Text>
+                  <Text>{recognition?.transcript}</Text>
                 </View>
               </View>
             ))}
