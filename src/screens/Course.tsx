@@ -9,18 +9,6 @@ import Button from '../components/Button'
 import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 import PrimaryButton from '../components/PrimaryButton'
 
-interface Course {
-  id: any
-  scenario: string
-  sentences: Sentence[]
-}
-
-interface Sentence {
-  id: any
-  translation?: string
-  original?: string
-}
-
 const course: Course = {
   id: 1,
   scenario: 'You are at a bar...',
