@@ -5,10 +5,14 @@ import axios from 'axios'
 
 export default (language: string) => {
   const { startRecording, stopRecording, audioRecording, isRecording } = useMic()
-  const [audioTranscript, setAudioTranscript] = useState<RecognizeResponse | null>(null)
+  const [state, setState] = useState<{
+    transcript?: RecognizeResponse
+    isLoading: boolean
+  }>({ isLoading: false })
 
   useEffect(() => {
     if (audioRecording) {
+      setState({ isLoading: true })
       speechToText(audioRecording).finally(() => FileSystem.deleteAsync(audioRecording!))
     }
   }, [audioRecording])
@@ -18,13 +22,19 @@ export default (language: string) => {
       encoding: FileSystem.EncodingType.Base64,
     })
     const url = 'http://localhost:5102/speech/recognize/' + language
-    const response = await axios.post(url, { audio })
-    setAudioTranscript(response.data)
+    const response = await axios.post<RecognizeResponse>(url, { audio })
+    setState({ transcript: response.data, isLoading: false })
   }
 
-  console.log(JSON.stringify(audioTranscript, null, 2))
+  console.log(JSON.stringify(state, null, 2))
 
-  return { startRecording, stopRecording, isRecording, audioTranscript }
+  return {
+    startRecording,
+    stopRecording,
+    isRecording,
+    isLoading: state.isLoading,
+    audioTranscript: state.transcript,
+  }
 }
 
 interface Word {
