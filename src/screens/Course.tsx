@@ -9,6 +9,7 @@ import PageView from '../components/PageView'
 import SecondaryButton from '../components/SecondaryButton'
 import PrimaryButton from '../components/PrimaryButton'
 import Button from '../components/Button'
+import ConfettiCannon from 'react-native-confetti-cannon'
 
 export default () => {
   const navigation = useNavigation()
@@ -18,6 +19,7 @@ export default () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
 
   const [isReady, setIsReady] = useState(false)
+  const [hasSucceeded, setHasSucceeded] = useState(false)
 
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
 
@@ -60,6 +62,8 @@ export default () => {
 
   return (
     <ScreenView>
+      {hasSucceeded && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
+
       <View style={styles.container}>
         <View style={styles.header}>
           <SecondaryButton
@@ -84,7 +88,11 @@ export default () => {
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>
-                    <Sentence translation={sentence.translation!} recognition={recognition!} />
+                    <Sentence
+                      onSuccess={() => setHasSucceeded(true)}
+                      translation={sentence?.translation!}
+                      recognition={recognition!}
+                    />
                   </Text>
                   <Text style={styles.original}>{sentence.original}</Text>
                 </View>
@@ -135,7 +143,15 @@ export default () => {
   )
 }
 
-const Sentence = ({ translation, recognition }: { translation: string; recognition: Recognition }) => {
+const Sentence = ({
+  translation,
+  recognition,
+  onSuccess,
+}: {
+  translation: string
+  recognition: Recognition
+  onSuccess?: () => void
+}) => {
   const strip = (input: string) => {
     return input
       .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
@@ -166,7 +182,9 @@ const Sentence = ({ translation, recognition }: { translation: string; recogniti
     const parsedTranscripted = strip(recognition.transcript)
     const mismatched = flagMismatch(parsedTranslation, parsedTranscripted)
 
-    console.log(parsedTranslation, parsedTranscripted)
+    if (!mismatched.length && onSuccess) {
+      onSuccess()
+    }
 
     return translation.split(' ').map((word, i) => (
       <Text
