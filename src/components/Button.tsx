@@ -1,5 +1,14 @@
 import React from 'react'
-import { Text, TouchableOpacity, TextStyle, StyleSheet, ViewStyle, View, Image } from 'react-native'
+import {
+  Text,
+  TouchableOpacity,
+  TextStyle,
+  StyleSheet,
+  ViewStyle,
+  View,
+  Image,
+  Animated,
+} from 'react-native'
 import { FONTS, THEME } from '../constants'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 
@@ -13,13 +22,23 @@ export interface ButtonProps {
   onClick?: () => void
 }
 
-export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, onClick }: ButtonProps) => {
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+
+export default ({
+  label,
+  labelFirst,
+  icon,
+  disable,
+  labelStyle,
+  containerStyle,
+  onClick,
+}: ButtonProps) => {
   const handleClick = () => {
     !disable && onClick && onClick()
   }
 
   return (
-    <TouchableOpacity
+    <AnimatedTouchableOpacity
       disabled={disable ?? false}
       style={[
         styles.container,
@@ -35,12 +54,15 @@ export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, 
           style={[
             styles.icon,
             labelStyle,
-            { marginLeft: label && labelFirst ? 8 : 0, marginRight: label && !labelFirst ? 8 : 0 },
+            {
+              marginLeft: label && labelFirst ? 8 : 0,
+              marginRight: label && !labelFirst ? 8 : 0,
+            },
           ]}
         />
       )}
       {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
-    </TouchableOpacity>
+    </AnimatedTouchableOpacity>
   )
 }
 
