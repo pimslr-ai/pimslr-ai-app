@@ -13,8 +13,7 @@ export default (input?: string) => {
   const textToSpeech = (input: string) => {}
 
   const playAudio = async () => {
-    console.log('trying to play...')
-    if (!state.isPlaying) {
+    if (!state.isLoading && !state.isPlaying) {
       await state.sound.loadAsync(file)
       state.sound.setOnPlaybackStatusUpdate(handleStatus)
       await state.sound.playAsync()
@@ -23,7 +22,7 @@ export default (input?: string) => {
   }
 
   const stopAudio = async () => {
-    if (state.isPlaying) {
+    if (!state.isLoading && state.isPlaying) {
       await state.sound.stopAsync()
       await state.sound.unloadAsync()
       setState(prev => ({ ...prev, isPlaying: false }))
