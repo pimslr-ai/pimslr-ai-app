@@ -20,16 +20,7 @@ export default () => {
   return (
     <ScreenView>
       <View style={styles.container}>
-        <PageTitle label='Pimslr'>
-          <SecondaryButton
-            labelFirst
-            icon='settings'
-            label='Settings'
-            onClick={() => navigation.navigate(SCREENS.SETTINGS)}
-          />
-        </PageTitle>
-
-        <SecondaryButton label='Onboarding' onClick={() => navigation.navigate(SCREENS.ONBOARDING)} />
+        <PageTitle label='Pimslr' />
 
         <SectionView name='Scenarios' redirectionLabel='More' redirection={SCREENS.COURSE.MAIN}>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}

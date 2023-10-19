@@ -9,6 +9,10 @@ export default () => {
   return (
     <ScreenView>
       <Button label='Back' onClick={() => navigation.navigate(SCREENS.DASHBOARD)} />
+      <Button
+        label='Onboarding'
+        onClick={() => navigation.navigate(SCREENS.ONBOARDING)}
+      />
     </ScreenView>
   )
 }
