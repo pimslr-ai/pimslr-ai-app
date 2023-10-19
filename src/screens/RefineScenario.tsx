@@ -1,6 +1,6 @@
 import { THEME, FONTS } from '../constants'
 import { View, StyleSheet, Text } from 'react-native'
-import { useNavigation, useParams } from '../hooks/useScreens'
+import { useNavigation, useParams } from '.'
 import ScreenView from '../components/ScreenView'
 import InteractiveInput from '../components/InteractiveInput'
 import SecondaryButton from '../components/SecondaryButton'

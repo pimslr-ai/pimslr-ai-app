@@ -1,7 +1,7 @@
 import { FONTS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { useNavigation, useParams } from '../hooks/useScreens'
+import { useNavigation, useParams } from '.'
 import useSpeechToText from '../hooks/useSpeechToText'
 import useTextToSpeech from '../hooks/useTextToSpeech'
 import ScreenView from '../components/ScreenView'

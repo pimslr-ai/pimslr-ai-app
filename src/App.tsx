@@ -1,6 +1,6 @@
 import { DATA } from './constants'
 import { useEffect, useState } from 'react'
-import { Routes, Navigator, Screen } from './hooks/useScreens'
+import { Routes, Navigator, Screen } from './screens'
 import { NavigationContainer } from '@react-navigation/native'
 import useStorage from './hooks/useStorage'
 import useFonts from './hooks/useFonts'
