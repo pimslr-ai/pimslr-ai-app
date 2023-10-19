@@ -1,4 +1,4 @@
-import { useNavigation } from '../App'
+import { useNavigation } from '../hooks/useScreens'
 import Button from '../components/Button'
 import ScreenView from '../components/ScreenView'
 

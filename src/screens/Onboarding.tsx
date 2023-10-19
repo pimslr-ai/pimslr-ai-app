@@ -1,7 +1,7 @@
 import { DATA, FONTS, THEME } from '../constants'
 import { View, Text, StyleSheet } from 'react-native'
 import { useState } from 'react'
-import { useNavigation } from '../App'
+import { useNavigation } from '../hooks/useScreens'
 import useAppStorage from '../hooks/useStorage'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'

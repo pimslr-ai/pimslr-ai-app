@@ -1,6 +1,6 @@
 import { THEME, FONTS } from '../constants'
 import { View, StyleSheet, Text } from 'react-native'
-import { useNavigation, useParams } from '../App'
+import { useNavigation, useParams } from '../hooks/useScreens'
 import ScreenView from '../components/ScreenView'
 import InteractiveInput from '../components/InteractiveInput'
 import SecondaryButton from '../components/SecondaryButton'
@@ -8,8 +8,7 @@ import PrimaryButton from '../components/PrimaryButton'
 
 export default () => {
   const navigation = useNavigation()
-  const params = useParams<'course:home'>()
-  const course = params?.course
+  const { course } = useParams<'course:home'>()
 
   const handleRefining = () => {
     navigation.navigate('course:home', { course })

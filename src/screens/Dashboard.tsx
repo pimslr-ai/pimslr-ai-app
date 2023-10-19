@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
 import { DATA, TEST_COURSE } from '../constants'
-import { useNavigation } from '../App'
+import { useNavigation } from '../hooks/useScreens'
 import PageTitle from '../components/PageTitle'
 import useAppStorage from '../hooks/useStorage'
 import SectionView from '../components/SectionView'

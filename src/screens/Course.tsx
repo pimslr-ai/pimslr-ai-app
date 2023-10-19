@@ -1,7 +1,7 @@
+import { FONTS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { FONTS, THEME } from '../constants'
-import { useNavigation, useParams } from '../App'
+import { useNavigation, useParams } from '../hooks/useScreens'
 import useSpeechToText from '../hooks/useSpeechToText'
 import useTextToSpeech from '../hooks/useTextToSpeech'
 import ScreenView from '../components/ScreenView'
@@ -12,8 +12,7 @@ import Button from '../components/Button'
 
 export default () => {
   const navigation = useNavigation()
-  const params = useParams<'course:refine_scenario'>()
-  const course = params?.course
+  const { course } = useParams<'course:refine_scenario'>()
 
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
