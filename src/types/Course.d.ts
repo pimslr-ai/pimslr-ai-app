@@ -8,4 +8,5 @@ interface Sentence {
   id: any
   translation?: string
   original?: string
+  audio?: string
 }

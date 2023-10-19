@@ -1,14 +1,14 @@
 import { useEffect, useState } from 'react'
 import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 
-const file = require('../../assets/audio/question1.m4a')
+const file = require('../../assets/audio/1.m4a')
 
-export default (input?: string) => {
+export default () => {
   const [state, setState] = useState<{
-    isLoading: boolean
     isPlaying: boolean
     sound: Audio.Sound
-  }>({ isLoading: false, isPlaying: false, sound: new Audio.Sound() })
+    audioFile?: any
+  }>({ isPlaying: false, sound: new Audio.Sound(), audioFile: file })
 
   useEffect(() => {
     Audio.requestPermissionsAsync()
@@ -24,10 +24,12 @@ export default (input?: string) => {
     })
   }, [])
 
-  const textToSpeech = (input: string) => {}
+  const setAudio = (audioFile: any) => {
+    setState(prev => ({ ...prev, audioFile }))
+  }
 
   const playAudio = async () => {
-    if (!state.isLoading && !state.isPlaying) {
+    if (!state.isPlaying && state.audioFile) {
       await state.sound.loadAsync(file)
       await state.sound.playAsync()
       setState(prev => ({ ...prev, isPlaying: true }))
@@ -35,12 +37,17 @@ export default (input?: string) => {
   }
 
   const stopAudio = async () => {
-    if (!state.isLoading && state.isPlaying) {
+    if (state.isPlaying) {
       await state.sound.stopAsync()
       await state.sound.unloadAsync()
       setState(prev => ({ ...prev, isPlaying: false }))
     }
   }
 
-  return { playAudio, stopAudio, isPlaying: state.isPlaying, isLoading: state.isLoading }
+  return {
+    playAudio,
+    stopAudio,
+    setAudio,
+    isPlaying: state.isPlaying,
+  }
 }

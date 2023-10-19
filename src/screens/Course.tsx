@@ -2,8 +2,8 @@ import { FONTS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { useNavigation, useParams } from '.'
-import useSpeechToText from '../hooks/useSpeechToText'
-import useTextToSpeech from '../hooks/useTextToSpeech'
+import useRecognition from '../hooks/useRecognition'
+import useAudio from '../hooks/useAudio'
 import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
 import SecondaryButton from '../components/SecondaryButton'
@@ -19,7 +19,7 @@ export default () => {
 
   const [isReady, setIsReady] = useState(false)
 
-  const { isPlaying, playAudio, stopAudio } = useTextToSpeech()
+  const { isPlaying, playAudio, stopAudio } = useAudio()
   const {
     startRecording,
     stopRecording,
@@ -27,7 +27,7 @@ export default () => {
     hasFailed,
     isRecording,
     isLoading,
-  } = useSpeechToText('en-US')
+  } = useRecognition('en-US')
 
   useEffect(() => {
     if (isReady) {
