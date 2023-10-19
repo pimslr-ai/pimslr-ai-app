@@ -1,8 +1,6 @@
 import { useEffect, useState } from 'react'
 import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 
-const file = require('../../assets/audio/1.m4a')
-
 export default () => {
   const [state, setState] = useState<{
     isPlaying: boolean
@@ -17,7 +15,6 @@ export default () => {
       const success = status as AVPlaybackStatusSuccess
 
       if (success.didJustFinish) {
-        await state.sound.unloadAsync()
         setState(prev => ({ ...prev, isPlaying: false }))
       }
     })
@@ -30,6 +27,7 @@ export default () => {
 
   const playAudio = async () => {
     if (!state.isPlaying) {
+      await state.sound.setPositionAsync(0)
       await state.sound.playAsync()
       setState(prev => ({ ...prev, isPlaying: true }))
     }
