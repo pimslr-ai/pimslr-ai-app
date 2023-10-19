@@ -21,14 +21,8 @@ export default () => {
 
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
 
-  const {
-    startRecording,
-    stopRecording,
-    recognition,
-    hasFailed,
-    isRecording,
-    isLoading,
-  } = useRecognition('fr-FR')
+  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } =
+    useRecognition('fr-FR')
 
   useEffect(() => {
     if (isReady) {
@@ -90,14 +84,9 @@ export default () => {
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>
-                    {sentence.translation?.split(' ').map((word, i) => (
-                      <Text key={i} style={{ color: i === 1 ? 'red' : 'black' }}>
-                        {i ? ' ' + word : word}
-                      </Text>
-                    ))}
+                    <Sentence translation={sentence.translation!} recognition={recognition!} />
                   </Text>
                   <Text style={styles.original}>{sentence.original}</Text>
-                  <Text>{recognition?.transcript}</Text>
                 </View>
               </View>
             ))}
@@ -138,11 +127,7 @@ export default () => {
               toggle={!isPlaying}
               onClick={toggleRecording}
             />
-            <Button
-              labelStyle={{ color: 'grey' }}
-              containerStyle={styles.courseControlButton}
-              icon='star'
-            />
+            <Button labelStyle={{ color: 'grey' }} containerStyle={styles.courseControlButton} icon='star' />
           </View>
         )}
       </View>
@@ -150,15 +135,53 @@ export default () => {
   )
 }
 
-const CourseButton = ({
-  icon,
-  toggle,
-  onClick,
-}: {
-  icon: string
-  toggle: boolean
-  onClick: () => void
-}) => {
+const Sentence = ({ translation, recognition }: { translation: string; recognition: Recognition }) => {
+  const strip = (input: string) => {
+    return input
+      .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
+      .replace(/\s+/g, ' ')
+      .toLowerCase()
+  }
+
+  const flagMismatch = (sentence1: string, sentence2: string) => {
+    const words1 = sentence1.split(' ')
+    const words2 = sentence2.split(' ')
+    const maxLength = Math.max(words1.length, words2.length)
+    const mismatchedIndicies: number[] = []
+
+    for (let i = 0; i < maxLength; i++) {
+      const word1 = words1[i] || ''
+      const word2 = words2[i] || ''
+
+      if (word1 !== word2) {
+        mismatchedIndicies.push(i)
+      }
+    }
+
+    return mismatchedIndicies
+  }
+
+  if (recognition) {
+    const parsedTranslation = strip(translation)
+    const parsedTranscripted = strip(recognition.transcript)
+    const mismatched = flagMismatch(parsedTranslation, parsedTranscripted)
+
+    console.log(parsedTranslation, parsedTranscripted)
+
+    return translation.split(' ').map((word, i) => (
+      <Text
+        key={i}
+        style={{ color: mismatched.length ? (mismatched.includes(i) ? 'red' : 'black') : 'green' }}
+      >
+        {word + ' '}
+      </Text>
+    ))
+  }
+
+  return <Text>{translation}</Text>
+}
+
+const CourseButton = ({ icon, toggle, onClick }: { icon: string; toggle: boolean; onClick: () => void }) => {
   // const animation = useRef(new Animated.Value(0)).current
 
   // useEffect(() => {
