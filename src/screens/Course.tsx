@@ -1,14 +1,14 @@
-import { StyleSheet, View, Text } from 'react-native'
-import ScreenView from '../components/ScreenView'
-import SecondaryButton from '../components/SecondaryButton'
-import { useNavigation } from '@react-navigation/native'
-import { FONTS, SCREENS, THEME } from '../constants'
 import { useEffect, useState } from 'react'
-import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
-import PageView from '../components/PageView'
-import Button from '../components/Button'
-import PrimaryButton from '../components/PrimaryButton'
+import { StyleSheet, View, Text } from 'react-native'
+import { FONTS, SCREENS, THEME } from '../constants'
+import { useNavigation } from '@react-navigation/native'
 import useSpeechToText from '../hooks/useSpeechToText'
+import useTextToSpeech from '../hooks/useTextToSpeech'
+import ScreenView from '../components/ScreenView'
+import PageView from '../components/PageView'
+import SecondaryButton from '../components/SecondaryButton'
+import PrimaryButton from '../components/PrimaryButton'
+import Button from '../components/Button'
 
 const course: Course = {
   id: 1,
@@ -36,11 +36,10 @@ export default () => {
   const navigation = useNavigation()
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
-
   const [isReady, setIsReady] = useState(false)
 
-  const [isPlaying, setIsPlaying] = useState(false)
-  
+  const { isPlaying, playAudio, stopAudio } = useTextToSpeech()
+
   const {
     startRecording,
     stopRecording,
@@ -61,19 +60,6 @@ export default () => {
       } else {
         startRecording()
       }
-    }
-  }
-
-  const playAudio = async () => {
-    if (!isPlaying && !isRecording) {
-      const file = require('../../assets/audio/question1.m4a')
-      const { sound } = await Audio.Sound.createAsync(file)
-      sound.setOnPlaybackStatusUpdate(
-        status =>
-          (status as AVPlaybackStatusSuccess).didJustFinish && setIsPlaying(false),
-      )
-      sound.playAsync()
-      setIsPlaying(true)
     }
   }
 
@@ -137,7 +123,11 @@ export default () => {
           />
         ) : (
           <View style={styles.courseControls}>
-            <CourseButton icon='audiotrack' toggle={isPlaying} onClick={playAudio} />
+            <CourseButton
+              icon='audiotrack'
+              toggle={isPlaying}
+              onClick={isPlaying ? stopAudio : playAudio}
+            />
             <CourseButton
               icon={isRecording ? 'pause' : 'mic'}
               toggle={!isPlaying}
