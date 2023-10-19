@@ -37,9 +37,7 @@ export default () => {
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-
   const { isPlaying, playAudio, stopAudio } = useTextToSpeech()
-
   const {
     startRecording,
     stopRecording,
@@ -48,6 +46,12 @@ export default () => {
     isRecording,
     isLoading,
   } = useSpeechToText('en-US')
+
+  useEffect(() => {
+    if (isReady) {
+      playAudio()
+    }
+  }, [isReady])
 
   const toggleRecording = async () => {
     if (isPlaying) {
