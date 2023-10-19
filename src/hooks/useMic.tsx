@@ -9,12 +9,14 @@ export default () => {
 
   useEffect(() => {
     Audio.requestPermissionsAsync()
+    Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
   }, [])
 
   const startRecording = async () => {
     if (!state.recording) {
-      await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      const { recording } = await Audio.Recording.createAsync(
+        Audio.RecordingOptionsPresets.HIGH_QUALITY,
+      )
       setState({ recording, uri: undefined })
     }
   }

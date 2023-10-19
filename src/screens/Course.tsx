@@ -49,16 +49,23 @@ export default () => {
     isLoading,
   } = useSpeechToText('en-US')
 
-  useEffect(() => {
-    if (isReady) playAudio()
-  }, [isReady])
+  const toggleRecording = async () => {
+    if (isPlaying) {
+      await stopAudio()
+    }
+    if (isRecording) {
+      await stopRecording()
+    } else {
+      await startRecording()
+    }
+  }
 
-  const recordAudio = () => {
-    if (!isPlaying) {
-      if (isRecording) {
-        stopRecording()
+  const toggleAudio = async () => {
+    if (!isRecording) {
+      if (isPlaying) {
+        await stopAudio()
       } else {
-        startRecording()
+        await playAudio()
       }
     }
   }
@@ -123,15 +130,11 @@ export default () => {
           />
         ) : (
           <View style={styles.courseControls}>
-            <CourseButton
-              icon='audiotrack'
-              toggle={isPlaying}
-              onClick={isPlaying ? stopAudio : playAudio}
-            />
+            <CourseButton icon='audiotrack' toggle={isPlaying} onClick={toggleAudio} />
             <CourseButton
               icon={isRecording ? 'pause' : 'mic'}
               toggle={!isPlaying}
-              onClick={recordAudio}
+              onClick={toggleRecording}
             />
             <Button
               labelStyle={{ color: 'grey' }}
