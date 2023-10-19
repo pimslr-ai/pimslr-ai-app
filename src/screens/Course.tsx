@@ -19,7 +19,8 @@ export default () => {
 
   const [isReady, setIsReady] = useState(false)
 
-  const { isPlaying, playAudio, stopAudio } = useAudio()
+  const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
+  
   const {
     startRecording,
     stopRecording,
@@ -31,9 +32,11 @@ export default () => {
 
   useEffect(() => {
     if (isReady) {
-      playAudio()
+      stopAudio()
+        .then(() => setAudio(course.sentences[pageNumber - 1].audio))
+        .then(playAudio)
     }
-  }, [isReady])
+  }, [isReady, pageNumber])
 
   const toggleRecording = () => {
     if (isPlaying) {

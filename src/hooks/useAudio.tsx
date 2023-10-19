@@ -7,8 +7,7 @@ export default () => {
   const [state, setState] = useState<{
     isPlaying: boolean
     sound: Audio.Sound
-    audioFile?: any
-  }>({ isPlaying: false, sound: new Audio.Sound(), audioFile: file })
+  }>({ isPlaying: false, sound: new Audio.Sound() })
 
   useEffect(() => {
     Audio.requestPermissionsAsync()
@@ -24,13 +23,13 @@ export default () => {
     })
   }, [])
 
-  const setAudio = (audioFile: any) => {
-    setState(prev => ({ ...prev, audioFile }))
+  const setAudio = async (audioFile: any) => {
+    await state.sound.unloadAsync()
+    await state.sound.loadAsync(audioFile)
   }
 
   const playAudio = async () => {
-    if (!state.isPlaying && state.audioFile) {
-      await state.sound.loadAsync(file)
+    if (!state.isPlaying) {
       await state.sound.playAsync()
       setState(prev => ({ ...prev, isPlaying: true }))
     }
@@ -39,7 +38,6 @@ export default () => {
   const stopAudio = async () => {
     if (state.isPlaying) {
       await state.sound.stopAsync()
-      await state.sound.unloadAsync()
       setState(prev => ({ ...prev, isPlaying: false }))
     }
   }
