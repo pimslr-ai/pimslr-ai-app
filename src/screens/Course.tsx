@@ -35,25 +35,30 @@ export default () => {
     }
   }, [isReady])
 
-  const toggleRecording = async () => {
+  const toggleRecording = () => {
     if (isPlaying) {
-      await stopAudio()
+      stopAudio()
     }
     if (isRecording) {
-      await stopRecording()
+      stopRecording()
     } else {
-      await startRecording()
+      startRecording()
     }
   }
 
-  const toggleAudio = async () => {
+  const toggleAudio = () => {
     if (!isRecording) {
       if (isPlaying) {
-        await stopAudio()
+        stopAudio()
       } else {
-        await playAudio()
+        playAudio()
       }
     }
+  }
+
+  const handleClose = () => {
+    stopAudio()
+    navigation.navigate('dashboard')
   }
 
   return (
@@ -63,7 +68,7 @@ export default () => {
           <SecondaryButton
             containerStyle={{ transform: [{ scale: 1.4 }] }}
             icon='close'
-            onClick={() => navigation.navigate('dashboard')}
+            onClick={handleClose}
           />
           <SecondaryButton
             labelFirst

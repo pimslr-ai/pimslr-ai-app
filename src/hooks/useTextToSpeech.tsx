@@ -27,7 +27,6 @@ export default (input?: string) => {
   const textToSpeech = (input: string) => {}
 
   const playAudio = async () => {
-    console.log('playing...', file)
     if (!state.isLoading && !state.isPlaying) {
       await state.sound.loadAsync(file)
       await state.sound.playAsync()
