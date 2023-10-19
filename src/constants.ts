@@ -34,19 +34,66 @@ const FONTS = {
   },
 }
 
-const SCREENS = {
-  ONBOARDING: 'onboarding' as never,
-  DASHBOARD: 'dashboard' as never,
-  SETTINGS: 'settings' as never,
-  COURSE: {
-    MAIN: 'course:home' as never,
-    REFINE_SCENARIO: 'course:refine_scenario' as never,
-  }
-}
-
 const DATA = {
   USER_DATA: 'user:preferences',
   SETUP_COMPLETE: 'onboarding:complete',
 }
 
-export { THEME, FONTS, SCREENS, DATA }
+const TEST_COURSE: Course = {
+  id: 1,
+  scenario: 'You are at a bar...',
+  sentences: [
+    {
+      id: 1,
+      translation: 'Pourriez-vous recommander une bière locale ?',
+      original: 'Could you recommend a local brew?',
+    },
+    {
+      id: 2,
+      translation: "Je voudrais une bière, s'il vous plaît.",
+      original: 'I would like a beer, please.',
+    },
+    {
+      id: 3,
+      translation: 'Où est la carte des boissons ?',
+      original: 'Where is the drink menu?',
+    },
+    {
+      id: 4,
+      translation: "J'aimerais un verre de vin rouge.",
+      original: 'I would like a glass of red wine.',
+    },
+    {
+      id: 5,
+      translation: 'Pouvez-vous me recommander un cocktail spécial ?',
+      original: 'Can you recommend a special cocktail?',
+    },
+    {
+      id: 6,
+      translation: "Combien coûte une bouteille d'eau minérale ?",
+      original: 'How much does a bottle of mineral water cost?',
+    },
+    {
+      id: 7,
+      translation: 'Est-ce que vous servez des snacks ici ?',
+      original: 'Do you serve snacks here?',
+    },
+    {
+      id: 8,
+      translation: 'Pouvez-vous allumer la télévision pour le match de football ?',
+      original: 'Can you turn on the TV for the football game?',
+    },
+    {
+      id: 9,
+      translation: "Je vais payer l'addition.",
+      original: 'I will pay the bill.',
+    },
+    {
+      id: 10,
+      translation: "C'est l'heure de fermeture.",
+      original: "It's closing time.",
+    },
+  ],
+}
+
+export { THEME, FONTS, DATA, TEST_COURSE }

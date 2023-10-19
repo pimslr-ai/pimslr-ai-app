@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
-import { FONTS, SCREENS, THEME } from '../constants'
-import { useNavigation } from '@react-navigation/native'
+import { FONTS, THEME } from '../constants'
+import { useNavigation, useParams } from '../App'
 import useSpeechToText from '../hooks/useSpeechToText'
 import useTextToSpeech from '../hooks/useTextToSpeech'
 import ScreenView from '../components/ScreenView'
@@ -10,33 +10,16 @@ import SecondaryButton from '../components/SecondaryButton'
 import PrimaryButton from '../components/PrimaryButton'
 import Button from '../components/Button'
 
-const course: Course = {
-  id: 1,
-  scenario: 'You are at a bar...',
-  sentences: [
-    {
-      id: 1,
-      translation: 'Pourriez-vous recommander une bière locale ?',
-      original: 'Could you recommend a local brew?',
-    },
-    {
-      id: 2,
-      translation: 'Pourriez-vous recommander une bière locale ?',
-      original: 'Could you recommend a local brew?',
-    },
-    {
-      id: 3,
-      translation: 'Pourriez-vous recommander une bière locale ?',
-      original: 'Could you recommend a local brew?',
-    },
-  ],
-}
-
 export default () => {
   const navigation = useNavigation()
+  const params = useParams<'course:refine_scenario'>()
+  const course = params?.course
+
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
+
   const [isReady, setIsReady] = useState(false)
+
   const { isPlaying, playAudio, stopAudio } = useTextToSpeech()
   const {
     startRecording,
@@ -81,22 +64,22 @@ export default () => {
           <SecondaryButton
             containerStyle={{ transform: [{ scale: 1.4 }] }}
             icon='close'
-            onClick={() => navigation.navigate(SCREENS.DASHBOARD)}
+            onClick={() => navigation.navigate('dashboard')}
           />
           <SecondaryButton
             labelFirst
             noticeMe
             label='Refine Scenario'
             icon='edit'
-            onClick={() => navigation.navigate(SCREENS.COURSE.REFINE_SCENARIO)}
+            onClick={() => navigation.navigate('course:refine_scenario', { course })}
           />
         </View>
 
-        <Text style={styles.title}>{course.scenario}</Text>
+        <Text style={styles.title}>{course?.scenario}</Text>
 
         <View style={styles.cards}>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {course.sentences.map(sentence => (
+            {course?.sentences.map(sentence => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>{sentence.translation}</Text>
@@ -115,10 +98,10 @@ export default () => {
               onClick={pageView?.turnPrevious}
             />
             <Text style={styles.cardControlPagination}>
-              {pageNumber}/{course.sentences.length}
+              {pageNumber}/{course?.sentences.length}
             </Text>
             <SecondaryButton
-              hide={pageNumber >= course.sentences.length}
+              hide={pageNumber >= course?.sentences.length!}
               label='Next'
               labelStyle={{ opacity: 0.7 }}
               onClick={pageView?.turnNext}

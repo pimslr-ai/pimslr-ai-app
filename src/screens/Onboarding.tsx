@@ -1,66 +1,77 @@
-import React, { useState } from 'react'
+import { DATA, FONTS, THEME } from '../constants'
 import { View, Text, StyleSheet } from 'react-native'
-import { DATA, FONTS, SCREENS, THEME } from '../constants'
+import { useState } from 'react'
+import { useNavigation } from '../App'
+import useAppStorage from '../hooks/useStorage'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
-import { useNavigation } from '@react-navigation/native'
-import useAppStorage from '../hooks/useStorage'
 import ScreenView from '../components/ScreenView'
 
 export default () => {
+  const navigation = useNavigation()
   const { set } = useAppStorage()
+
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
-  const navigation = useNavigation()
 
-  const [language, setLanguage] = useState('French')
-  const [profeciency, setProficiency] = useState('')
-  const [context, setContext] = useState('')
+  const [state, setState] = useState<UserData>({
+    language: 'French',
+    profeciency: '',
+    context: '',
+  })
 
   const handleCompletion = async () => {
-    const data: UserData = {
-      language,
-      profeciency,
-      context,
-    }
-
-    await set<UserData>(DATA.USER_DATA, data)
+    await set<UserData>(DATA.USER_DATA, state)
     await set<boolean>(DATA.SETUP_COMPLETE, true)
 
-    navigation.navigate(SCREENS.DASHBOARD)
+    navigation.navigate('dashboard')
   }
 
   return (
     <ScreenView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
+          <SecondaryButton
+            hide={pageNumber <= 1}
+            label='Back'
+            onClick={pageView?.turnPrevious}
+          />
           <Text style={styles.headerTitle}>{pageNumber}/3</Text>
-          <SecondaryButton label='Skip' noticeMe hide={pageNumber != 3} onClick={pageView?.turnNext} />
+          <SecondaryButton
+            label='Skip'
+            noticeMe
+            hide={pageNumber != 3}
+            onClick={pageView?.turnNext}
+          />
         </View>
 
-        <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
+        <PageView
+          ref={setPageView}
+          onPageChange={setPageNumber}
+          onLastPage={handleCompletion}
+        >
           <View style={styles.page}>
             <Text style={styles.title}>What language would you like to learn?</Text>
             <InteractiveInput
               disable
               style={styles.langageInput}
               placeholder='French'
-              onChange={setLanguage}
+              onChange={language => setState(prev => ({ ...prev, language }))}
             />
           </View>
           <View style={styles.page}>
             <Text style={styles.title}>What's your level?</Text>
             <Text style={styles.subtitle}>
-              This information is used to generate sentences that match your current level.
+              This information is used to generate sentences that match your current
+              level.
             </Text>
             <InteractiveInput
               multiline
               style={styles.input}
               placeholder='I can understand some of it...'
-              onChange={setProficiency}
+              onChange={profeciency => setState(prev => ({ ...prev, profeciency }))}
             />
           </View>
           <View style={styles.page}>
@@ -72,7 +83,7 @@ export default () => {
               multiline
               style={styles.input}
               placeholder='I am an exchange student...'
-              onChange={setContext}
+              onChange={context => setState(prev => ({ ...prev, context }))}
             />
           </View>
         </PageView>

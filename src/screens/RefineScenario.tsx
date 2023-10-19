@@ -1,20 +1,18 @@
+import { THEME, FONTS } from '../constants'
 import { View, StyleSheet, Text } from 'react-native'
+import { useNavigation, useParams } from '../App'
 import ScreenView from '../components/ScreenView'
 import InteractiveInput from '../components/InteractiveInput'
-import { THEME, FONTS, SCREENS } from '../constants'
 import SecondaryButton from '../components/SecondaryButton'
-import { useNavigation } from '@react-navigation/native'
 import PrimaryButton from '../components/PrimaryButton'
 
-interface RefineScenarioProps {
-  scenario?: string
-}
-
-export default ({ scenario }: RefineScenarioProps) => {
+export default () => {
   const navigation = useNavigation()
+  const params = useParams<'course:home'>()
+  const course = params?.course
 
   const handleRefining = () => {
-    navigation.navigate(SCREENS.COURSE.MAIN)
+    navigation.navigate('course:home', { course })
   }
 
   return (
@@ -24,14 +22,15 @@ export default ({ scenario }: RefineScenarioProps) => {
           <SecondaryButton
             containerStyle={{ transform: [{ scale: 1.4 }] }}
             icon='close'
-            onClick={() => navigation.navigate(SCREENS.COURSE.MAIN)}
+            onClick={() => navigation.navigate('course:home', { course })}
           />
         </View>
 
         <View style={styles.page}>
-          <Text style={styles.title}>{scenario ?? 'Refine your scenario'}</Text>
+          <Text style={styles.title}>{course?.scenario ?? 'Refine your scenario'}</Text>
           <Text style={styles.subtitle}>
-            You can refine the current scenario by entering more information about the context you desire.
+            You can refine the current scenario by entering more information about the
+            context you desire.
           </Text>
           <InteractiveInput
             multiline
@@ -40,7 +39,11 @@ export default ({ scenario }: RefineScenarioProps) => {
           />
         </View>
 
-        <PrimaryButton label='Refine Scenario' containerStyle={styles.button} onClick={handleRefining} />
+        <PrimaryButton
+          label='Refine Scenario'
+          containerStyle={styles.button}
+          onClick={handleRefining}
+        />
       </View>
     </ScreenView>
   )

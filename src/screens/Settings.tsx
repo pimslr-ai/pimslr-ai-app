@@ -1,5 +1,4 @@
-import { SCREENS } from '../constants'
-import { useNavigation } from '@react-navigation/native'
+import { useNavigation } from '../App'
 import Button from '../components/Button'
 import ScreenView from '../components/ScreenView'
 
@@ -8,11 +7,8 @@ export default () => {
 
   return (
     <ScreenView>
-      <Button label='Back' onClick={() => navigation.navigate(SCREENS.DASHBOARD)} />
-      <Button
-        label='Onboarding'
-        onClick={() => navigation.navigate(SCREENS.ONBOARDING)}
-      />
+      <Button label='Back' onClick={() => navigation.navigate('dashboard')} />
+      <Button label='Onboarding' onClick={() => navigation.navigate('onboarding')} />
     </ScreenView>
   )
 }

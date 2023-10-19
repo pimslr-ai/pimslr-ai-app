@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { Text, StyleSheet, View } from 'react-native'
-import { DATA, SCREENS } from '../constants'
+import { DATA, TEST_COURSE } from '../constants'
+import { useNavigation } from '../App'
 import PageTitle from '../components/PageTitle'
 import useAppStorage from '../hooks/useStorage'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
-import SecondaryButton from '../components/SecondaryButton'
-import { useNavigation } from '@react-navigation/native'
+import Button from '../components/Button'
 
 export default () => {
   const navigation = useNavigation()
@@ -22,15 +22,18 @@ export default () => {
       <View style={styles.container}>
         <PageTitle label='Pimslr' />
 
-        <SectionView name='Scenarios' redirectionLabel='More' redirection={SCREENS.COURSE.MAIN}>
+        <SectionView name='Scenarios' redirectionLabel='More'>
+          <Button
+            label={TEST_COURSE.scenario}
+            onClick={() => navigation.navigate('course:home', { course: TEST_COURSE })}
+          />
+        </SectionView>
+
+        <SectionView name='Saved Sentences' redirectionLabel='More'>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
 
-        <SectionView name='Saved Sentences' redirectionLabel='More' redirection={SCREENS.ONBOARDING}>
-          {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
-        </SectionView>
-
-        <SectionView name='Recent Sentences' redirectionLabel='More' redirection={SCREENS.ONBOARDING}>
+        <SectionView name='Recent Sentences' redirectionLabel='More'>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
       </View>
