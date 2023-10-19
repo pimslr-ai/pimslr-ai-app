@@ -1,6 +1,6 @@
 import { FONTS, THEME } from '../constants'
-import { useEffect, useState } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import { StyleSheet, View, Text, Animated, Easing } from 'react-native'
 import { useNavigation, useParams } from '.'
 import useRecognition from '../hooks/useRecognition'
 import useAudio from '../hooks/useAudio'
@@ -20,7 +20,7 @@ export default () => {
   const [isReady, setIsReady] = useState(false)
 
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
-  
+
   const {
     startRecording,
     stopRecording,
@@ -28,7 +28,7 @@ export default () => {
     hasFailed,
     isRecording,
     isLoading,
-  } = useRecognition('en-US')
+  } = useRecognition('fr-FR')
 
   useEffect(() => {
     if (isReady) {
@@ -126,7 +126,7 @@ export default () => {
           <View style={styles.courseControls}>
             <CourseButton icon='audiotrack' toggle={isPlaying} onClick={toggleAudio} />
             <CourseButton
-              icon={isRecording ? 'pause' : 'mic'}
+              icon={isLoading ? 'loop' : isRecording ? 'pause' : 'mic'}
               toggle={!isPlaying}
               onClick={toggleRecording}
             />
@@ -151,12 +151,24 @@ const CourseButton = ({
   toggle: boolean
   onClick: () => void
 }) => {
+  // const animation = useRef(new Animated.Value(0)).current
+
+  // useEffect(() => {
+  //   Animated.timing(animation, {
+  //     toValue: 1.4,
+  //     duration: 200,
+  //     easing: Easing.ease,
+  //     useNativeDriver: true,
+  //   }).start()
+  // }, [toggle])
+
   return (
     <Button
       labelStyle={{ color: toggle ? 'white' : 'grey' }}
       containerStyle={{
         ...styles.courseControlButton,
         backgroundColor: toggle ? THEME.CTA : 'transparent',
+        // transform: [{ scale: animation }],
       }}
       icon={icon}
       onClick={onClick}
