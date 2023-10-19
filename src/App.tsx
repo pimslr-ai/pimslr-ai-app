@@ -1,6 +1,6 @@
 import { DATA } from './constants'
 import { useEffect, useState } from 'react'
-import { Routes, Navigator, Screen } from './screens'
+import { Screen, Navigator, Screen } from './screens'
 import { NavigationContainer } from '@react-navigation/native'
 import useStorage from './hooks/useStorage'
 import useFonts from './hooks/useFonts'
@@ -14,7 +14,7 @@ import Course from './screens/Course'
 export default () => {
   const { loaded } = useFonts()
   const { get } = useStorage()
-  const [initialRoute, setInitialRoute] = useState<Routes | undefined>()
+  const [initialRoute, setInitialRoute] = useState<Screen | undefined>()
 
   useEffect(() => {
     get<boolean>(DATA.SETUP_COMPLETE).then(complete => {

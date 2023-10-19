@@ -8,7 +8,7 @@ import PrimaryButton from '../components/PrimaryButton'
 
 export default () => {
   const navigation = useNavigation()
-  const { course } = useParams<'course:home'>()
+  const { course } = useParams('course:home')
 
   const handleRefining = () => {
     navigation.navigate('course:home', { course })

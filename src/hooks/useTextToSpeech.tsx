@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import { AVPlaybackStatus, AVPlaybackStatusSuccess, Audio } from 'expo-av'
+import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
 
 const file = require('../../assets/audio/question1.m4a')
 

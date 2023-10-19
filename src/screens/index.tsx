@@ -16,7 +16,7 @@ type RootStackParamList = {
   }
 }
 
-export type Routes = keyof RootStackParamList
+export type Screen = keyof RootStackParamList
 
 export const { Navigator, Screen } = createNativeStackNavigator<RootStackParamList>()
 
@@ -24,10 +24,10 @@ export const useNavigation = () => {
   return useNavigation_<StackNavigationProp<RootStackParamList>>()
 }
 
-export function useRoute<T extends Routes>() {
+export function useRoute<T extends Screen>() {
   return useRoute_<RouteProp<RootStackParamList, T>>()
 }
 
-export function useParams<T extends Routes>() {
-  return useRoute_<RouteProp<RootStackParamList, T>>().params!
+export function useParams(screen: Screen) {
+  return useRoute_<RouteProp<RootStackParamList, typeof screen>>().params!
 }

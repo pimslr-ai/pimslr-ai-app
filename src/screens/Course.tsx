@@ -12,7 +12,7 @@ import Button from '../components/Button'
 
 export default () => {
   const navigation = useNavigation()
-  const { course } = useParams<'course:refine_scenario'>()
+  const { course } = useParams('course:refine_scenario')
 
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
