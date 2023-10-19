@@ -89,7 +89,13 @@ export default () => {
             {course?.sentences.map(sentence => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
-                  <Text style={styles.translation}>{sentence.translation}</Text>
+                  <Text style={styles.translation}>
+                    {sentence.translation?.split(' ').map((word, i) => (
+                      <Text key={i} style={{ color: i === 1 ? 'red' : 'black' }}>
+                        {i ? ' ' + word : word}
+                      </Text>
+                    ))}
+                  </Text>
                   <Text style={styles.original}>{sentence.original}</Text>
                   <Text>{recognition?.transcript}</Text>
                 </View>
@@ -97,23 +103,25 @@ export default () => {
             ))}
           </PageView>
 
-          <View style={styles.cardControls}>
-            <SecondaryButton
-              hide={pageNumber <= 1}
-              label='Back'
-              labelStyle={{ opacity: 0.7 }}
-              onClick={pageView?.turnPrevious}
-            />
-            <Text style={styles.cardControlPagination}>
-              {pageNumber}/{course?.sentences.length}
-            </Text>
-            <SecondaryButton
-              hide={pageNumber >= course?.sentences.length!}
-              label='Next'
-              labelStyle={{ opacity: 0.7 }}
-              onClick={pageView?.turnNext}
-            />
-          </View>
+          {isReady && (
+            <View style={styles.cardControls}>
+              <SecondaryButton
+                hide={pageNumber <= 1}
+                label='Back'
+                labelStyle={{ opacity: 0.7 }}
+                onClick={pageView?.turnPrevious}
+              />
+              <Text style={styles.cardControlPagination}>
+                {pageNumber}/{course?.sentences.length}
+              </Text>
+              <SecondaryButton
+                hide={pageNumber >= course?.sentences.length!}
+                label='Next'
+                labelStyle={{ opacity: 0.7 }}
+                onClick={pageView?.turnNext}
+              />
+            </View>
+          )}
         </View>
 
         {!isReady ? (
