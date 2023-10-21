@@ -1,16 +1,10 @@
-import React from 'react'
-import {
-  Text,
-  TouchableOpacity,
-  TextStyle,
-  StyleSheet,
-  ViewStyle,
-  View,
-  Image,
-  Animated,
-} from 'react-native'
 import { FONTS, THEME } from '../constants'
+import { Text, TouchableOpacity, TextStyle, StyleSheet, ViewStyle, Animated } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+
+const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
+const AnimatedText = Animated.createAnimatedComponent(Text)
+const AnimatedIcon = Animated.createAnimatedComponent(Icon)
 
 export interface ButtonProps {
   label?: string
@@ -22,17 +16,7 @@ export interface ButtonProps {
   onClick?: () => void
 }
 
-const AnimatedTouchableOpacity = Animated.createAnimatedComponent(TouchableOpacity)
-
-export default ({
-  label,
-  labelFirst,
-  icon,
-  disable,
-  labelStyle,
-  containerStyle,
-  onClick,
-}: ButtonProps) => {
+export default ({ label, labelFirst, icon, disable, labelStyle, containerStyle, onClick }: ButtonProps) => {
   const handleClick = () => {
     !disable && onClick && onClick()
   }
@@ -48,7 +32,7 @@ export default ({
       onPress={handleClick}
     >
       {icon && (
-        <Icon
+        <AnimatedIcon
           size={17}
           name={icon}
           style={[
@@ -61,7 +45,7 @@ export default ({
           ]}
         />
       )}
-      {label && <Text style={[styles.label, labelStyle]}>{label}</Text>}
+      {label && <AnimatedText style={[styles.label, labelStyle]}>{label}</AnimatedText>}
     </AnimatedTouchableOpacity>
   )
 }
@@ -73,7 +57,6 @@ const styles = StyleSheet.create({
     paddingBottom: 5,
     paddingLeft: 16,
     paddingRight: 16,
-    backgroundColor: 'white',
     alignSelf: 'flex-start',
   },
   label: {

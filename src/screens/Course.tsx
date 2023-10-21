@@ -1,6 +1,6 @@
 import { FONTS, THEME } from '../constants'
-import { useEffect, useState } from 'react'
-import { StyleSheet, View, Text } from 'react-native'
+import { useEffect, useRef, useState } from 'react'
+import { StyleSheet, View, Text, Animated, TextStyle } from 'react-native'
 import { useNavigation, useParams } from '.'
 import useRecognition from '../hooks/useRecognition'
 import useAudio from '../hooks/useAudio'
@@ -127,33 +127,64 @@ export default () => {
           />
         ) : (
           <View style={styles.courseControls}>
-            <Button
-              icon='audiotrack'
-              onClick={toggleAudio}
-              labelStyle={{ color: isPlaying ? 'white' : 'grey' }}
-              containerStyle={{
-                ...styles.courseControlButton,
-                backgroundColor: isPlaying ? THEME.CTA : 'transparent',
-              }}
-            />
-            <Button
+            <AnimatedButton icon='audiotrack' onClick={toggleAudio} toggle={isPlaying} />
+            <AnimatedButton
               icon={isLoading ? 'loop' : isRecording ? 'stop' : 'mic'}
               onClick={toggleRecording}
-              labelStyle={{ color: !isPlaying ? 'white' : 'grey' }}
-              containerStyle={{
-                ...styles.courseControlButton,
-                backgroundColor: !isPlaying ? THEME.CTA : 'transparent',
-              }}
+              toggle={!isPlaying}
             />
-            <Button
-              icon='star'
-              containerStyle={{ ...styles.courseControlButton }}
-              labelStyle={{ color: false ? THEME.ACCENT : 'grey' }}
-            />
+            <AnimatedButton icon='star' />
           </View>
         )}
       </View>
     </ScreenView>
+  )
+}
+
+const AnimatedButton = ({
+  icon,
+  onClick,
+  toggle,
+}: {
+  icon: string
+  onClick?: () => void
+  toggle?: boolean
+}) => {
+  const animation = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    animate()
+  }, [toggle])
+
+  const scale = animation.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: [1.4, 0, 1.4],
+  })
+
+  const backgroundColor = animation.interpolate({
+    inputRange: [0, 0.5, 1],
+    outputRange: ['transparent', 'transparent', THEME.CTA],
+  }) as any
+
+  const animate = () => {
+    Animated.timing(animation, {
+      duration: 200,
+      toValue: toggle ? 1 : 0,
+      useNativeDriver: true,
+    }).start()
+  }
+
+  return (
+    <Button
+      icon={icon}
+      onClick={onClick}
+      labelStyle={{ color: toggle ? 'white' : 'grey' }}
+      containerStyle={{
+        ...styles.courseControlButton,
+        transform: [{ scale }],
+        backgroundColor,
+      }}
+    />
   )
 }
 
