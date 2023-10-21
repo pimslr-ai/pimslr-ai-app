@@ -30,9 +30,14 @@ export default (language: string) => {
     return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
 
+  const clearRecognition = () => {
+    setState(prev => ({ ...prev, recognition: null }))
+  }
+  
   return {
     startRecording,
     stopRecording,
+    clearRecognition,
     isRecording,
     isLoading: state.isLoading,
     recognition: state.recognition,
