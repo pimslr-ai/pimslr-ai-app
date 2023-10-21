@@ -5,6 +5,7 @@ export default () => {
   const [state, setState] = useState<{
     recording?: Audio.Recording
     uri?: string
+    amplitude?: number
   }>({})
 
   useEffect(() => {
@@ -14,9 +15,10 @@ export default () => {
   const startRecording = async () => {
     if (!state.recording) {
       Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await Audio.Recording.createAsync(
-        Audio.RecordingOptionsPresets.HIGH_QUALITY,
-      )
+      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      recording.setOnRecordingStatusUpdate(status => {
+        setState(prev => ({ ...prev, amplitude: status.metering }))
+      })
       setState({ recording, uri: undefined })
     }
   }
@@ -35,5 +37,6 @@ export default () => {
     stopRecording,
     audioRecording: state.uri,
     isRecording: !!state.recording,
+    amplitude: state.amplitude,
   }
 }

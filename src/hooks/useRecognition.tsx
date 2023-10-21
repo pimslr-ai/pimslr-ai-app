@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
-import useMic from './useMic'
+import useMicrophone from './useMicrophone'
 import * as FileSystem from 'expo-file-system'
 import axios from 'axios'
 
 export default (language: string) => {
-  const { startRecording, stopRecording, audioRecording, isRecording } = useMic()
+  const { startRecording, stopRecording, audioRecording, isRecording, amplitude } = useMicrophone()
   const [state, setState] = useState<{
     recognition?: Recognition | null
     isLoading: boolean
@@ -33,12 +33,13 @@ export default (language: string) => {
   const clearRecognition = () => {
     setState(prev => ({ ...prev, recognition: null }))
   }
-  
+
   return {
     startRecording,
     stopRecording,
     clearRecognition,
     isRecording,
+    amplitude,
     isLoading: state.isLoading,
     recognition: state.recognition,
     hasFailed: state.hasFailed,
