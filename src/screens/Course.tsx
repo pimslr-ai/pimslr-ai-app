@@ -1,6 +1,6 @@
 import { FONTS, THEME } from '../constants'
-import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text, Animated, Easing } from 'react-native'
+import { useEffect, useState } from 'react'
+import { StyleSheet, View, Text } from 'react-native'
 import { useNavigation, useParams } from '.'
 import useRecognition from '../hooks/useRecognition'
 import useAudio from '../hooks/useAudio'
@@ -8,26 +8,24 @@ import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
 import SecondaryButton from '../components/SecondaryButton'
 import PrimaryButton from '../components/PrimaryButton'
-import Button from '../components/Button'
 import ConfettiCannon from 'react-native-confetti-cannon'
+import Button from '../components/Button'
 
 export default () => {
   const navigation = useNavigation()
   const { course } = useParams('course:home')
-
   const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
-
   const [isReady, setIsReady] = useState(false)
   const [hasSucceeded, setHasSucceeded] = useState(false)
-
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
-
-  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } =
+  const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading } =
     useRecognition('fr-FR')
 
   useEffect(() => {
     if (isReady) {
+      clearRecognition()
+
       stopAudio()
         .then(() => setAudio(course.sentences[pageNumber - 1].audio))
         .then(playAudio)
@@ -67,15 +65,15 @@ export default () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <SecondaryButton
-            containerStyle={{ transform: [{ scale: 1.4 }] }}
             icon='close'
             onClick={handleClose}
+            containerStyle={{ transform: [{ scale: 1.4 }] }}
           />
           <SecondaryButton
-            labelFirst
-            noticeMe
-            label='Refine Scenario'
             icon='edit'
+            label='Refine Scenario'
+            noticeMe
+            labelFirst
             onClick={() => navigation.navigate('course:refine_scenario', { course })}
           />
         </View>
@@ -84,14 +82,14 @@ export default () => {
 
         <View style={styles.cards}>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {course?.sentences.map(sentence => (
+            {course?.sentences.map((sentence, i) => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>
                     <Sentence
                       onSuccess={() => setHasSucceeded(true)}
                       translation={sentence?.translation!}
-                      recognition={recognition!}
+                      recognition={i === pageNumber - 1 ? recognition! : undefined}
                     />
                   </Text>
                   <Text style={styles.original}>{sentence.original}</Text>
@@ -103,8 +101,8 @@ export default () => {
           {isReady && (
             <View style={styles.cardControls}>
               <SecondaryButton
-                hide={pageNumber <= 1}
                 label='Back'
+                hide={pageNumber <= 1}
                 labelStyle={{ opacity: 0.7 }}
                 onClick={pageView?.turnPrevious}
               />
@@ -112,8 +110,8 @@ export default () => {
                 {pageNumber}/{course?.sentences.length}
               </Text>
               <SecondaryButton
-                hide={pageNumber >= course?.sentences.length!}
                 label='Next'
+                hide={pageNumber >= course?.sentences.length!}
                 labelStyle={{ opacity: 0.7 }}
                 onClick={pageView?.turnNext}
               />
@@ -123,19 +121,35 @@ export default () => {
 
         {!isReady ? (
           <PrimaryButton
-            containerStyle={styles.startButton}
             label='Start!'
+            containerStyle={styles.startButton}
             onClick={() => setIsReady(true)}
           />
         ) : (
           <View style={styles.courseControls}>
-            <CourseButton icon='audiotrack' toggle={isPlaying} onClick={toggleAudio} />
-            <CourseButton
-              icon={isLoading ? 'loop' : isRecording ? 'pause' : 'mic'}
-              toggle={!isPlaying}
-              onClick={toggleRecording}
+            <Button
+              icon='audiotrack'
+              onClick={toggleAudio}
+              labelStyle={{ color: isPlaying ? 'white' : 'grey' }}
+              containerStyle={{
+                ...styles.courseControlButton,
+                backgroundColor: isPlaying ? THEME.CTA : 'transparent',
+              }}
             />
-            <Button labelStyle={{ color: 'grey' }} containerStyle={styles.courseControlButton} icon='star' />
+            <Button
+              icon={isLoading ? 'loop' : isRecording ? 'pause' : 'mic'}
+              onClick={toggleRecording}
+              labelStyle={{ color: !isPlaying ? 'white' : 'grey' }}
+              containerStyle={{
+                ...styles.courseControlButton,
+                backgroundColor: !isPlaying ? THEME.CTA : 'transparent',
+              }}
+            />
+            <Button
+              icon='star'
+              containerStyle={{ ...styles.courseControlButton }}
+              labelStyle={{ color: false ? THEME.ACCENT : 'grey' }}
+            />
           </View>
         )}
       </View>
@@ -149,7 +163,7 @@ const Sentence = ({
   onSuccess,
 }: {
   translation: string
-  recognition: Recognition
+  recognition?: Recognition
   onSuccess?: () => void
 }) => {
   const strip = (input: string) => {
@@ -197,32 +211,6 @@ const Sentence = ({
   }
 
   return <Text>{translation}</Text>
-}
-
-const CourseButton = ({ icon, toggle, onClick }: { icon: string; toggle: boolean; onClick: () => void }) => {
-  // const animation = useRef(new Animated.Value(0)).current
-
-  // useEffect(() => {
-  //   Animated.timing(animation, {
-  //     toValue: 1.4,
-  //     duration: 200,
-  //     easing: Easing.ease,
-  //     useNativeDriver: true,
-  //   }).start()
-  // }, [toggle])
-
-  return (
-    <Button
-      labelStyle={{ color: toggle ? 'white' : 'grey' }}
-      containerStyle={{
-        ...styles.courseControlButton,
-        backgroundColor: toggle ? THEME.CTA : 'transparent',
-        // transform: [{ scale: animation }],
-      }}
-      icon={icon}
-      onClick={onClick}
-    />
-  )
 }
 
 const styles = StyleSheet.create({
