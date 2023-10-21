@@ -18,6 +18,7 @@ export default (language: string) => {
       speechToText(audioRecording)
         .then(data => setState({ recognition: data, isLoading: false, hasFailed: data === null }))
         .finally(() => FileSystem.deleteAsync(audioRecording!))
+        .catch(() => setState(prev => ({ ...prev, hasFailed: true, recognition: null })))
     }
   }, [audioRecording])
 
@@ -25,8 +26,11 @@ export default (language: string) => {
     const audio = await FileSystem.readAsStringAsync(audioFile, {
       encoding: FileSystem.EncodingType.Base64,
     })
+
+    console.log(audio)
     const url = 'http://pimslrai.greffchandler.net/speech/recognize/' + language
     const response = await axios.post<RecognizeResponse>(url, { audio })
+
     return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
 
