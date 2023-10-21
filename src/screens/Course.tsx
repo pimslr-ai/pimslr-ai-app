@@ -80,7 +80,7 @@ export default () => {
 
         <Text style={styles.title}>{course?.scenario}</Text>
 
-        <View style={styles.cards}>
+        <View>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
             {course?.sentences.map((sentence, i) => (
               <View key={sentence.id} style={styles.card}>
@@ -286,16 +286,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginVertical: 40,
   },
-  cards: {
-    elevation: 5,
+  card: {
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
-  },
-  card: {
     padding: 16,
   },
   cardContent: {
+    elevation: 20,
     borderRadius: 20,
     width: '100%',
     backgroundColor: 'white',
