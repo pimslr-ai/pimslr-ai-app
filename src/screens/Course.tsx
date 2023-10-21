@@ -1,23 +1,23 @@
 import { FONTS, THEME } from '../constants'
 import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text, Animated, TextStyle } from 'react-native'
+import { StyleSheet, View, Text, Animated } from 'react-native'
 import { useNavigation, useParams } from '.'
 import useRecognition from '../hooks/useRecognition'
 import useAudio from '../hooks/useAudio'
+import Button from '../components/Button'
+import PrimaryButton from '../components/PrimaryButton'
+import SecondaryButton from '../components/SecondaryButton'
 import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
-import SecondaryButton from '../components/SecondaryButton'
-import PrimaryButton from '../components/PrimaryButton'
-import ConfettiCannon from 'react-native-confetti-cannon'
-import Button from '../components/Button'
+import ConfettiCannon from '../components/ConfettiCannon'
 
 export default () => {
   const navigation = useNavigation()
   const { course } = useParams('course:home')
   const [pageView, setPageView] = useState<PageView | null>()
+  const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-  const [hasSucceeded, setHasSucceeded] = useState(false)
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
   const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading, amplitude } =
     useRecognition('fr-FR')
@@ -28,7 +28,7 @@ export default () => {
 
       stopAudio()
         .then(() => setAudio(course.sentences[pageNumber - 1].audio))
-        .then(playAudio)
+        .then(() => setTimeout(playAudio, 100))
     }
   }, [isReady, pageNumber])
 
@@ -60,7 +60,7 @@ export default () => {
 
   return (
     <ScreenView>
-      {hasSucceeded && <ConfettiCannon count={200} origin={{ x: -10, y: 0 }} />}
+      <ConfettiCannon ref={setCannon} />
 
       <View style={styles.container}>
         <View style={styles.header}>
@@ -87,7 +87,7 @@ export default () => {
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>
                     <Sentence
-                      onSuccess={() => setHasSucceeded(true)}
+                      onSuccess={cannon?.shoot}
                       translation={sentence?.translation!}
                       recognition={i === pageNumber - 1 ? recognition! : undefined}
                     />
@@ -140,59 +140,6 @@ export default () => {
     </ScreenView>
   )
 }
-
-// const AnimatedMicButton = ({
-//   icon,
-//   onClick,
-//   toggle,
-//   amplitude,
-// }: {
-//   icon: string
-//   onClick?: () => void
-//   toggle?: boolean
-//   amplitude?: number
-// }) => {
-//   const animation = useRef(new Animated.Value(0)).current
-
-//   useEffect(() => {
-//     animate()
-//   }, [toggle])
-
-//   const backgroundColor = animation.interpolate({
-//     inputRange: [0, 0.5, 1],
-//     outputRange: ['transparent', 'transparent', THEME.CTA],
-//   }) as any
-
-//   const animate = () => {
-//     Animated.timing(animation, {
-//       duration: 200,
-//       toValue: toggle ? 1 : 0,
-//       useNativeDriver: true,
-//     }).start()
-//   }
-
-//   const remap = (value: number, fromMin: number, fromMax: number, toMin: number, toMax: number) => {
-//     const normalizedValue = (value - fromMin) / (fromMax - fromMin)
-//     return normalizedValue * (toMax - toMin) + toMin
-//   }
-
-//   const remapped = remap(amplitude! + 60, 0, 50, 0, 100)
-
-//   console.log(remapped)
-
-//   return (
-//     <Button
-//       icon={icon}
-//       onClick={onClick}
-//       labelStyle={{ color: toggle ? 'white' : 'grey' }}
-//       containerStyle={{
-//         ...styles.courseControlButton,
-//         transform: amplitude ? [{ scale: Math.round(Math.abs(amplitude)) / 100 }] : [],
-//         backgroundColor,
-//       }}
-//     />
-//   )
-// }
 
 const AnimatedButton = ({
   icon,
