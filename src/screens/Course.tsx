@@ -19,7 +19,7 @@ export default () => {
   const [isReady, setIsReady] = useState(false)
   const [hasSucceeded, setHasSucceeded] = useState(false)
   const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
-  const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading } =
+  const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading, amplitude } =
     useRecognition('fr-FR')
 
   useEffect(() => {
@@ -140,6 +140,59 @@ export default () => {
     </ScreenView>
   )
 }
+
+// const AnimatedMicButton = ({
+//   icon,
+//   onClick,
+//   toggle,
+//   amplitude,
+// }: {
+//   icon: string
+//   onClick?: () => void
+//   toggle?: boolean
+//   amplitude?: number
+// }) => {
+//   const animation = useRef(new Animated.Value(0)).current
+
+//   useEffect(() => {
+//     animate()
+//   }, [toggle])
+
+//   const backgroundColor = animation.interpolate({
+//     inputRange: [0, 0.5, 1],
+//     outputRange: ['transparent', 'transparent', THEME.CTA],
+//   }) as any
+
+//   const animate = () => {
+//     Animated.timing(animation, {
+//       duration: 200,
+//       toValue: toggle ? 1 : 0,
+//       useNativeDriver: true,
+//     }).start()
+//   }
+
+//   const remap = (value: number, fromMin: number, fromMax: number, toMin: number, toMax: number) => {
+//     const normalizedValue = (value - fromMin) / (fromMax - fromMin)
+//     return normalizedValue * (toMax - toMin) + toMin
+//   }
+
+//   const remapped = remap(amplitude! + 60, 0, 50, 0, 100)
+
+//   console.log(remapped)
+
+//   return (
+//     <Button
+//       icon={icon}
+//       onClick={onClick}
+//       labelStyle={{ color: toggle ? 'white' : 'grey' }}
+//       containerStyle={{
+//         ...styles.courseControlButton,
+//         transform: amplitude ? [{ scale: Math.round(Math.abs(amplitude)) / 100 }] : [],
+//         backgroundColor,
+//       }}
+//     />
+//   )
+// }
 
 const AnimatedButton = ({
   icon,
