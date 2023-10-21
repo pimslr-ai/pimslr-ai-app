@@ -137,7 +137,7 @@ export default () => {
               }}
             />
             <Button
-              icon={isLoading ? 'loop' : isRecording ? 'pause' : 'mic'}
+              icon={isLoading ? 'loop' : isRecording ? 'stop' : 'mic'}
               onClick={toggleRecording}
               labelStyle={{ color: !isPlaying ? 'white' : 'grey' }}
               containerStyle={{
@@ -203,7 +203,8 @@ const Sentence = ({
     return translation.split(' ').map((word, i) => (
       <Text
         key={i}
-        style={{ color: mismatched.length ? (mismatched.includes(i) ? 'red' : 'black') : 'green' }}
+        style={{ color: mismatched.length ? 'red' : 'green' }}
+        // style={{ color: mismatched.length ? (mismatched.includes(i) ? 'red' : 'black') : 'green' }}
       >
         {word + ' '}
       </Text>
