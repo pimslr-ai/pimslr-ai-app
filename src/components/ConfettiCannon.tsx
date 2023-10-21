@@ -1,6 +1,6 @@
+import { Component, createRef } from 'react'
 import Explosion from 'react-native-confetti-cannon'
 import { Dimensions } from 'react-native'
-import React, { Component, createRef } from 'react'
 
 const screen = Dimensions.get('screen')
 
