@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import { useRef } from 'react'
 import { TextInput, Animated, TextStyle } from 'react-native'
 import { FONTS } from '../constants'
 
@@ -42,7 +42,7 @@ export default (props: InteractiveInputProps) => {
     Animated.timing(interpolatedColor, {
       duration: 200,
       toValue: 1,
-      useNativeDriver: false,
+      useNativeDriver: true,
     }).start()
   }
 
@@ -65,7 +65,7 @@ export default (props: InteractiveInputProps) => {
   )
 }
 
-export const textInputStyle = (borderColor: any): TextStyle => ({
+const textInputStyle = (borderColor: any): TextStyle => ({
   width: '100%',
   padding: 16,
   borderWidth: 2,
