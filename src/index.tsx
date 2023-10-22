@@ -1,4 +1,9 @@
 import { registerRootComponent } from 'expo'
 import App from './App'
+import StorageProvider from './contexts/StorageProvider'
 
-registerRootComponent(() => <App />)
+registerRootComponent(() => (
+  <StorageProvider>
+    <App />
+  </StorageProvider>
+))
