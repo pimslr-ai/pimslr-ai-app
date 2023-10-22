@@ -4,10 +4,10 @@ import { DATA } from '../constants'
 
 export default () => {
   const { get, set } = useStorage()
-  const [courses, setCourse] = useState<Course[]>([])
+  const [courses, setCourses] = useState<Course[]>([])
 
   useEffect(() => {
-    get<Course[]>(DATA.COURSES).then(setCourse)
+    get<Course[]>(DATA.COURSES).then(courses => setCourses(courses!))
   }, [])
 
   useEffect(() => {
@@ -15,49 +15,18 @@ export default () => {
   }, [courses])
 
   const remove = async (id: any) => {
-    courses.filter(c => c.id !== id)
+    setCourses(courses => courses.filter(c => c.id !== id))
   }
 
   const create = async (scenario: Scenario) => {
+    // call ChatGPT for generating course
     const course: Course = {
       id: 'course:' + 1,
       scenario,
       sentences: [] as Sentence[],
-      createdAt: new Date(),
-      modifiedAt: new Date(),
     }
-    setCourse(course)
-    set(course.id, course)
+    setCourses(courses => [...courses, course])
   }
 
-  return { course, remove, create }
-}
-
-export const useCourse = (id?: string) => {
-  const { get, set, remove: remove_ } = useStorage()
-  const [course, setCourse] = useState<Course | null>(null)
-
-  useEffect(() => {
-    if (id) {
-      get<Course>(id).then(setCourse)
-    }
-  }, [id])
-
-  const remove = async () => {
-    await remove_(id!)
-  }
-
-  const create = async (scenario: Scenario) => {
-    const course: Course = {
-      id: 'course:' + 1,
-      scenario,
-      sentences: [] as Sentence[],
-      createdAt: new Date(),
-      modifiedAt: new Date(),
-    }
-    setCourse(course)
-    set(course.id, course)
-  }
-
-  return { course, remove, create }
+  return { courses, remove, create }
 }

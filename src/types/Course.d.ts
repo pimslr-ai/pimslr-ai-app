@@ -1,9 +1,10 @@
-interface Course extends Persistent, RecordKeeping {
+interface Course  {
+  id: any
   scenario: Scenario
   sentences: Sentence[]
 }
 
-interface Sentence extends Persistent {
+interface Sentence {
   translation?: string
   original?: string
   audio?: string

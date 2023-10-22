@@ -1,4 +1,5 @@
-interface Scenario extends Persistent, RecordKeeping {
+interface Scenario {
+  id: string
   title: string
   description: string
 }
