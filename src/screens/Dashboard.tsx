@@ -1,12 +1,13 @@
-import { TEST_COURSE } from '../constants'
 import { useNavigation } from '.'
 import PageTitle from '../components/PageTitle'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
+import useCourses from '../hooks/useCourses'
 
 export default () => {
   const navigation = useNavigation()
+  const { courses } = useCourses()
 
   return (
     <ScreenView>
@@ -16,11 +17,13 @@ export default () => {
       <SectionView name='Scenarios' />
 
       <SectionView name='Courses'>
-        <SecondaryButton
-          noticeMe
-          label={TEST_COURSE.scenario.title}
-          onClick={() => navigation.navigate('course:home', { course: TEST_COURSE })}
-        />
+        {courses.map(course => (
+          <SecondaryButton
+            noticeMe
+            label={course.scenario.title}
+            onClick={() => navigation.navigate('course:home', { course })}
+          />
+        ))}
       </SectionView>
 
       <SectionView name='Saved sentences' />

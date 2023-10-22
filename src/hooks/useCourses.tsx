@@ -1,6 +1,6 @@
+import { DATA } from '../constants'
 import { useEffect, useState } from 'react'
 import useStorage from './useStorage'
-import { DATA } from '../constants'
 
 export default () => {
   const { get, set } = useStorage()
@@ -11,21 +11,18 @@ export default () => {
   }, [])
 
   useEffect(() => {
-    set(DATA.COURSES, courses)
+    if (courses) {
+      set(DATA.COURSES, courses)
+    }
   }, [courses])
 
   const remove = async (id: any) => {
     setCourses(courses => courses.filter(c => c.id !== id))
   }
 
-  const create = async (scenario: Scenario) => {
-    // call ChatGPT for generating course
-    const course: Course = {
-      id: 'course:' + 1,
-      scenario,
-      sentences: [] as Sentence[],
-    }
-    setCourses(courses => [...courses, course])
+  const create = async (language: Langauge, scenario: Scenario) => {
+    // TODO call ChatGPT for generating course
+    // setCourses(courses => [...courses])
   }
 
   return { courses, remove, create }

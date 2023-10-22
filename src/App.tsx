@@ -14,9 +14,11 @@ import Course from './screens/Course'
 export default () => {
   const { loaded } = useFonts()
   const { get } = useStorage()
+
   const [initialRoute, setInitialRoute] = useState<Screens | undefined>()
 
   useEffect(() => {
+    console.log('app about to load')
     get<boolean>(DATA.SETUP_COMPLETE).then(complete => {
       setInitialRoute(complete ? 'dashboard' : 'onboarding')
     })
