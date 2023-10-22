@@ -2,7 +2,7 @@ import { DATA, FONTS, THEME } from '../constants'
 import { View, Text, StyleSheet } from 'react-native'
 import { useState } from 'react'
 import { useNavigation } from '.'
-import useAppStorage from '../hooks/useStorage'
+import useStorage from '../hooks/useStorage'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
@@ -11,20 +11,20 @@ import ScreenView from '../components/ScreenView'
 
 export default () => {
   const navigation = useNavigation()
-  const { set } = useAppStorage()
+  const { set } = useStorage()
 
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
 
-  const [state, setState] = useState<UserData>({
+  const [state, setState] = useState({
     language: 'French',
     profeciency: '',
     context: '',
   })
 
   const handleCompletion = async () => {
-    await set<UserData>(DATA.USER_DATA, state)
-    await set<boolean>(DATA.SETUP_COMPLETE, true)
+    await set(DATA.USER_DATA, state)
+    await set(DATA.SETUP_COMPLETE, true)
 
     navigation.navigate('dashboard')
   }
@@ -33,25 +33,12 @@ export default () => {
     <ScreenView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <SecondaryButton
-            hide={pageNumber <= 1}
-            label='Back'
-            onClick={pageView?.turnPrevious}
-          />
+          <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
           <Text style={styles.headerTitle}>{pageNumber}/3</Text>
-          <SecondaryButton
-            label='Skip'
-            noticeMe
-            hide={pageNumber != 3}
-            onClick={pageView?.turnNext}
-          />
+          <SecondaryButton label='Skip' noticeMe hide={pageNumber != 3} onClick={pageView?.turnNext} />
         </View>
 
-        <PageView
-          ref={setPageView}
-          onPageChange={setPageNumber}
-          onLastPage={handleCompletion}
-        >
+        <PageView ref={setPageView} onPageChange={setPageNumber} onLastPage={handleCompletion}>
           <View style={styles.page}>
             <Text style={styles.title}>What language would you like to learn?</Text>
             <InteractiveInput
@@ -64,8 +51,7 @@ export default () => {
           <View style={styles.page}>
             <Text style={styles.title}>What's your level?</Text>
             <Text style={styles.subtitle}>
-              This information is used to generate sentences that match your current
-              level.
+              This information is used to generate sentences that match your current level.
             </Text>
             <InteractiveInput
               multiline
