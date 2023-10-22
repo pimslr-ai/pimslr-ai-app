@@ -68,6 +68,8 @@ export default (props: InteractiveInputProps) => {
 const textInputStyle = (borderColor: any): TextStyle => ({
   width: '100%',
   padding: 16,
+  paddingTop: 12,
+  paddingBottom: 12,
   borderWidth: 2,
   borderRadius: 16,
   borderColor: borderColor,
