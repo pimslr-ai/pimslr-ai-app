@@ -37,11 +37,17 @@ const FONTS = {
 const DATA = {
   USER_DATA: 'user:preferences',
   SETUP_COMPLETE: 'onboarding:complete',
+  COURSES: 'data:courses',
+  SCENARIOS: 'data:scenarios',
 }
 
 const TEST_COURSE: Course = {
   id: 1,
-  scenario: 'You are at a bar...',
+  scenario: {
+    id: 1,
+    title: 'You are at a bar...',
+    description: 'You are at a new bar and are about to spend the night there.',
+  },
   sentences: [
     {
       id: 1,

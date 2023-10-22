@@ -1,32 +1,31 @@
-import React, { useEffect, useState } from 'react'
-import { Text, StyleSheet, View } from 'react-native'
-import { DATA, TEST_COURSE } from '../constants'
+import { TEST_COURSE } from '../constants'
+import { StyleSheet, View } from 'react-native'
 import { useNavigation } from '.'
 import PageTitle from '../components/PageTitle'
-import useAppStorage from '../hooks/useStorage'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
-import Button from '../components/Button'
 import SecondaryButton from '../components/SecondaryButton'
 
 export default () => {
   const navigation = useNavigation()
-  const { get } = useAppStorage()
-  const [userData, setUserData] = useState<UserData | null>(null)
-
-  useEffect(() => {
-    get<UserData>(DATA.USER_DATA).then(setUserData)
-  }, [])
 
   return (
     <ScreenView>
       <View style={styles.container}>
         <PageTitle label='Pimslr' />
 
-        <SectionView name='Scenarios' redirectionLabel='More'>
+        <SectionView name='Courses'>
           <SecondaryButton
             noticeMe
-            label={TEST_COURSE.scenario}
+            label={TEST_COURSE.scenario.title}
+            onClick={() => navigation.navigate('course:home', { course: TEST_COURSE })}
+          />
+        </SectionView>
+
+        <SectionView name='Scenarios'>
+          <SecondaryButton
+            noticeMe
+            label={TEST_COURSE.scenario.title}
             onClick={() => navigation.navigate('course:home', { course: TEST_COURSE })}
           />
         </SectionView>

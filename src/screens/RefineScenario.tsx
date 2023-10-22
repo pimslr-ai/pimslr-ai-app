@@ -26,7 +26,7 @@ export default () => {
         </View>
 
         <View style={styles.page}>
-          <Text style={styles.title}>{course?.scenario ?? 'Refine your scenario'}</Text>
+          <Text style={styles.title}>{course?.scenarioId ?? 'Refine your scenario'}</Text>
           <Text style={styles.subtitle}>
             You can refine the current scenario by entering more information about the
             context you desire.

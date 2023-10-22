@@ -78,7 +78,7 @@ export default () => {
           />
         </View>
 
-        <Text style={styles.title}>{course?.scenario}</Text>
+        <Text style={styles.title}>{course?.scenario.title}</Text>
 
         <View>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
