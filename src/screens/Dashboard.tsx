@@ -20,6 +20,7 @@ export default () => {
         {courses.map(course => (
           <SecondaryButton
             noticeMe
+            key={course.id}
             label={course.scenario.title}
             onClick={() => navigation.navigate('course:home', { course })}
           />
