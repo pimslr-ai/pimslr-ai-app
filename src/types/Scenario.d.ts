@@ -1,5 +1,5 @@
 interface Scenario {
-  id: string
+  id: any
   title: string
   description: string
 }

@@ -7,9 +7,9 @@ interface Course {
 
 interface Sentence {
   id: any
-  translation?: string
-  original?: string
+  translation: string
+  original: string
   audio?: string
-  completed?: boolean
+  completed: boolean
   score?: number
 }
