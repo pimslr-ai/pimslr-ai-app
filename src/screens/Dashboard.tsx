@@ -7,6 +7,7 @@ import useAppStorage from '../hooks/useStorage'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import Button from '../components/Button'
+import SecondaryButton from '../components/SecondaryButton'
 
 export default () => {
   const navigation = useNavigation()
@@ -23,19 +24,20 @@ export default () => {
         <PageTitle label='Pimslr' />
 
         <SectionView name='Scenarios' redirectionLabel='More'>
-          <Button
+          <SecondaryButton
+            noticeMe
             label={TEST_COURSE.scenario}
             onClick={() => navigation.navigate('course:home', { course: TEST_COURSE })}
           />
         </SectionView>
 
-        <SectionView name='Saved Sentences' redirectionLabel='More'>
+        {/* <SectionView name='Saved Sentences' redirectionLabel='More'>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
         </SectionView>
 
         <SectionView name='Recent Sentences' redirectionLabel='More'>
           {userData && <Text>{JSON.stringify(userData, null, 2)}</Text>}
-        </SectionView>
+        </SectionView> */}
       </View>
     </ScreenView>
   )
