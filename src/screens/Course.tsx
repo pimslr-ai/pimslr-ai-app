@@ -293,7 +293,7 @@ const styles = StyleSheet.create({
     padding: 16,
   },
   cardContent: {
-    elevation: 20,
+    elevation: 14,
     borderRadius: 20,
     width: '100%',
     backgroundColor: 'white',
