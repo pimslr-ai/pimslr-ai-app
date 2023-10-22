@@ -301,6 +301,21 @@ const styles = StyleSheet.create({
     paddingVertical: 70,
     paddingHorizontal: 32,
   },
+  cardControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    fontSize: 14,
+    marginTop: 20,
+    paddingHorizontal: 30,
+  },
+  cardControlPagination: {
+    color: THEME.COLOR,
+    fontSize: 14,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
   translation: {
     textAlign: 'center',
     fontFamily: FONTS.POPPINS.BOLD,
@@ -312,19 +327,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.POPPINS.REGULAR,
     fontSize: 16,
     opacity: 0.5,
-  },
-  cardControls: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center',
-    marginTop: 20,
-    paddingHorizontal: 30,
-  },
-  cardControlPagination: {
-    fontSize: 12,
-    color: THEME.COLOR,
-    alignSelf: 'center',
-    textAlign: 'center',
   },
 })
