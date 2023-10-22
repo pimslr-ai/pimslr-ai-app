@@ -12,7 +12,8 @@ export default () => {
     <ScreenView>
       <PageTitle label='Pimslr' />
 
-      <SectionView name='Languages'></SectionView>
+      <SectionView name='Languages' />
+      <SectionView name='Scenarios' />
 
       <SectionView name='Courses'>
         <SecondaryButton
@@ -22,7 +23,7 @@ export default () => {
         />
       </SectionView>
 
-      <SectionView name='Scenarios'></SectionView>
+      <SectionView name='Saved sentences' />
     </ScreenView>
   )
 }

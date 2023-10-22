@@ -1,5 +1,6 @@
-interface Course  {
+interface Course {
   id: any
+  language: Langauge
   scenario: Scenario
   sentences: Sentence[]
 }
