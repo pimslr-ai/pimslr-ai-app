@@ -14,7 +14,7 @@ export default () => {
 
   const startRecording = async () => {
     if (!state.recording) {
-      Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
+      Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: false })
       const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
       recording.setOnRecordingStatusUpdate(status => {
         setState(prev => ({ ...prev, amplitude: status.metering }))
