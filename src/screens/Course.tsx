@@ -39,7 +39,7 @@ export default () => {
     if (isReady) {
       clearRecognition()
 
-      stopAudio().then(() => setTimeout(toggleAudio, 100))
+      stopAudio().then(toggleAudio)
     }
   }, [isReady, pageNumber])
 
