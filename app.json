@@ -2,7 +2,7 @@
   "expo": {
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
-    "version": "1.0.2",
+    "version": "0.0.4",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -21,7 +21,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "package": "nl.chandler23.LagoAI"
     },
     "web": {
       "favicon": "./assets/favicon.png"
