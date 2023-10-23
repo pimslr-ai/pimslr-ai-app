@@ -1,10 +1,10 @@
-import { DATA } from '../constants'
+import { DATA, TEST_COURSE } from '../constants'
 import { useEffect, useState } from 'react'
 import useStorage from './useStorage'
 
 export default () => {
   const { get, set } = useStorage()
-  const [courses, setCourses] = useState<Course[]>([])
+  const [courses, setCourses] = useState<Course[]>([TEST_COURSE])
 
   useEffect(() => {
     get<Course[]>(DATA.COURSES).then(courses => setCourses(courses!))

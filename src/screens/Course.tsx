@@ -31,7 +31,7 @@ export default () => {
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-  const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
+  const { isPlaying, playAudio, stopAudio } = useAudio()
   const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading, amplitude } =
     useRecognition('fr-FR')
 
@@ -39,9 +39,7 @@ export default () => {
     if (isReady) {
       clearRecognition()
 
-      stopAudio()
-        .then(() => setAudio(audios[course.sentences[pageNumber - 1].audio!]))
-        .then(() => setTimeout(playAudio, 100))
+      stopAudio().then(() => setTimeout(toggleAudio, 100))
     }
   }, [isReady, pageNumber])
 
@@ -61,7 +59,7 @@ export default () => {
       if (isPlaying) {
         stopAudio()
       } else {
-        playAudio()
+        playAudio(audios[course.sentences[pageNumber - 1].audio - 1!])
       }
     }
   }
@@ -95,7 +93,7 @@ export default () => {
 
         <View>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {course?.sentences.map((sentence, i) => (
+            {course?.sentences?.map((sentence, i) => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>

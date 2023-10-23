@@ -17,7 +17,7 @@ export default () => {
       <SectionView name='Scenarios' />
 
       <SectionView name='Courses'>
-        {courses.map(course => (
+        {courses?.map(course => (
           <SecondaryButton
             noticeMe
             key={course.id}
