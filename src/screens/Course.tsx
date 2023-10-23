@@ -11,6 +11,19 @@ import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
 import ConfettiCannon from '../components/ConfettiCannon'
 
+const audios = [
+  require('../../assets/audio/1.m4a'),
+  require('../../assets/audio/2.m4a'),
+  require('../../assets/audio/3.m4a'),
+  require('../../assets/audio/4.m4a'),
+  require('../../assets/audio/5.m4a'),
+  require('../../assets/audio/6.m4a'),
+  require('../../assets/audio/7.m4a'),
+  require('../../assets/audio/8.m4a'),
+  require('../../assets/audio/9.m4a'),
+  require('../../assets/audio/10.m4a'),
+]
+
 export default () => {
   const navigation = useNavigation()
   const { course } = useParams('course:home')
@@ -27,7 +40,7 @@ export default () => {
       clearRecognition()
 
       stopAudio()
-        .then(() => setAudio(course.sentences[pageNumber - 1].audio))
+        .then(() => setAudio(audios[course.sentences[pageNumber - 1].audio!]))
         .then(() => setTimeout(playAudio, 100))
     }
   }, [isReady, pageNumber])

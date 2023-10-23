@@ -9,7 +9,7 @@ interface Sentence {
   id: any
   translation: string
   original: string
-  audio?: string
+  audio: any
   completed: boolean
   score?: number
 }
