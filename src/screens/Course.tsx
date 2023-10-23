@@ -44,6 +44,8 @@ export default () => {
   }, [isReady, pageNumber])
 
   const toggleRecording = () => {
+    clearRecognition()
+
     if (isPlaying) {
       stopAudio()
     }
@@ -55,6 +57,8 @@ export default () => {
   }
 
   const toggleAudio = () => {
+    clearRecognition()
+
     if (!isRecording) {
       if (isPlaying) {
         stopAudio()
@@ -65,6 +69,7 @@ export default () => {
   }
 
   const handleClose = () => {
+    clearRecognition()
     stopAudio()
     navigation.navigate('dashboard')
   }

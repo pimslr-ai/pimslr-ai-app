@@ -4,10 +4,12 @@ import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
 import useCourses from '../hooks/useCourses'
+import { TEST_COURSE } from '../constants'
 
 export default () => {
   const navigation = useNavigation()
-  const { courses } = useCourses()
+  // const { courses } = useCourses()
+  const courses = [TEST_COURSE]
 
   return (
     <ScreenView>
