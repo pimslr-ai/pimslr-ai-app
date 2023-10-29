@@ -88,13 +88,13 @@ export default () => {
               onClick={handleClose}
               containerStyle={{ transform: [{ scale: 1.4 }] }}
             />
-            <SecondaryButton
+            {/* <SecondaryButton
               icon='edit'
               label='Refine Scenario'
               noticeMe
               labelFirst
               onClick={() => navigation.navigate('course:refine_scenario', { courseId })}
-            />
+            /> */}
           </View>
 
           <Text style={styles.title}>{course?.scenario.title}</Text>

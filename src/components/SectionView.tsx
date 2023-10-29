@@ -8,9 +8,18 @@ interface SectionViewProps extends PropsWithChildren {
   name?: string
   redirection?: string
   redirectionLabel?: string
+  separation?: number
+  rowDirection?: boolean
 }
 
-export default ({ name, redirection, redirectionLabel, children }: SectionViewProps) => {
+export default ({
+  name,
+  redirection,
+  redirectionLabel,
+  rowDirection,
+  separation,
+  children,
+}: SectionViewProps) => {
   const navigation = useNavigation()
 
   const handleRedirection = () => {
@@ -22,16 +31,23 @@ export default ({ name, redirection, redirectionLabel, children }: SectionViewPr
       <View style={[styles.header, { justifyContent: redirectionLabel ? 'space-between' : 'flex-start' }]}>
         <Text style={styles.headerName}>{name ?? 'Section'}</Text>
         {redirection && (
-          <Button
-            labelFirst
-            label={redirectionLabel}
-            icon='arrow-forward'
-            onClick={handleRedirection}
-          />
+          <Button labelFirst label={redirectionLabel} icon='arrow-forward' onClick={handleRedirection} />
         )}
       </View>
 
-      <View>{children}</View>
+      <View
+        style={[
+          {
+            display: 'flex',
+            flexDirection: rowDirection ? 'row' : 'column',
+            gap: separation ?? 20,
+            overflow: 'scroll',
+            width: 'auto', // Set width to 'auto' to fit content
+          },
+        ]}
+      >
+        {children}
+      </View>
     </View>
   )
 }
