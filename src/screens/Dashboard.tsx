@@ -1,10 +1,10 @@
 import { useNavigation } from '.'
-import PageTitle from '../components/PageTitle'
+import { Image } from 'react-native'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import SecondaryButton from '../components/SecondaryButton'
-import useCourses from '../hooks/useCourses'
 import { TEST_COURSE } from '../constants'
+import { SvgUri } from 'react-native-svg'
 
 export default () => {
   const navigation = useNavigation()
@@ -13,7 +13,7 @@ export default () => {
 
   return (
     <ScreenView>
-      <PageTitle label='Pimslr' />
+      <SvgUri width={100} height={100} source={} />
 
       <SectionView name='Languages' />
       <SectionView name='Scenarios' />
