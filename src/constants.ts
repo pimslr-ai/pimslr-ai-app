@@ -43,6 +43,8 @@ const DATA = {
 
 const TEST_COURSE: Course = {
   id: 1,
+  createdAt: new Date(),
+  lastModified: new Date(),
   language: {
     id: 1,
     name: 'French',
