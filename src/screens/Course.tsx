@@ -11,6 +11,19 @@ import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
 import ConfettiCannon from '../components/ConfettiCannon'
 
+const audios = [
+  require('../../assets/audio/1.m4a'),
+  require('../../assets/audio/2.m4a'),
+  require('../../assets/audio/3.m4a'),
+  require('../../assets/audio/4.m4a'),
+  require('../../assets/audio/5.m4a'),
+  require('../../assets/audio/6.m4a'),
+  require('../../assets/audio/7.m4a'),
+  require('../../assets/audio/8.m4a'),
+  require('../../assets/audio/9.m4a'),
+  require('../../assets/audio/10.m4a'),
+]
+
 export default () => {
   const navigation = useNavigation()
   const { course } = useParams('course:home')
@@ -18,7 +31,7 @@ export default () => {
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-  const { isPlaying, playAudio, stopAudio, setAudio } = useAudio()
+  const { isPlaying, playAudio, stopAudio } = useAudio()
   const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading, amplitude } =
     useRecognition('fr-FR')
 
@@ -26,13 +39,13 @@ export default () => {
     if (isReady) {
       clearRecognition()
 
-      stopAudio()
-        .then(() => setAudio(course.sentences[pageNumber - 1].audio))
-        .then(() => setTimeout(playAudio, 100))
+      stopAudio().then(toggleAudio)
     }
   }, [isReady, pageNumber])
 
   const toggleRecording = () => {
+    clearRecognition()
+
     if (isPlaying) {
       stopAudio()
     }
@@ -44,16 +57,19 @@ export default () => {
   }
 
   const toggleAudio = () => {
+    clearRecognition()
+
     if (!isRecording) {
       if (isPlaying) {
         stopAudio()
       } else {
-        playAudio()
+        playAudio(audios[course.sentences[pageNumber - 1].audio - 1!])
       }
     }
   }
 
   const handleClose = () => {
+    clearRecognition()
     stopAudio()
     navigation.navigate('dashboard')
   }
@@ -78,11 +94,11 @@ export default () => {
           />
         </View>
 
-        <Text style={styles.title}>{course?.scenario}</Text>
+        <Text style={styles.title}>{course?.scenario.title}</Text>
 
         <View>
           <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {course?.sentences.map((sentence, i) => (
+            {course?.sentences?.map((sentence, i) => (
               <View key={sentence.id} style={styles.card}>
                 <View key={sentence.id} style={styles.cardContent}>
                   <Text style={styles.translation}>
@@ -301,6 +317,21 @@ const styles = StyleSheet.create({
     paddingVertical: 70,
     paddingHorizontal: 32,
   },
+  cardControls: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignContent: 'center',
+    fontSize: 14,
+    marginTop: 20,
+    paddingHorizontal: 30,
+  },
+  cardControlPagination: {
+    color: THEME.COLOR,
+    fontSize: 14,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
   translation: {
     textAlign: 'center',
     fontFamily: FONTS.POPPINS.BOLD,
@@ -312,19 +343,5 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.POPPINS.REGULAR,
     fontSize: 16,
     opacity: 0.5,
-  },
-  cardControls: {
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignContent: 'center',
-    marginTop: 20,
-    paddingHorizontal: 30,
-  },
-  cardControlPagination: {
-    fontSize: 12,
-    color: THEME.COLOR,
-    alignSelf: 'center',
-    textAlign: 'center',
   },
 })

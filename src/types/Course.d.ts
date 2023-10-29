@@ -1,12 +1,15 @@
 interface Course {
   id: any
-  scenario: string
+  language: Langauge
+  scenario: Scenario
   sentences: Sentence[]
 }
 
 interface Sentence {
   id: any
-  translation?: string
-  original?: string
-  audio?: string
+  translation: string
+  original: string
+  audio: any
+  completed: boolean
+  score?: number
 }

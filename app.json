@@ -2,29 +2,29 @@
   "expo": {
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
-    "version": "1.0.2",
+    "version": "0.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#713ABE",
+      "resizeMode": "center"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
-      "supportsTablet": false,
       "bundleIdentifier": "nl.chandler23.LagoAI",
-      "playsInSilentModeIOS": true
+      "supportsTablet": false,
+      "playsInSilentModeIOS": false
     },
     "android": {
+      "package": "nl.chandler23.LagoAI",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#713ABE"
       }
     },
     "web": {
-      "favicon": "./assets/favicon.png"
     },
     "extra": {
       "eas": {

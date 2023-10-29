@@ -20,17 +20,16 @@ export default () => {
     })
   }, [])
 
-  const setAudio = async (audioFile: any) => {
+  const playAudio = async (audioFile: any) => {
+    if (state.isPlaying) {
+      await state.sound.stopAsync()
+    }
+    // too much time spent loading, add setAudio back
     await state.sound.unloadAsync()
     await state.sound.loadAsync(audioFile)
-  }
-
-  const playAudio = async () => {
-    if (!state.isPlaying) {
-      await state.sound.setPositionAsync(0)
-      await state.sound.playAsync()
-      setState(prev => ({ ...prev, isPlaying: true }))
-    }
+    await state.sound.setPositionAsync(0)
+    await state.sound.playAsync()
+    setState(prev => ({ ...prev, isPlaying: true }))
   }
 
   const stopAudio = async () => {
@@ -43,7 +42,6 @@ export default () => {
   return {
     playAudio,
     stopAudio,
-    setAudio,
     isPlaying: state.isPlaying,
   }
 }

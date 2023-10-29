@@ -6,17 +6,21 @@ import axios from 'axios'
 export default (language: string) => {
   const { startRecording, stopRecording, audioRecording, isRecording, amplitude } = useMicrophone()
   const [state, setState] = useState<{
-    recognition?: Recognition | null
     isLoading: boolean
     hasFailed?: boolean
   }>({ isLoading: false })
+  const [recognition, setRecognition] = useState<Recognition | null>()
 
   useEffect(() => {
     if (audioRecording) {
-      setState({ recognition: null, isLoading: true })
+      setState({ isLoading: true })
+      setRecognition(null)
 
       speechToText(audioRecording)
-        .then(data => setState({ recognition: data, isLoading: false, hasFailed: data === null }))
+        .then(data => {
+          setRecognition(data)
+          setState({ isLoading: false, hasFailed: data === null })
+        })
         .catch(() => setState(prev => ({ ...prev, hasFailed: true, recognition: null })))
         .finally(() => FileSystem.deleteAsync(audioRecording!))
     }
@@ -28,12 +32,11 @@ export default (language: string) => {
     })
     const url = 'http://pimslrai.greffchandler.net/speech/recognize/' + language
     const response = await axios.post<RecognizeResponse>(url, { audio })
-
     return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
 
   const clearRecognition = () => {
-    setState(prev => ({ ...prev, recognition: null }))
+    setRecognition(null)
   }
 
   return {
@@ -42,8 +45,8 @@ export default (language: string) => {
     clearRecognition,
     isRecording,
     amplitude,
+    recognition,
     isLoading: state.isLoading,
-    recognition: state.recognition,
     hasFailed: state.hasFailed,
   }
 }

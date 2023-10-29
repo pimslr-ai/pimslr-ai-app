@@ -14,6 +14,7 @@ import Course from './screens/Course'
 export default () => {
   const { loaded } = useFonts()
   const { get } = useStorage()
+
   const [initialRoute, setInitialRoute] = useState<Screens | undefined>()
 
   useEffect(() => {

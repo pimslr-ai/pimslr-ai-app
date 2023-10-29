@@ -26,10 +26,9 @@ export default () => {
         </View>
 
         <View style={styles.page}>
-          <Text style={styles.title}>{course?.scenario ?? 'Refine your scenario'}</Text>
+          <Text style={styles.title}>{course?.scenario.title ?? 'Refine your scenario'}</Text>
           <Text style={styles.subtitle}>
-            You can refine the current scenario by entering more information about the
-            context you desire.
+            You can refine the current scenario by entering more information about the context you desire.
           </Text>
           <InteractiveInput
             multiline
@@ -38,11 +37,7 @@ export default () => {
           />
         </View>
 
-        <PrimaryButton
-          label='Refine Scenario'
-          containerStyle={styles.button}
-          onClick={handleRefining}
-        />
+        <PrimaryButton label='Refine Scenario' containerStyle={styles.button} onClick={handleRefining} />
       </View>
     </ScreenView>
   )
