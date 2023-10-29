@@ -10,6 +10,7 @@ import SecondaryButton from '../components/SecondaryButton'
 import ScreenView from '../components/ScreenView'
 import PageView from '../components/PageView'
 import ConfettiCannon from '../components/ConfettiCannon'
+import { useCourses } from '../hooks/useCourses'
 
 const audios = [
   require('../../assets/audio/1.m4a'),
@@ -26,7 +27,8 @@ const audios = [
 
 export default () => {
   const navigation = useNavigation()
-  const { course } = useParams('course:home')
+  const { courseId } = useParams('course:home')
+  const { course } = useCourses(courseId)
   const [pageView, setPageView] = useState<PageView | null>()
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
@@ -63,7 +65,7 @@ export default () => {
       if (isPlaying) {
         stopAudio()
       } else {
-        playAudio(audios[course.sentences[pageNumber - 1].audio - 1!])
+        playAudio(audios[course!.sentences[pageNumber - 1].audio - 1!])
       }
     }
   }
@@ -75,85 +77,87 @@ export default () => {
   }
 
   return (
-    <ScreenView>
-      <ConfettiCannon ref={setCannon} />
+    course && (
+      <ScreenView>
+        <ConfettiCannon ref={setCannon} />
 
-      <View style={styles.container}>
-        <View style={styles.header}>
-          <SecondaryButton
-            icon='close'
-            onClick={handleClose}
-            containerStyle={{ transform: [{ scale: 1.4 }] }}
-          />
-          <SecondaryButton
-            icon='edit'
-            label='Refine Scenario'
-            noticeMe
-            labelFirst
-            onClick={() => navigation.navigate('course:refine_scenario', { course })}
-          />
-        </View>
+        <View style={styles.container}>
+          <View style={styles.header}>
+            <SecondaryButton
+              icon='close'
+              onClick={handleClose}
+              containerStyle={{ transform: [{ scale: 1.4 }] }}
+            />
+            <SecondaryButton
+              icon='edit'
+              label='Refine Scenario'
+              noticeMe
+              labelFirst
+              onClick={() => navigation.navigate('course:refine_scenario', { courseId })}
+            />
+          </View>
 
-        <Text style={styles.title}>{course?.scenario.title}</Text>
+          <Text style={styles.title}>{course?.scenario.title}</Text>
 
-        <View>
-          <PageView ref={setPageView} onPageChange={setPageNumber}>
-            {course?.sentences?.map((sentence, i) => (
-              <View key={sentence.id} style={styles.card}>
-                <View key={sentence.id} style={styles.cardContent}>
-                  <Text style={styles.translation}>
-                    <Sentence
-                      onSuccess={cannon?.shoot}
-                      translation={sentence?.translation!}
-                      recognition={i === pageNumber - 1 ? recognition! : undefined}
-                    />
-                  </Text>
-                  <Text style={styles.original}>{sentence.original}</Text>
+          <View>
+            <PageView ref={setPageView} onPageChange={setPageNumber}>
+              {course?.sentences?.map((sentence, i) => (
+                <View key={sentence.id} style={styles.card}>
+                  <View key={sentence.id} style={styles.cardContent}>
+                    <Text style={styles.translation}>
+                      <Sentence
+                        onSuccess={cannon?.shoot}
+                        translation={sentence?.translation!}
+                        recognition={i === pageNumber - 1 ? recognition! : undefined}
+                      />
+                    </Text>
+                    <Text style={styles.original}>{sentence.original}</Text>
+                  </View>
                 </View>
-              </View>
-            ))}
-          </PageView>
+              ))}
+            </PageView>
 
-          {isReady && (
-            <View style={styles.cardControls}>
-              <SecondaryButton
-                label='Back'
-                hide={pageNumber <= 1}
-                labelStyle={{ opacity: 0.7 }}
-                onClick={pageView?.turnPrevious}
+            {isReady && (
+              <View style={styles.cardControls}>
+                <SecondaryButton
+                  label='Back'
+                  hide={pageNumber <= 1}
+                  labelStyle={{ opacity: 0.7 }}
+                  onClick={pageView?.turnPrevious}
+                />
+                <Text style={styles.cardControlPagination}>
+                  {pageNumber}/{course?.sentences.length}
+                </Text>
+                <SecondaryButton
+                  label='Next'
+                  hide={pageNumber >= course?.sentences.length!}
+                  labelStyle={{ opacity: 0.7 }}
+                  onClick={pageView?.turnNext}
+                />
+              </View>
+            )}
+          </View>
+
+          {!isReady ? (
+            <PrimaryButton
+              label='Start!'
+              containerStyle={styles.startButton}
+              onClick={() => setIsReady(true)}
+            />
+          ) : (
+            <View style={styles.courseControls}>
+              <AnimatedButton icon='audiotrack' onClick={toggleAudio} toggle={isPlaying} />
+              <AnimatedButton
+                icon={isLoading ? 'loop' : isRecording ? 'stop' : 'mic'}
+                onClick={toggleRecording}
+                toggle={!isPlaying}
               />
-              <Text style={styles.cardControlPagination}>
-                {pageNumber}/{course?.sentences.length}
-              </Text>
-              <SecondaryButton
-                label='Next'
-                hide={pageNumber >= course?.sentences.length!}
-                labelStyle={{ opacity: 0.7 }}
-                onClick={pageView?.turnNext}
-              />
+              <AnimatedButton icon='star' />
             </View>
           )}
         </View>
-
-        {!isReady ? (
-          <PrimaryButton
-            label='Start!'
-            containerStyle={styles.startButton}
-            onClick={() => setIsReady(true)}
-          />
-        ) : (
-          <View style={styles.courseControls}>
-            <AnimatedButton icon='audiotrack' onClick={toggleAudio} toggle={isPlaying} />
-            <AnimatedButton
-              icon={isLoading ? 'loop' : isRecording ? 'stop' : 'mic'}
-              onClick={toggleRecording}
-              toggle={!isPlaying}
-            />
-            <AnimatedButton icon='star' />
-          </View>
-        )}
-      </View>
-    </ScreenView>
+      </ScreenView>
+    )
   )
 }
 

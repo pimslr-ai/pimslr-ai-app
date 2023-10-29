@@ -1,10 +1,9 @@
+import { FONTS, TEST_COURSE } from '../constants'
+import { StyleSheet, Text, TouchableOpacity } from 'react-native'
 import { useNavigation } from '.'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
-import SecondaryButton from '../components/SecondaryButton'
-import { FONTS, TEST_COURSE } from '../constants'
 import Logo from '../components/Logo'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 
 export default () => {
   // const { courses } = useCourses()
@@ -34,7 +33,7 @@ const Card = (course: Course) => {
   return (
     <TouchableOpacity
       style={styles.cardContainer}
-      onPress={() => navigation.navigate('course:home', { course })}
+      onPress={() => navigation.navigate('course:home', { courseId: course.id })}
     >
       <Text style={styles.cardDate}>{formatHumanDateTime(course.createdAt)}</Text>
       <Text style={styles.cardTitle}>{course.scenario.title}</Text>
@@ -59,9 +58,7 @@ const styles = StyleSheet.create({
   cardDate: {
     fontSize: 12,
   },
-  cardDetails: {
-
-  },
+  cardDetails: {},
 })
 
 function formatHumanDateTime(date: Date) {

@@ -9,10 +9,10 @@ type RootStackParamList = {
   dashboard: undefined
   settings: undefined
   'course:home': {
-    course: Course
+    courseId: string
   }
   'course:refine_scenario': {
-    course: Course
+    courseId: string
   }
 }
 

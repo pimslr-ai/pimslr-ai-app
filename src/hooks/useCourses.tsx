@@ -2,22 +2,25 @@ import { DATA, TEST_COURSE } from '../constants'
 import { useEffect, useState } from 'react'
 import useStorage from './useStorage'
 
-export default () => {
+export const useCourses = (id?: any) => {
   const { get, set } = useStorage()
-  const [courses, setCourses] = useState<Course[]>([TEST_COURSE])
+  const [courses, setCourses] = useState<Course[] | null>([TEST_COURSE])
+  const [course, setCourse] = useState<Course | null>()
 
   useEffect(() => {
-    get<Course[]>(DATA.COURSES).then(courses => setCourses(courses!))
+    get<Course[]>(DATA.COURSES).then(courses => {
+      if (courses) {
+        if (id) {
+          setCourse(courses.filter(c => c.id === id)[0])
+        } else {
+          setCourses(courses)
+        }
+      }
+    })
   }, [])
 
-  useEffect(() => {
-    if (courses) {
-      set(DATA.COURSES, courses)
-    }
-  }, [courses])
-
-  const remove = async (id: any) => {
-    setCourses(courses => courses.filter(c => c.id !== id))
+  const remove = (id: any) => {
+    setCourses(courses => courses?.filter(c => c.id !== id)!)
   }
 
   const create = async (language: Langauge, scenario: Scenario) => {
@@ -25,5 +28,5 @@ export default () => {
     // setCourses(courses => [...courses])
   }
 
-  return { courses, remove, create }
+  return { course, courses, get, remove, create }
 }
