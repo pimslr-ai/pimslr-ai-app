@@ -17,7 +17,7 @@ export default () => {
     </svg>`
 
   return (
-    <View style={{ marginVertical: 30, padding: 10, height: 50 }}>
+    <View style={{ marginVertical: 30, paddingTop: 10, height: 30 }}>
       <SvgXml xml={svg} fill='#713abd' />
     </View>
   )

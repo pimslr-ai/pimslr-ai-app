@@ -1,10 +1,11 @@
-import { FONTS, TEST_COURSE } from '../constants'
+import { FONTS, TEST_COURSE, THEME } from '../constants'
 import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
 import { PropsWithChildren } from 'react'
 import { useNavigation } from '.'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import Logo from '../components/Logo'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 
 export default () => {
   // const { courses } = useCourses()
@@ -15,28 +16,26 @@ export default () => {
       <Logo />
 
       <SectionView name='Languages' rowDirection>
-        <Card>
-          <Text>Learn a new language!</Text>
-        </Card>
-        <Card>
+        <CreateCard text='Learn new' />
+
+        <Card style={{ width: 200 }}>
           <Text>French</Text>
         </Card>
-        <Card>
+        <Card style={{ width: 200 }}>
           <Text>Dutch</Text>
         </Card>
-        <Card>
+        <Card style={{ width: 200 }}>
           <Text>Spanish</Text>
         </Card>
       </SectionView>
 
       <SectionView name='Scenarios' rowDirection>
-        <Card>
-          <Text>Add a new scenario</Text>
-        </Card>
-        <Card>
+        <CreateCard text='Create new' />
+
+        <Card style={{ width: 200 }}>
           <Text>You are at a bar...</Text>
         </Card>
-        <Card>
+        <Card style={{ width: 200 }}>
           <Text>You are at a carwash...</Text>
         </Card>
       </SectionView>
@@ -75,6 +74,26 @@ const Card = ({ children, onClick, style }: CardProps) => {
   )
 }
 
+const CreateCard = (props: CardProps & { text: string }) => {
+  return (
+    <Card
+      {...props}
+      style={{
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-around',
+        // aspectRatio: 1,
+        backgroundColor: THEME.CTA,
+        width: 150,
+      }}
+    >
+      <Icon size={20} color='white' name='add' />
+      <Text style={{ color: 'white', fontSize: 15, fontFamily: FONTS.POPPINS.MEDIUM }}>{props.text}</Text>
+    </Card>
+  )
+}
+
 const CourseCard = (course: Course) => {
   const navigation = useNavigation()
   const backgroundCards = new Array(3).fill(null)
@@ -82,8 +101,8 @@ const CourseCard = (course: Course) => {
   const backgroundCardStyle = (index: number): ViewStyle => ({
     width: '100%',
     height: '100%',
-    backgroundColor: `rgba(0, 0, 0, ${0.03 * (index + 1)})`,
-    transform: [{ rotateZ: `${getBetween(7, -7)}deg` }],
+    backgroundColor: `rgba(0, 0, 0, ${0.025 * (index + 1)})`,
+    transform: [{ rotateZ: `${getRandom([7, 6, 5, 4, -4, -5, -6, -7])}deg` }],
     margin: 20,
     position: 'absolute',
     borderRadius: 20,
@@ -111,12 +130,10 @@ const styles = StyleSheet.create({
   cardContainer: {
     display: 'flex',
     gap: 10,
-    paddingHorizontal: 20,
-    paddingVertical: 40,
+    padding: 20,
     borderRadius: 10,
     borderColor: 'rgba(0,0,0,0.05)',
     borderWidth: 1.5,
-    minHeight: 100,
   },
   courseCard: {
     display: 'flex',
@@ -154,9 +171,10 @@ function formatHumanDateTime(date: Date) {
   return `${datePart} | ${timePart}`
 }
 
-const getBetween = (num1: number, num2: number) => {
-  if (num1 > num2) {
-    ;[num1, num2] = [num2, num1]
+function getRandom(arr: number[]) {
+  if (arr.length === 0) {
+    return null // Return null if the array is empty
   }
-  return Math.random() * (num2 - num1) + num1
+  const randomIndex = Math.floor(Math.random() * arr.length)
+  return arr[randomIndex]
 }
