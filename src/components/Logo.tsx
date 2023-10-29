@@ -1,5 +1,6 @@
 import { View } from 'react-native'
 import { SvgXml } from 'react-native-svg'
+import { THEME } from '../constants'
 
 export default () => {
   const svg = `
@@ -18,7 +19,7 @@ export default () => {
 
   return (
     <View style={{ marginVertical: 30, paddingTop: 10, height: 30 }}>
-      <SvgXml xml={svg} fill='#713abd' />
+      <SvgXml xml={svg} fill={THEME.CTA} />
     </View>
   )
 }

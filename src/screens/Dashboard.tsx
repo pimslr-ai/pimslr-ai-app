@@ -83,7 +83,6 @@ const CreateCard = (props: CardProps & { text: string }) => {
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
-        // aspectRatio: 1,
         backgroundColor: THEME.CTA,
         width: 150,
       }}
@@ -101,7 +100,7 @@ const CourseCard = (course: Course) => {
   const backgroundCardStyle = (index: number): ViewStyle => ({
     width: '100%',
     height: '100%',
-    backgroundColor: `rgba(0, 0, 0, ${0.025 * (index + 1)})`,
+    backgroundColor: `rgba(113, 58, 189, ${0.025 * (index + 1)})`,
     transform: [{ rotateZ: `${getRandom([7, 6, 5, 4, -4, -5, -6, -7])}deg` }],
     margin: 20,
     position: 'absolute',
