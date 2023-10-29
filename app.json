@@ -2,14 +2,14 @@
   "expo": {
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
-    "version": "0.0.6",
+    "version": "0.0.7",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#713ABE"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {

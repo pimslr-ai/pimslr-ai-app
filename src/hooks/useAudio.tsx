@@ -24,6 +24,7 @@ export default () => {
     if (state.isPlaying) {
       await state.sound.stopAsync()
     }
+    // too much time spent loading, add setAudio back
     await state.sound.unloadAsync()
     await state.sound.loadAsync(audioFile)
     await state.sound.setPositionAsync(0)
