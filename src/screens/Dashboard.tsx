@@ -84,11 +84,11 @@ const CreateCard = (props: CardProps & { text: string }) => {
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: THEME.CTA,
-        width: 150,
+        // width: 150,
       }}
     >
       <Icon size={20} color='white' name='add' />
-      <Text style={{ color: 'white', fontSize: 15, fontFamily: FONTS.POPPINS.MEDIUM }}>{props.text}</Text>
+      {/* <Text style={{ color: 'white', fontSize: 15, fontFamily: FONTS.POPPINS.MEDIUM }}>{props.text}</Text> */}
     </Card>
   )
 }
