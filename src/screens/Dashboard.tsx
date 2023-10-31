@@ -43,6 +43,7 @@ export default () => {
               </Card>
             </View>
           </ScrollView>
+          <Text style={{ textAlign: 'center', marginTop: 24 }}>View all</Text>
         </SectionView>
 
         <SectionView name='Scenarios' extra='Add scenario'>
@@ -56,6 +57,7 @@ export default () => {
               </Card>
             </View>
           </ScrollView>
+          <Text style={{ textAlign: 'center', marginTop: 24 }}>View all</Text>
         </SectionView>
 
         <SectionView name='Courses' extra='Generate course'>
@@ -69,6 +71,7 @@ export default () => {
             {courses?.map(course => (
               <CourseCard key={course.id} {...course} />
             ))}
+            <Text style={{ textAlign: 'center' }}>View all</Text>
           </View>
         </SectionView>
 
@@ -78,6 +81,7 @@ export default () => {
               <Text>This is a saved sentence.</Text>
             </Card>
           </View>
+          <Text style={{ textAlign: 'center' }}>View all</Text>
         </SectionView>
       </ScrollView>
     </ScreenView>
