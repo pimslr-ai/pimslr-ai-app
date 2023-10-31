@@ -1,18 +1,18 @@
 import { PropsWithChildren } from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import { ColorValue, View, StyleSheet } from 'react-native'
 import { THEME } from '../constants'
 import { StatusBar } from 'expo-status-bar'
 
-export default ({ children }: PropsWithChildren) => {
+interface ScreenViewProps extends PropsWithChildren {
+  backgroundColor?: ColorValue
+}
+
+export default ({ children, backgroundColor }: ScreenViewProps) => {
   return (
-    <ScrollView
-      showsHorizontalScrollIndicator={false}
-      showsVerticalScrollIndicator={false}
-      style={styles.body}
-    >
+    <View style={[styles.body, { backgroundColor }]}>
       <StatusBar style='auto' />
       {children}
-    </ScrollView>
+    </View>
   )
 }
 
@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     paddingTop: 30,
     backgroundColor: THEME.BACKGROUND,
     overflow: 'scroll',
-    maxHeight: '100%',
-    maxWidth: '100%',
+    height: '100%',
+    width: '100%',
   },
 })

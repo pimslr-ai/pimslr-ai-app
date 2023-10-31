@@ -6,54 +6,63 @@ import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import Logo from '../components/Logo'
 import Icon from 'react-native-vector-icons/MaterialIcons'
+import Button from '../components/Button'
 
 export default () => {
   // const { courses } = useCourses()
   const courses = [TEST_COURSE]
 
   return (
-    <ScreenView>
-      <View style={{ marginBottom: 50 }}>
-        <Logo />
+    <ScreenView backgroundColor='rgba(0,0,0,0.01)'>
+      <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+        <View style={styles.dashboardHeader}>
+          <Logo />
+          <Button icon='settings' label='Settings' />
+        </View>
 
-        <SectionView name='Languages'>
+        <SectionView name='Languages' extra='Add language'>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
-              <CreateCard text='Learn new' />
-
-              <Card style={{ width: 200 }}>
+              <Card>
                 <Text>French</Text>
               </Card>
-              <Card style={{ width: 200 }}>
+              <Card>
                 <Text>Dutch</Text>
               </Card>
-              <Card style={{ width: 200 }}>
+              <Card>
+                <Text>Spanish</Text>
+              </Card>
+              <Card>
+                <Text>French</Text>
+              </Card>
+              <Card>
+                <Text>Dutch</Text>
+              </Card>
+              <Card>
                 <Text>Spanish</Text>
               </Card>
             </View>
           </ScrollView>
         </SectionView>
 
-        <SectionView name='Scenarios'>
+        <SectionView name='Scenarios' extra='Add scenario'>
           <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
             <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
-              <CreateCard text='Create new' />
-
-              <Card style={{ width: 200 }}>
+              <Card>
                 <Text>You are at a bar...</Text>
               </Card>
-              <Card style={{ width: 200 }}>
+              <Card>
                 <Text>You are at a carwash...</Text>
               </Card>
             </View>
           </ScrollView>
         </SectionView>
 
-        <SectionView name='Courses'>
+        <SectionView name='Courses' extra='Generate course'>
           <View style={{ padding: 16, gap: 16 }}>
-            {/* <Card>
-          <Text>Create new course</Text>
-        </Card> */}
+            {courses?.map(course => (
+              <CourseCard key={course.id} {...course} />
+            ))}
             {courses?.map(course => (
               <CourseCard key={course.id} {...course} />
             ))}
@@ -70,7 +79,7 @@ export default () => {
             </Card>
           </View>
         </SectionView>
-      </View>
+      </ScrollView>
     </ScreenView>
   )
 }
@@ -85,25 +94,6 @@ const Card = ({ children, onClick, style }: CardProps) => {
     <TouchableOpacity style={[styles.cardContainer, style]} onPress={() => (onClick ? onClick() : null)}>
       {children}
     </TouchableOpacity>
-  )
-}
-
-const CreateCard = (props: CardProps & { text: string }) => {
-  return (
-    <Card
-      {...props}
-      style={{
-        width: 200,
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-around',
-        backgroundColor: THEME.CTA,
-      }}
-    >
-      <Icon size={20} color='white' name='add' />
-      {/* <Text style={{ color: 'white', fontSize: 15, fontFamily: FONTS.POPPINS.MEDIUM }}>{props.text}</Text> */}
-    </Card>
   )
 }
 
@@ -175,6 +165,12 @@ const styles = StyleSheet.create({
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  dashboardHeader: {
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    padding: 16,
   },
 })
 

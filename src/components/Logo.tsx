@@ -18,7 +18,7 @@ export default () => {
     </svg>`
 
   return (
-    <View style={{ marginVertical: 30, paddingTop: 10, height: 40 }}>
+    <View style={{ width: 180, height: 40 }}>
       <SvgXml xml={svg} fill={THEME.CTA} />
     </View>
   )
