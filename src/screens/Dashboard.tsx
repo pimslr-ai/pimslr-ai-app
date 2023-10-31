@@ -1,5 +1,5 @@
 import { FONTS, TEST_COURSE, THEME } from '../constants'
-import { StyleSheet, Text, TouchableOpacity, View, ViewStyle } from 'react-native'
+import { StyleSheet, Text, TouchableOpacity, View, ScrollView, ViewStyle } from 'react-native'
 import { PropsWithChildren } from 'react'
 import { useNavigation } from '.'
 import SectionView from '../components/SectionView'
@@ -13,50 +13,64 @@ export default () => {
 
   return (
     <ScreenView>
-      <Logo />
+      <View style={{ marginBottom: 50 }}>
+        <Logo />
 
-      <SectionView name='Languages' rowDirection>
-        <CreateCard text='Learn new' />
+        <SectionView name='Languages'>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
+              <CreateCard text='Learn new' />
 
-        <Card style={{ width: 200 }}>
-          <Text>French</Text>
-        </Card>
-        <Card style={{ width: 200 }}>
-          <Text>Dutch</Text>
-        </Card>
-        <Card style={{ width: 200 }}>
-          <Text>Spanish</Text>
-        </Card>
-      </SectionView>
+              <Card style={{ width: 200 }}>
+                <Text>French</Text>
+              </Card>
+              <Card style={{ width: 200 }}>
+                <Text>Dutch</Text>
+              </Card>
+              <Card style={{ width: 200 }}>
+                <Text>Spanish</Text>
+              </Card>
+            </View>
+          </ScrollView>
+        </SectionView>
 
-      <SectionView name='Scenarios' rowDirection>
-        <CreateCard text='Create new' />
+        <SectionView name='Scenarios'>
+          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
+            <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
+              <CreateCard text='Create new' />
 
-        <Card style={{ width: 200 }}>
-          <Text>You are at a bar...</Text>
-        </Card>
-        <Card style={{ width: 200 }}>
-          <Text>You are at a carwash...</Text>
-        </Card>
-      </SectionView>
+              <Card style={{ width: 200 }}>
+                <Text>You are at a bar...</Text>
+              </Card>
+              <Card style={{ width: 200 }}>
+                <Text>You are at a carwash...</Text>
+              </Card>
+            </View>
+          </ScrollView>
+        </SectionView>
 
-      <SectionView name='Courses'>
-        {/* <Card>
+        <SectionView name='Courses'>
+          <View style={{ padding: 16, gap: 16 }}>
+            {/* <Card>
           <Text>Create new course</Text>
         </Card> */}
-        {courses?.map(course => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-        {courses?.map(course => (
-          <CourseCard key={course.id} {...course} />
-        ))}
-      </SectionView>
+            {courses?.map(course => (
+              <CourseCard key={course.id} {...course} />
+            ))}
+            {courses?.map(course => (
+              <CourseCard key={course.id} {...course} />
+            ))}
+          </View>
+        </SectionView>
 
-      <SectionView name='Saved sentences'>
-        <Card>
-          <Text>This is a saved sentence.</Text>
-        </Card>
-      </SectionView>
+        <SectionView name='Saved sentences'>
+          <View style={{ padding: 16, gap: 16 }}>
+            <Card>
+              <Text>This is a saved sentence.</Text>
+            </Card>
+          </View>
+        </SectionView>
+      </View>
     </ScreenView>
   )
 }
@@ -79,12 +93,12 @@ const CreateCard = (props: CardProps & { text: string }) => {
     <Card
       {...props}
       style={{
+        width: 200,
         display: 'flex',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-around',
         backgroundColor: THEME.CTA,
-        // width: 150,
       }}
     >
       <Icon size={20} color='white' name='add' />

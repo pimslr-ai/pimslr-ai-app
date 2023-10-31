@@ -1,21 +1,27 @@
 import { PropsWithChildren } from 'react'
-import { View, StyleSheet } from 'react-native'
+import { ScrollView, StyleSheet } from 'react-native'
 import { THEME } from '../constants'
 import { StatusBar } from 'expo-status-bar'
 
 export default ({ children }: PropsWithChildren) => {
   return (
-    <View style={styles.body}>
+    <ScrollView
+      showsHorizontalScrollIndicator={false}
+      showsVerticalScrollIndicator={false}
+      style={styles.body}
+    >
       <StatusBar style='auto' />
       {children}
-    </View>
+    </ScrollView>
   )
 }
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
     paddingTop: 30,
     backgroundColor: THEME.BACKGROUND,
+    overflow: 'scroll',
+    maxHeight: '100%',
+    maxWidth: '100%',
   },
 })

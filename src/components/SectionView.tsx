@@ -8,18 +8,9 @@ interface SectionViewProps extends PropsWithChildren {
   name?: string
   redirection?: string
   redirectionLabel?: string
-  separation?: number
-  rowDirection?: boolean
 }
 
-export default ({
-  name,
-  redirection,
-  redirectionLabel,
-  rowDirection,
-  separation,
-  children,
-}: SectionViewProps) => {
+export default ({ name, redirection, redirectionLabel, children }: SectionViewProps) => {
   const navigation = useNavigation()
 
   const handleRedirection = () => {
@@ -35,19 +26,7 @@ export default ({
         )}
       </View>
 
-      <View
-        style={[
-          {
-            display: 'flex',
-            flexDirection: rowDirection ? 'row' : 'column',
-            gap: separation ?? 20,
-            overflow: 'scroll',
-            width: 'auto', // Set width to 'auto' to fit content
-          },
-        ]}
-      >
-        {children}
-      </View>
+      <View>{children}</View>
     </View>
   )
 }
@@ -55,7 +34,7 @@ export default ({
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    padding: 16,
+    paddingVertical: 16,
   },
   header: {
     width: '100%',
@@ -64,6 +43,7 @@ const styles = StyleSheet.create({
     marginBottom: 16,
   },
   headerName: {
+    marginLeft: 16,
     fontSize: 20,
     fontFamily: FONTS.POPPINS.SEMI_BOLD,
   },
