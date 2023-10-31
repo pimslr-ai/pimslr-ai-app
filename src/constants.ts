@@ -1,10 +1,5 @@
 const THEME = {
-  // BACKGROUND: '#FFF2D8',
-  // COLOR: '#4D4637',
-  // COLOR_ALT: '#0F2C59',
-  // CTA: '#FF7C7C',
-  // ACCENT: '#1A936F'
-  BACKGROUND: 'white',
+  BACKGROUND: '#f6f5fa',
   COLOR: '#001524',
   COLOR_ALT: '#0F2C59',
   CTA: '#713ABE',

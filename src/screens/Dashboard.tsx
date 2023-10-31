@@ -5,7 +5,6 @@ import { useNavigation } from '.'
 import SectionView from '../components/SectionView'
 import ScreenView from '../components/ScreenView'
 import Logo from '../components/Logo'
-import Icon from 'react-native-vector-icons/MaterialIcons'
 import Button from '../components/Button'
 
 export default () => {
@@ -13,51 +12,38 @@ export default () => {
   const courses = [TEST_COURSE]
 
   return (
-    <ScreenView backgroundColor='rgba(0,0,0,0.01)'>
+    <ScreenView>
       <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View style={styles.dashboardHeader}>
           <Logo />
-          <Button icon='settings' label='Settings' />
+          {/* <Button icon='settings' label='Settings' /> */}
         </View>
 
         <SectionView name='Languages' extra='Add language'>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-            <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
-              <Card>
-                <Text>French</Text>
-              </Card>
-              <Card>
-                <Text>Dutch</Text>
-              </Card>
-              <Card>
-                <Text>Spanish</Text>
-              </Card>
-              <Card>
-                <Text>French</Text>
-              </Card>
-              <Card>
-                <Text>Dutch</Text>
-              </Card>
-              <Card>
-                <Text>Spanish</Text>
-              </Card>
-            </View>
-          </ScrollView>
-          <Text style={{ textAlign: 'center', marginTop: 24 }}>View all</Text>
+          <View style={{ marginHorizontal: 16, gap: 16 }}>
+            <Card>
+              <Text>French</Text>
+            </Card>
+            <Card>
+              <Text>Dutch</Text>
+            </Card>
+            <Card>
+              <Text>Spanish</Text>
+            </Card>
+          </View>
+          <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
         </SectionView>
 
         <SectionView name='Scenarios' extra='Add scenario'>
-          <ScrollView horizontal showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
-            <View style={{ marginHorizontal: 16, flexDirection: 'row', gap: 16 }}>
-              <Card>
-                <Text>You are at a bar...</Text>
-              </Card>
-              <Card>
-                <Text>You are at a carwash...</Text>
-              </Card>
-            </View>
-          </ScrollView>
-          <Text style={{ textAlign: 'center', marginTop: 24 }}>View all</Text>
+          <View style={{ marginHorizontal: 16, gap: 16 }}>
+            <Card>
+              <Text>You are at a bar...</Text>
+            </Card>
+            <Card>
+              <Text>You are at a carwash...</Text>
+            </Card>
+          </View>
+          <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
         </SectionView>
 
         <SectionView name='Courses' extra='Generate course'>
@@ -71,7 +57,7 @@ export default () => {
             {courses?.map(course => (
               <CourseCard key={course.id} {...course} />
             ))}
-            <Text style={{ textAlign: 'center' }}>View all</Text>
+            <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
           </View>
         </SectionView>
 
@@ -81,7 +67,7 @@ export default () => {
               <Text>This is a saved sentence.</Text>
             </Card>
           </View>
-          <Text style={{ textAlign: 'center' }}>View all</Text>
+          <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
         </SectionView>
       </ScrollView>
     </ScreenView>
@@ -108,7 +94,8 @@ const CourseCard = (course: Course) => {
   const backgroundCardStyle = (index: number): ViewStyle => ({
     width: '100%',
     height: '100%',
-    backgroundColor: `rgba(113, 58, 189, ${0.025 * (index + 1)})`,
+    backgroundColor: `#fed69c`,
+    opacity: 0.25 * (index + 1),
     transform: [{ rotateZ: `${getRandom([7, 6, 5, 4, -4, -5, -6, -7])}deg` }],
     margin: 20,
     position: 'absolute',
@@ -171,10 +158,11 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   dashboardHeader: {
+    marginTop: 50,
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    padding: 16,
+    padding: 24,
   },
 })
 
