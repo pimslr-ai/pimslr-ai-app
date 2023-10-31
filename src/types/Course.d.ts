@@ -3,6 +3,8 @@ interface Course {
   language: Langauge
   scenario: Scenario
   sentences: Sentence[]
+  createdAt: Date
+  lastModified?: Date
 }
 
 interface Sentence {

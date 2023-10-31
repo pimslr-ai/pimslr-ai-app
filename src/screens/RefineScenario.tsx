@@ -5,13 +5,15 @@ import ScreenView from '../components/ScreenView'
 import InteractiveInput from '../components/InteractiveInput'
 import SecondaryButton from '../components/SecondaryButton'
 import PrimaryButton from '../components/PrimaryButton'
+import { useCourses } from '../hooks/useCourses'
 
 export default () => {
   const navigation = useNavigation()
-  const { course } = useParams('course:home')
+  const { courseId } = useParams('course:home')
+  const { course } = useCourses(courseId)
 
   const handleRefining = () => {
-    navigation.navigate('course:home', { course })
+    navigation.navigate('course:home', { courseId })
   }
 
   return (
@@ -21,7 +23,7 @@ export default () => {
           <SecondaryButton
             containerStyle={{ transform: [{ scale: 1.4 }] }}
             icon='close'
-            onClick={() => navigation.navigate('course:home', { course })}
+            onClick={() => navigation.navigate('course:home', { courseId })}
           />
         </View>
 

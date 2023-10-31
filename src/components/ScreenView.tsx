@@ -5,7 +5,7 @@ import { StatusBar } from 'expo-status-bar'
 
 export default ({ children }: PropsWithChildren) => {
   return (
-    <View style={styles.body}>
+    <View style={[styles.body]}>
       <StatusBar style='auto' />
       {children}
     </View>
@@ -14,8 +14,9 @@ export default ({ children }: PropsWithChildren) => {
 
 const styles = StyleSheet.create({
   body: {
-    flex: 1,
     paddingTop: 30,
     backgroundColor: THEME.BACKGROUND,
+    height: '100%',
+    width: '100%',
   },
 })
