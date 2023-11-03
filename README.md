@@ -8,6 +8,8 @@ This version of the application is a prototype that serves two purposes: to test
   <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/08d8f023-df04-4827-8a67-6f5c3d00f63e" width="400" />
 </div>
 
+In this prototype, the user can select a language to recognize and can record himself spelling words. Recognition is made after the user stops the recording and the results are then displayed in the white card. The words spelled out are colored to represent the pronouciation confidence.
+
 ### Voice recognition API
 
 Before the creation of this prototype, a research on existing speech-to-text APIs was conducted to find a candidate best suited for the purposes of this project. Among them was the [Google Cloud Speech-To-Text](https://cloud.google.com/speech-to-text?hl=en) API was selected based on a combination of low costs, low, latency, and more importantly, high accuracy. This service also features speech transcription with word-level confidence, which some services don't offer.
