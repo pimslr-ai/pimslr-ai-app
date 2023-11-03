@@ -1,4 +1,4 @@
-import { View, Text, Button, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
 import { FONTS, THEME } from '../constants'
 
@@ -22,19 +22,17 @@ export default () => {
 
       <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
         <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
-          <Text style={styles.buttonLabel}>{isRecording ? 'Stop recording' : 'Start recording'}</Text>
+          <Text style={styles.buttonLabel}>
+            {isRecording
+              ? 'Listening...'
+              : isLoading
+              ? 'Loading...'
+              : hasFailed
+              ? 'Recognition failed.'
+              : 'Start recording'}
+          </Text>
         </TouchableOpacity>
       </View>
-
-      <Text style={styles.status}>
-        {isRecording
-          ? 'Listening...'
-          : isLoading
-          ? 'Loading...'
-          : hasFailed
-          ? 'Recognition failed.'
-          : 'Standby'}
-      </Text>
     </View>
   )
 }
@@ -47,19 +45,15 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     gap: 40,
   },
-  status: {
-    textAlign: 'center',
-    fontSize: 16,
-    fontFamily: FONTS.POPPINS.MEDIUM,
-  },
   button: {
     backgroundColor: THEME.CTA,
-    paddingVertical: 10,
-    paddingHorizontal: 20,
+    paddingVertical: 15,
     borderRadius: 10,
+    width: '50%',
   },
   buttonLabel: {
     fontFamily: FONTS.POPPINS.MEDIUM,
+    textAlign: 'center',
     fontSize: 14,
     color: 'white',
   },
@@ -71,7 +65,8 @@ const styles = StyleSheet.create({
   },
   cardWrapper: {
     width: '100%',
-    minHeight: 150,
+    minHeight: 250,
+    padding: 30,
     justifyContent: 'center',
     alignContent: 'center',
     backgroundColor: 'white',
