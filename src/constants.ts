@@ -1,3 +1,11 @@
+const THEME = {
+  BACKGROUND: '#f6f5fa',
+  COLOR: '#001524',
+  COLOR_ALT: '#0F2C59',
+  CTA: '#713ABE',
+  ACCENT: '#FF9501',
+}
+
 const FONTS = {
   POPPINS: {
     THIN: 'Poppins_100Thin',
@@ -21,4 +29,4 @@ const FONTS = {
   },
 }
 
-export { FONTS }
+export { FONTS, THEME }
