@@ -12,7 +12,13 @@ export default () => {
       <View style={styles.card}>
         <View style={styles.cardWrapper}>
           <Text style={styles.recongized}>
-            {recognition
+            {isRecording
+              ? 'Listening...'
+              : isLoading
+              ? 'Loading...'
+              : hasFailed
+              ? 'Recognition failed.'
+              : recognition
               ? `${recognition.transcript} (${Math.ceil(recognition.confidence * 100) / 100}) \n\n` +
                 recognition.words.map(w => `${w.word} (${Math.ceil(w.confidence * 100) / 100})`).join(' ')
               : 'Waiting for input'}
@@ -20,19 +26,9 @@ export default () => {
         </View>
       </View>
 
-      <View style={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-evenly' }}>
-        <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
-          <Text style={styles.buttonLabel}>
-            {isRecording
-              ? 'Listening...'
-              : isLoading
-              ? 'Loading...'
-              : hasFailed
-              ? 'Recognition failed.'
-              : 'Start recording'}
-          </Text>
-        </TouchableOpacity>
-      </View>
+      <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
+        <Text style={styles.buttonLabel}>{isRecording ? 'Stop recording' : 'Start recording'}</Text>
+      </TouchableOpacity>
     </View>
   )
 }
