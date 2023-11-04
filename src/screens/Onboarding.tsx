@@ -57,6 +57,17 @@ export default () => {
           </View>
 
           <View style={styles.page}>
+            <Text style={styles.title}>Let's test your level</Text>
+            <Text style={styles.subtitle}>Get lessons tailored to your level.</Text>
+            <InteractiveInput
+              multiline
+              style={styles.input}
+              placeholder='I can understand some of it...'
+              onChange={setProfecenicy}
+            />
+          </View>
+
+          <View style={styles.page}>
             <Text style={styles.title}>Tell us about yourself</Text>
             <Text style={styles.subtitle}>Get lessons catered to your interests. Select at least 3.</Text>
             <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
@@ -72,17 +83,6 @@ export default () => {
               </View>
             </ScrollView>
             <View style={styles.bottomBorder} />
-          </View>
-
-          <View style={styles.page}>
-            <Text style={styles.title}>What's your level?</Text>
-            <Text style={styles.subtitle}>Get lessons tailored to your level.</Text>
-            <InteractiveInput
-              multiline
-              style={styles.input}
-              placeholder='I can understand some of it...'
-              onChange={setProfecenicy}
-            />
           </View>
         </PageView>
 
@@ -205,6 +205,7 @@ const styles = StyleSheet.create({
   },
   dropdown: {
     marginTop: 50,
+    width: '80%',
   },
   button: {
     position: 'absolute',

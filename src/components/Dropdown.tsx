@@ -32,10 +32,12 @@ export default ({ onSelection, items, label, labelStyle, containerStyle }: Dropd
 
 const styles = StyleSheet.create({
   dropdown: {
-    paddingVertical: 20,
-    paddingHorizontal: 16,
+    height: 55,
+    width: 200,
+    borderRadius: 16,
+    alignSelf: 'center',
+    justifyContent: 'center',
     backgroundColor: 'white',
-    borderRadius: 10,
   },
   dropdownLabel: {
     fontFamily: FONTS.POPPINS.MEDIUM,
