@@ -11,7 +11,7 @@ import Dropdown from '../components/Dropdown'
 export default () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
-  const [canSkip, setCanSkip] = useState(true)
+  const [skippable, setSkippable] = useState(true)
   const [pageCompleted, setPageCompleted] = useState(false)
 
   const [language, setLanguage] = useState<string | null>(null)
@@ -19,8 +19,20 @@ export default () => {
   const [interests, setInterests] = useState<string[]>([])
 
   useEffect(() => {
-    setCanSkip(![2, 3].includes(pageNumber))
-    setPageCompleted(false)
+    switch (pageNumber) {
+      case 1:
+        setSkippable(false)
+        setPageCompleted(!!language)
+        break
+      case 2:
+        setSkippable(true)
+        setPageCompleted(!!profecenicy)
+        break
+      case 3:
+        setSkippable(true)
+        setPageCompleted(interests.length >= 3)
+        break
+    }
   }, [pageNumber])
 
   useEffect(() => {
@@ -41,7 +53,7 @@ export default () => {
         <View style={styles.header}>
           <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
           <Text style={styles.headerTitle}>{pageNumber}/3</Text>
-          <SecondaryButton label='Skip' noticeMe hide={canSkip} onClick={pageView?.turnNext} />
+          <SecondaryButton label='Skip' noticeMe hide={!skippable} onClick={pageView?.turnNext} />
         </View>
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>

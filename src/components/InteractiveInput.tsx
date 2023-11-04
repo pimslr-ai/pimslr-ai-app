@@ -42,7 +42,7 @@ export default (props: InteractiveInputProps) => {
     Animated.timing(interpolatedColor, {
       duration: 200,
       toValue: 1,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start()
   }
 
