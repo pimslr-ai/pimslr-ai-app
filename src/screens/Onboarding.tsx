@@ -24,16 +24,12 @@ export default () => {
   }, [pageNumber])
 
   useEffect(() => {
-    setPageCompleted(!!(language || profecenicy || interests.length))
-  }, [language, interests, profecenicy])
-
-  const handleTagToggle = (label: string) => {
-    if (interests.includes(label)) {
-      setInterests(interests.filter(i => i !== label))
-    } else {
-      setInterests([...interests, label])
+    if (!pageCompleted) {
+      if (language || profecenicy || interests.length) {
+        setPageCompleted(true)
+      }
     }
-  }
+  }, [language, interests, profecenicy])
 
   return (
     <ScreenView>
@@ -46,19 +42,6 @@ export default () => {
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
           <View style={styles.page}>
-            <Text style={styles.title}>Tell us about yourself</Text>
-            <Text style={styles.subtitle}>Get lessons catered to your interests</Text>
-            <ScrollView style={styles.tagsWrapper}>
-              <View style={styles.tags}>
-                {INTERESTS.map(interest => (
-                  <Tag key={interest} label={interest} onToggle={handleTagToggle} />
-                ))}
-              </View>
-            </ScrollView>
-            <View style={styles.bottomBorder} />
-          </View>
-
-          <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way</Text>
             <Dropdown
@@ -67,6 +50,24 @@ export default () => {
               label='Select a language'
               onSelection={setLanguage}
             />
+          </View>
+
+          <View style={styles.page}>
+            <Text style={styles.title}>Tell us about yourself</Text>
+            <Text style={styles.subtitle}>Get lessons catered to your interests</Text>
+            <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
+              <View style={styles.tags}>
+                {INTERESTS.map(interest => (
+                  <Tag
+                    key={interest}
+                    label={interest}
+                    onToggleOn={label => setInterests([...interests, label])}
+                    onToggleOff={label => setInterests(interests.filter(i => i !== label))}
+                  />
+                ))}
+              </View>
+            </ScrollView>
+            <View style={styles.bottomBorder} />
           </View>
 
           <View style={styles.page}>
@@ -92,7 +93,15 @@ export default () => {
   )
 }
 
-const Tag = ({ label, onToggle }: { label: string; onToggle?: (label: string) => void }) => {
+const Tag = ({
+  label,
+  onToggleOn,
+  onToggleOff,
+}: {
+  label: string
+  onToggleOn?: (label: string) => void
+  onToggleOff?: (label: string) => void
+}) => {
   const [toggle, setToggled] = useState<boolean>()
 
   const style = toggle
@@ -103,8 +112,13 @@ const Tag = ({ label, onToggle }: { label: string; onToggle?: (label: string) =>
     : styles.tag
 
   const handleToggle = () => {
-    onToggle!(label)
-    setToggled(!toggle)
+    if (toggle) {
+      setToggled(false)
+      onToggleOff!(label)
+    } else {
+      setToggled(true)
+      onToggleOn!(label)
+    }
   }
 
   return (
@@ -165,7 +179,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 12,
+    gap: 16,
     paddingBottom: 32,
     // justifyContent: 'center',
   },
@@ -181,7 +195,7 @@ const styles = StyleSheet.create({
     fontSize: 15,
   },
   tagActive: {
-    backgroundColor: THEME.CTA,
+    backgroundColor: THEME.ACCENT,
     color: 'white',
   },
   dropdown: {
