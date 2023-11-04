@@ -24,8 +24,10 @@ export default () => {
   }, [pageNumber])
 
   useEffect(() => {
-    if (language || profecenicy || interests.length) {
-      setPageCompleted(true)
+    if (!pageCompleted) {
+      if (language || profecenicy || interests.length) {
+        setPageCompleted(true)
+      }
     }
   }, [language, interests, profecenicy])
 
