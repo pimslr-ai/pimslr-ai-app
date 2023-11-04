@@ -1,6 +1,6 @@
-import { FONTS, INTERESTS, LANGUAGES, THEME } from '../constants'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { FONTS, LANGUAGES, THEME } from '../constants'
+import { View, Text, StyleSheet } from 'react-native'
+import { useEffect, useState } from 'react'
 import InteractiveInput from '../components/InteractiveInput'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
@@ -16,24 +16,16 @@ export default () => {
 
   const [language, setLanguage] = useState<string | null>(null)
   const [profecenicy, setProfecenicy] = useState<string | null>(null)
-  const [interests, setInterests] = useState<string[]>([])
+  const [interests, setInterests] = useState<string | null>(null)
 
   useEffect(() => {
-    setCanSkip(![1, 2, 3].includes(pageNumber))
+    setCanSkip(![3, 2].includes(pageNumber))
     setPageCompleted(false)
   }, [pageNumber])
 
   useEffect(() => {
-    setPageCompleted(!!(language || profecenicy || interests.length))
+    setPageCompleted(!!(language || profecenicy || interests))
   }, [language, interests, profecenicy])
-
-  const handleTagToggle = (label: string) => {
-    if (interests.includes(label)) {
-      setInterests(interests.filter(i => i !== label))
-    } else {
-      setInterests([...interests, label])
-    }
-  }
 
   return (
     <ScreenView>
@@ -46,19 +38,6 @@ export default () => {
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
           <View style={styles.page}>
-            <Text style={styles.title}>Tell us about yourself</Text>
-            <Text style={styles.subtitle}>Get lessons catered to your interests</Text>
-            <ScrollView style={styles.tagsWrapper}>
-              <View style={styles.tags}>
-                {INTERESTS.map(interest => (
-                  <Tag key={interest} label={interest} onToggle={handleTagToggle} />
-                ))}
-              </View>
-            </ScrollView>
-            <View style={styles.bottomBorder} />
-          </View>
-
-          <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way</Text>
             <Dropdown
@@ -68,7 +47,6 @@ export default () => {
               onSelection={setLanguage}
             />
           </View>
-
           <View style={styles.page}>
             <Text style={styles.title}>What's your level?</Text>
             <Text style={styles.subtitle}>Get lessons tailored to your level</Text>
@@ -77,6 +55,16 @@ export default () => {
               style={styles.input}
               placeholder='I can understand some of it...'
               onChange={setProfecenicy}
+            />
+          </View>
+          <View style={styles.page}>
+            <Text style={styles.title}>Tell us about yourself</Text>
+            <Text style={styles.subtitle}>Get lessons catered to your interests</Text>
+            <InteractiveInput
+              multiline
+              style={styles.input}
+              placeholder='I am an exchange student...'
+              onChange={setInterests}
             />
           </View>
         </PageView>
@@ -89,28 +77,6 @@ export default () => {
         />
       </View>
     </ScreenView>
-  )
-}
-
-const Tag = ({ label, onToggle }: { label: string; onToggle?: (label: string) => void }) => {
-  const [toggle, setToggled] = useState<boolean>()
-
-  const style = toggle
-    ? {
-        ...styles.tag,
-        ...styles.tagActive,
-      }
-    : styles.tag
-
-  const handleToggle = () => {
-    onToggle!(label)
-    setToggled(!toggle)
-  }
-
-  return (
-    <TouchableOpacity onPress={handleToggle}>
-      <Text style={style}>{label}</Text>
-    </TouchableOpacity>
   )
 }
 
@@ -150,39 +116,6 @@ const styles = StyleSheet.create({
   input: {
     height: '50%',
     marginTop: 50,
-  },
-  tagsWrapper: {
-    marginTop: 50,
-    height: '50%',
-    padding: 8,
-  },
-  bottomBorder: {
-    borderBottomWidth: 1.5,
-    borderBottomColor: 'rgba(0,0,0,0.1)',
-  },
-  tags: {
-    width: '100%',
-    display: 'flex',
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    gap: 12,
-    paddingBottom: 32,
-    // justifyContent: 'center',
-  },
-  tag: {
-    paddingVertical: 8,
-    paddingHorizontal: 22,
-    backgroundColor: 'white',
-    borderRadius: 10,
-    overflow: 'hidden',
-    alignSelf: 'flex-start',
-    color: THEME.COLOR,
-    fontFamily: FONTS.POPPINS.MEDIUM,
-    fontSize: 15,
-  },
-  tagActive: {
-    backgroundColor: THEME.CTA,
-    color: 'white',
   },
   dropdown: {
     marginTop: 50,
