@@ -18,6 +18,8 @@ export default () => {
   const [profecenicy, setProfecenicy] = useState<string | null>(null)
   const [interests, setInterests] = useState<string[]>([])
 
+  const [testPageView, setTestPageView] = useState<PageView | null>()
+
   useEffect(() => {
     switch (pageNumber) {
       case 1:
@@ -58,6 +60,24 @@ export default () => {
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
           <View style={styles.page}>
+            <Text style={styles.title}>Let's test yourself</Text>
+            <Text style={styles.subtitle}>Get lessons tailored to your speaking level.</Text>
+            <Text style={styles.subtitle}>Repeat after the me.</Text>
+            {/* <InteractiveInput
+              multiline
+              style={styles.input}
+              placeholder='I can understand some of it...'
+              onChange={setProfecenicy}
+            /> */}
+
+            <PageView ref={setTestPageView}>
+              <Text onPress={testPageView?.turnNext}>First</Text>
+              <Text onPress={testPageView?.turnNext}>Second</Text>
+              <Text onPress={testPageView?.turnNext}>Third</Text>
+            </PageView>
+          </View>
+
+          <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
             <Dropdown
@@ -65,17 +85,6 @@ export default () => {
               items={LANGUAGES}
               label='Select a language'
               onSelection={setLanguage}
-            />
-          </View>
-
-          <View style={styles.page}>
-            <Text style={styles.title}>Let's test your level</Text>
-            <Text style={styles.subtitle}>Get lessons tailored to your level.</Text>
-            <InteractiveInput
-              multiline
-              style={styles.input}
-              placeholder='I can understand some of it...'
-              onChange={setProfecenicy}
             />
           </View>
 
