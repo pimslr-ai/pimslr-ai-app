@@ -15,7 +15,7 @@ export default () => {
   const [pageCompleted, setPageCompleted] = useState(false)
 
   const [language, setLanguage] = useState<string | null>(null)
-  const [profecenicy, setProfecenicy] = useState<string | null>(null)
+  const [profeciency, setProfeciency] = useState<string | null>(null)
   const [interests, setInterests] = useState<string[]>([])
 
   const [testPageView, setTestPageView] = useState<PageView | null>()
@@ -28,7 +28,7 @@ export default () => {
         break
       case 2:
         setSkippable(true)
-        setPageCompleted(!!profecenicy)
+        setPageCompleted(!!profeciency)
         break
       case 3:
         setSkippable(true)
@@ -42,8 +42,8 @@ export default () => {
   }, [language])
 
   useEffect(() => {
-    setPageCompleted(!!profecenicy)
-  }, [profecenicy])
+    setPageCompleted(!!profeciency)
+  }, [profeciency])
 
   useEffect(() => {
     setPageCompleted(interests.length >= 3)
@@ -63,17 +63,11 @@ export default () => {
             <Text style={styles.title}>Let's test yourself</Text>
             <Text style={styles.subtitle}>Get lessons tailored to your speaking level.</Text>
             <Text style={styles.subtitle}>Repeat after the me.</Text>
-            {/* <InteractiveInput
-              multiline
-              style={styles.input}
-              placeholder='I can understand some of it...'
-              onChange={setProfecenicy}
-            /> */}
 
             <PageView ref={setTestPageView}>
               <Text onPress={testPageView?.turnNext}>First</Text>
               <Text onPress={testPageView?.turnNext}>Second</Text>
-              <Text onPress={testPageView?.turnNext}>Third</Text>
+              <Text onPress={() => setProfeciency('abc')}>Third</Text>
             </PageView>
           </View>
 
