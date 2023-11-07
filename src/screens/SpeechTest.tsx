@@ -1,117 +1,27 @@
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
-import { FONTS, THEME } from '../constants'
+import { FONTS, LANGUAGES, THEME } from '../constants'
 import React, { useState } from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 
 const screen = Dimensions.get('screen')
 
-const languageCodes = [
-  'en-US',
-  'nl-NL',
-  'fr-FR',
-  'de-DE',
-  'es-ES',
-  'it-IT',
-  'pt-PT',
-  'ru-RU',
-  'ja-JP',
-  'zh-CN',
-  'ar-SA',
-  'hi-IN',
-  'ko-KR',
-  'tr-TR',
-  'pl-PL',
-  'cs-CZ',
-  'sv-SE',
-  'da-DK',
-  'no-NO',
-  'fi-FI',
-  'el-GR',
-  'he-IL',
-  'hu-HU',
-  'ro-RO',
-  'th-TH',
-  'id-ID',
-  'ms-MY',
-  'vi-VN',
-  'tl-PH',
-  'uk-UA',
-  'bg-BG',
-  'hr-HR',
-  'sr-RS',
-  'sk-SK',
-  'sl-SI',
-  'et-EE',
-  'lv-LV',
-  'lt-LT',
-  'is-IS',
-  'ga-IE',
-  'cy-GB',
-  'gl-ES',
-  'eu-ES',
-  'sq-AL',
-  'mk-MK',
-  'bs-BA',
-  'hy-AM',
-  'ka-GE',
-  'uz-UZ',
-  'tt-RU',
-  'tg-TJ',
-  'km-KH',
-  'mn-MN',
-  'ne-NP',
-  'si-LK',
-  'pa-IN',
-  'ta-IN',
-  'te-IN',
-  'kn-IN',
-  'ur-PK',
-  'bn-BD',
-  'th-TH',
-  'lo-LA',
-  'my-MM',
-  'ka-KG',
-  'ug-CN',
-  'tm-TM',
-  'ku-IQ',
-  'fa-IR',
-  'ps-AF',
-  'dv-MV',
-  'bh-IN',
-  'mr-IN',
-  'sa-IN',
-  'kk-KZ',
-  'ky-KG',
-  'az-AZ',
-  'be-BY',
-]
-
 export default () => {
   const [lang, setLang] = useState<string | null>(null)
   const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } = useSpeech(lang!)
 
-  function getRandomColor(): string {
+  function getColor(confidence: number): string {
     const colors = [
-      { color: '#44b51a', chance: 50 },
-      { color: '#7bba16', chance: 35 },
-      { color: '#b8be0e', chance: 10 },
-      { color: '#c39d12', chance: 5 },
+      'rgb(252, 54, 17)',
+      'rgb(252, 122, 19)',
+      'rgb(247, 169, 40)',
+      'rgb(247, 169, 40)',
+      'rgb(156, 167, 40)',
+      'rgb(156, 167, 40)',
+      'rgb(89, 168, 60)',
     ]
-
-    const totalChance = colors.reduce((acc, curr) => acc + curr.chance, 0)
-
-    const randomValue = Math.random() * totalChance
-
-    let accumulatedChance = 0
-    for (const { color, chance } of colors) {
-      accumulatedChance += chance
-      if (randomValue < accumulatedChance) {
-        return color
-      }
-    }
-
-    return '#000000'
+    const index = Math.floor(confidence * (colors.length - 1))
+    return colors[index]
   }
 
   return (
@@ -125,7 +35,7 @@ export default () => {
             inputIOS: styles.dropdownLabel,
           }}
           onValueChange={setLang}
-          items={languageCodes.map(code => ({ label: code, value: code }))}
+          items={LANGUAGES.map(code => ({ label: code, value: code }))}
         />
       </View>
 
@@ -140,7 +50,7 @@ export default () => {
               ? 'Recognition failed.'
               : recognition
               ? recognition.words.map(w => (
-                  <Text key={w.word} style={{ color: getRandomColor() }}>
+                  <Text key={w.word} style={{ color: getColor(w.confidence) }}>
                     {w.word + ' '}
                   </Text>
                 ))
@@ -149,8 +59,14 @@ export default () => {
         </View>
       </View>
 
-      <TouchableOpacity style={styles.button} onPress={isRecording ? stopRecording : startRecording}>
-        <Text style={styles.buttonLabel}>{isRecording ? 'Stop recording' : 'Start recording'}</Text>
+      <TouchableOpacity
+        disabled={lang === null}
+        style={styles.button}
+        onPress={isRecording ? stopRecording : startRecording}
+      >
+        <Text style={styles.buttonLabel}>
+          {lang === null ? 'Select a language first' : isRecording ? 'Stop recording' : 'Start recording'}
+        </Text>
       </TouchableOpacity>
     </View>
   )
