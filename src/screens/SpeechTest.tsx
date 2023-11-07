@@ -1,7 +1,7 @@
+import { useState } from 'react'
+import { FONTS, LANGUAGES, THEME } from '../constants'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
 import useSpeech from '../hooks/useSpeech'
-import { FONTS, LANGUAGES, THEME } from '../constants'
-import React, { useState } from 'react'
 import RNPickerSelect from 'react-native-picker-select'
 
 const screen = Dimensions.get('screen')
