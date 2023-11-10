@@ -4,11 +4,16 @@ import { useNavigation as useNavigation_ } from '@react-navigation/native'
 import { useRoute as useRoute_ } from '@react-navigation/native'
 import { RouteProp } from '@react-navigation/native'
 
+// type RootStackParamList = {
+//   dashboard: undefined
+//   'course:home': {
+//     courseId: string
+//   }
+// }
+
 type RootStackParamList = {
   dashboard: undefined
-  'course:home': {
-    courseId: string
-  }
+  'course:home': undefined
 }
 
 export type Screens = keyof RootStackParamList

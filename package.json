@@ -1,6 +1,6 @@
 {
   "name": "pimslr-ai",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "main": "src/index.tsx",
   "scripts": {
     "start": "expo start",

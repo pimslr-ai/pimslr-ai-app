@@ -2,7 +2,7 @@
   "expo": {
     "name": "pimslr-ai",
     "slug": "pimslr-ai",
-    "version": "0.0.7",
+    "version": "0.0.9",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -13,8 +13,7 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "nl.chandler23.LagoAI",
-      "supportsTablet": false,
-      "playsInSilentModeIOS": false
+      "supportsTablet": false
     },
     "android": {
       "package": "nl.chandler23.LagoAI",

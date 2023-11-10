@@ -1,4 +1,4 @@
-import { FONTS, THEME } from '../../constants'
+import { FONTS, TEST_COURSE, THEME } from '../../constants'
 import { useEffect, useState } from 'react'
 import { StyleSheet, View, Text } from 'react-native'
 import { useNavigation, useParams } from '../'
@@ -28,8 +28,9 @@ const audios = [
 
 export default () => {
   const navigation = useNavigation()
-  const { courseId } = useParams('course:home')
-  const { course } = useCourses(courseId)
+  // const { courseId } = useParams('course:home')
+  // const { course } = useCourses(courseId)
+  const course = TEST_COURSE
 
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageView, setPageView] = useState<PageView | null>()
