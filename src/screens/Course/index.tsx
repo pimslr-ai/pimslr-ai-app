@@ -67,7 +67,7 @@ export default () => {
 
   const toggleRecording = () => {
     clearRecognition()
-    
+
     if (isPlaying) {
       stopAudio()
     }
@@ -156,11 +156,16 @@ export default () => {
           </View>
 
           {!isReady ? (
-            <PrimaryButton
-              label='Start!'
-              containerStyle={styles.startButton}
-              onClick={() => setIsReady(true)}
-            />
+            <>
+              <Text style={{ bottom: 150, textAlign: 'center', position: 'absolute', width: '100%' }}>
+                Please disable silent mode 😊
+              </Text>
+              <PrimaryButton
+                label='Start!'
+                containerStyle={styles.startButton}
+                onClick={() => setIsReady(true)}
+              />
+            </>
           ) : (
             <View style={styles.courseControls}>
               <AnimatedButton icon='audiotrack' onClick={toggleAudio} toggle={isPlaying} />

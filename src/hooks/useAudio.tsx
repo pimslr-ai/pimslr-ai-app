@@ -9,7 +9,7 @@ export default () => {
 
   useEffect(() => {
     Audio.requestPermissionsAsync()
-    Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
+    Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: false })
 
     state.sound.setOnPlaybackStatusUpdate(async status => {
       const success = status as AVPlaybackStatusSuccess
