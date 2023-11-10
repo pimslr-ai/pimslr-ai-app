@@ -30,22 +30,43 @@ export default () => {
   const navigation = useNavigation()
   const { courseId } = useParams('course:home')
   const { course } = useCourses(courseId)
-  const [pageView, setPageView] = useState<PageView | null>()
+
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
+  const [pageView, setPageView] = useState<PageView | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-  const { isPlaying, loadAudio, playAudio, stopAudio } = useAudio()
-  const { startRecording, stopRecording, recognition, isRecording, isLoading, amplitude } =
-    useRecognition('fr-FR')
+
+  // prettier-ignore
+  const { 
+    isPlaying, 
+    loadAudio, 
+    playAudio, 
+    stopAudio 
+  } = useAudio()
+
+  // prettier-ignore
+  const { 
+    startRecording, 
+    stopRecording, 
+    clearRecognition, 
+    recognition, 
+    isRecording, 
+    isLoading, 
+    amplitude 
+  } = useRecognition(course?.language.code!)
 
   useEffect(() => {
     if (isReady) {
-      const audio = audios[course!.sentences[pageNumber - 1].audio - 1!]
+      const selectedSentence = course!.sentences[pageNumber - 1]
+      const audio = audios[selectedSentence.audio - 1!]
       loadAudio(audio).then(playAudio)
+      clearRecognition()
     }
   }, [isReady, pageNumber])
 
   const toggleRecording = () => {
+    clearRecognition()
+    
     if (isPlaying) {
       stopAudio()
     }
@@ -57,12 +78,15 @@ export default () => {
   }
 
   const toggleAudio = () => {
-    if (!isRecording) {
-      if (isPlaying) {
-        stopAudio()
-      } else {
-        playAudio()
-      }
+    clearRecognition()
+
+    if (isRecording) {
+      stopRecording()
+    }
+    if (isPlaying) {
+      stopAudio()
+    } else {
+      playAudio()
     }
   }
 
@@ -97,7 +121,13 @@ export default () => {
           <View>
             <PageView ref={setPageView} onPageChange={setPageNumber}>
               {course?.sentences?.map((sentence, i) => (
-                <Card key={i} sentence={sentence} onSuccess={cannon?.shoot} />
+                <Card
+                  isCurrent={pageNumber - 1 === i}
+                  key={sentence.id}
+                  sentence={sentence}
+                  recognition={recognition!}
+                  onSuccess={cannon?.shoot}
+                />
               ))}
             </PageView>
 

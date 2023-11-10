@@ -2,17 +2,23 @@ import { View, Text, StyleSheet } from 'react-native'
 import { FONTS } from '../../../constants'
 
 interface CardProps {
-  recognition?: Recognition
   sentence: Sentence
+  isCurrent: boolean
+  recognition?: Recognition
   onSuccess?: () => void
 }
 
-export default ({ sentence, recognition, onSuccess }: CardProps) => {
+export default ({ sentence, isCurrent, recognition, onSuccess }: CardProps) => {
   return (
     <View key={sentence.id} style={styles.container}>
       <View key={sentence.id} style={styles.wrapper}>
         <Text style={styles.translation}>
-          <Sentence onSuccess={onSuccess!} translation={sentence?.translation!} recognition={recognition!} />
+          <Sentence
+            onSuccess={onSuccess!}
+            isCurrent={isCurrent}
+            translation={sentence?.translation!}
+            recognition={recognition!}
+          />
         </Text>
         <Text style={styles.original}>{sentence.original}</Text>
       </View>
@@ -21,55 +27,73 @@ export default ({ sentence, recognition, onSuccess }: CardProps) => {
 }
 
 interface SentenceProps {
+  isCurrent: boolean
   translation: string
   recognition?: Recognition
   onSuccess?: () => void
 }
 
-const Sentence = ({ translation, recognition, onSuccess }: SentenceProps) => {
-  const strip = (input: string) => {
-    return input
-      .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
-      .replace(/\s+/g, ' ')
-      .toLowerCase()
-  }
+const Sentence = ({ translation, isCurrent, recognition, onSuccess }: SentenceProps) => {
+  if (recognition && isCurrent) {
+    const strip = (input: string) => {
+      return input
+        .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
+        .replace(/\s+/g, ' ')
+        .toLowerCase()
+    }
 
-  const flagMismatch = (sentence1: string, sentence2: string) => {
-    const words1 = sentence1.split(' ')
-    const words2 = sentence2.split(' ')
-    const maxLength = Math.max(words1.length, words2.length)
-    const mismatchedIndicies: number[] = []
+    function isMatch(arr1: string[], arr2: string[]) {
+      const sortedArr1 = arr1.slice().sort()
+      const sortedArr2 = arr2.slice().sort()
+      return sortedArr1.every((value, index) => value === sortedArr2[index])
+    }
 
-    for (let i = 0; i < maxLength; i++) {
-      const word1 = words1[i] || ''
-      const word2 = words2[i] || ''
+    function getColor(confidence: number): string {
+      const colors = [
+        'rgb(252, 54, 17)',
+        'rgb(252, 122, 19)',
+        'rgb(247, 169, 40)',
+        'rgb(247, 169, 40)',
+        'rgb(156, 167, 40)',
+        'rgb(156, 167, 40)',
+        'rgb(89, 168, 60)',
+        'rgb(89, 168, 60)',
+      ]
+      const index = Math.floor(confidence * (colors.length - 1))
+      return colors[index]
+    }
 
-      if (word1 !== word2) {
-        mismatchedIndicies.push(i)
+    const originalWords = translation.split(' ').map(w => ({ word: w, stripped: strip(w) }))
+    const scoredWords = recognition?.words.map(w => ({ word: strip(w.word), score: w.confidence }))
+
+    const matched = isMatch(
+      originalWords.filter(w => w.stripped !== '').map(w => w.stripped),
+      scoredWords?.map(w => w.word)!,
+    )
+
+    if (matched) {
+      onSuccess!()
+    }
+
+    return originalWords.map((original, i) => {
+      let confidenceColor = 'black'
+
+      if (original.stripped !== '') {
+        const matchingWord = scoredWords?.filter(w => w.word === original.stripped)[0]
+
+        if (matchingWord === undefined) {
+          confidenceColor = 'rgb(252, 54, 17)'
+        } else {
+          confidenceColor = getColor(matchingWord?.score!)
+        }
       }
-    }
 
-    return mismatchedIndicies
-  }
-
-  if (recognition) {
-    const parsedTranslation = strip(translation)
-    const parsedTranscripted = strip(recognition.transcript)
-    const mismatched = flagMismatch(parsedTranslation, parsedTranscripted)
-
-    if (!mismatched.length && onSuccess) {
-      onSuccess()
-    }
-
-    return translation.split(' ').map((word, i) => (
-      <Text
-        key={i}
-        style={{ color: mismatched.length ? 'red' : 'green' }}
-        // style={{ color: mismatched.length ? (mismatched.includes(i) ? 'red' : 'black') : 'green' }}
-      >
-        {word + ' '}
-      </Text>
-    ))
+      return (
+        <Text key={i} style={{ color: confidenceColor }}>
+          {original.word + ' '}
+        </Text>
+      )
+    })
   }
 
   return <Text>{translation}</Text>
