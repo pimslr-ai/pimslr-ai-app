@@ -26,10 +26,11 @@ export default () => {
 
   const stopRecording = async () => {
     if (state.recording) {
+      setState({ recording: undefined })
       await state.recording.stopAndUnloadAsync()
       await Audio.setAudioModeAsync({ allowsRecordingIOS: false })
       const uri = state.recording?.getURI()!
-      setState({ uri, recording: undefined })
+      setState({ uri })
     }
   }
 
