@@ -1,6 +1,6 @@
 import { ViewStyle, TouchableOpacity, View, StyleSheet, Text } from 'react-native'
 import { useNavigation } from '../..'
-import { FONTS } from '../../../constants'
+import { FONTS, THEME } from '../../../constants'
 
 export default (course: Course) => {
   const navigation = useNavigation()
@@ -20,7 +20,7 @@ export default (course: Course) => {
   const backgroundCardStyle = (index: number): ViewStyle => ({
     width: '100%',
     height: '100%',
-    backgroundColor: `#fed69c`,
+    backgroundColor: `lightgrey`,
     opacity: 0.25 * (index + 1),
     transform: [{ rotateZ: `${getRandom([7, 6, 5, 4, -4, -5, -6, -7])}deg` }],
     margin: 20,
@@ -37,7 +37,11 @@ export default (course: Course) => {
       <View style={styles.courseCard}>
         <Text style={styles.courseTitle}>{course.scenario.title}</Text>
         <Text style={styles.courseDate}>{formatHumanDateTime(course.createdAt)}</Text>
-        <Text style={styles.courseDetails}>{course.language.name} | 85% native speaker | 6/10 completed</Text>
+        <View style={styles.courseDetails}>
+          <Text style={styles.tag}>{course.language.name}</Text>
+          <Text style={styles.tag}>85% native speaking</Text>
+          <Text style={styles.tag}>6/10 completed</Text>
+        </View>
       </View>
       {backgroundCards.map((_, i) => (
         <View key={i} style={backgroundCardStyle(i)} />
@@ -54,7 +58,7 @@ const styles = StyleSheet.create({
   },
   courseCard: {
     display: 'flex',
-    gap: 10,
+    gap: 20,
     paddingHorizontal: 20,
     paddingVertical: 60,
     borderRadius: 20,
@@ -69,10 +73,28 @@ const styles = StyleSheet.create({
   },
   courseTitle: {
     fontSize: 24,
-    fontFamily: FONTS.POPPINS.MEDIUM,
+    fontFamily: FONTS.POPPINS.BOLD,
+    textAlign: 'center',
   },
   courseDate: {
     fontSize: 10,
+    textAlign: 'center',
   },
-  courseDetails: {},
+  courseDetails: {
+    justifyContent: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 7,
+  },
+  tag: {
+    alignSelf: 'flex-start',
+    color: 'black',
+    fontFamily: FONTS.POPPINS.MEDIUM,
+    fontSize: 12,
+    paddingVertical: 5,
+    paddingHorizontal: 10,
+    backgroundColor: 'whitesmoke',
+    borderRadius: 8,
+    overflow: 'hidden',
+  },
 })
