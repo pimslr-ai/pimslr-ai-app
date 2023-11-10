@@ -1,11 +1,9 @@
 import { TEST_COURSE } from '../../constants'
-import { StyleSheet, Text, View, ScrollView } from 'react-native'
+import { StyleSheet, View, ScrollView } from 'react-native'
 import SectionView from '../../components/SectionView'
 import ScreenView from '../../components/ScreenView'
 import Logo from '../../components/Logo'
-import Button from '../../components/Button'
-import CourseCard from '../Course/components/CourseCard'
-import Card from '../Course/components/Card'
+import CourseCard from './components/CourseCard'
 
 export default () => {
   // const { courses } = useCourses()

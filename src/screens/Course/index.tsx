@@ -1,16 +1,17 @@
 import { FONTS, THEME } from '../../constants'
-import { useEffect, useRef, useState } from 'react'
-import { StyleSheet, View, Text, Animated } from 'react-native'
+import { useEffect, useState } from 'react'
+import { StyleSheet, View, Text } from 'react-native'
 import { useNavigation, useParams } from '../'
 import useRecognition from '../../hooks/useRecognition'
 import useAudio from '../../hooks/useAudio'
-import Button from '../../components/Button'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import ScreenView from '../../components/ScreenView'
 import PageView from '../../components/PageView'
 import ConfettiCannon from '../../components/ConfettiCannon'
 import { useCourses } from '../../hooks/useCourses'
+import AnimatedButton from './components/AnimatedButton'
+import Card from './components/Card'
 
 const audios = [
   require('../../../assets/audio/1.m4a'),
@@ -102,18 +103,7 @@ export default () => {
           <View>
             <PageView ref={setPageView} onPageChange={setPageNumber}>
               {course?.sentences?.map((sentence, i) => (
-                <View key={sentence.id} style={styles.card}>
-                  <View key={sentence.id} style={styles.cardContent}>
-                    <Text style={styles.translation}>
-                      <Sentence
-                        onSuccess={cannon?.shoot}
-                        translation={sentence?.translation!}
-                        recognition={i === pageNumber - 1 ? recognition! : undefined}
-                      />
-                    </Text>
-                    <Text style={styles.original}>{sentence.original}</Text>
-                  </View>
-                </View>
+                <Card key={i} sentence={sentence} onSuccess={cannon?.shoot} />
               ))}
             </PageView>
 
@@ -161,110 +151,6 @@ export default () => {
   )
 }
 
-const AnimatedButton = ({
-  icon,
-  onClick,
-  toggle,
-}: {
-  icon: string
-  onClick?: () => void
-  toggle?: boolean
-}) => {
-  const animation = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    animate()
-  }, [toggle])
-
-  const scale = animation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: [1.4, 0, 1.4],
-  })
-
-  const backgroundColor = animation.interpolate({
-    inputRange: [0, 0.5, 1],
-    outputRange: ['transparent', 'transparent', THEME.CTA],
-  }) as any
-
-  const animate = () => {
-    Animated.timing(animation, {
-      duration: 200,
-      toValue: toggle ? 1 : 0,
-      useNativeDriver: true,
-    }).start()
-  }
-
-  return (
-    <Button
-      icon={icon}
-      onClick={onClick}
-      labelStyle={{ color: toggle ? 'white' : 'grey' }}
-      containerStyle={{
-        ...styles.courseControlButton,
-        transform: [{ scale }],
-        backgroundColor,
-      }}
-    />
-  )
-}
-
-const Sentence = ({
-  translation,
-  recognition,
-  onSuccess,
-}: {
-  translation: string
-  recognition?: Recognition
-  onSuccess?: () => void
-}) => {
-  const strip = (input: string) => {
-    return input
-      .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
-      .replace(/\s+/g, ' ')
-      .toLowerCase()
-  }
-
-  const flagMismatch = (sentence1: string, sentence2: string) => {
-    const words1 = sentence1.split(' ')
-    const words2 = sentence2.split(' ')
-    const maxLength = Math.max(words1.length, words2.length)
-    const mismatchedIndicies: number[] = []
-
-    for (let i = 0; i < maxLength; i++) {
-      const word1 = words1[i] || ''
-      const word2 = words2[i] || ''
-
-      if (word1 !== word2) {
-        mismatchedIndicies.push(i)
-      }
-    }
-
-    return mismatchedIndicies
-  }
-
-  if (recognition) {
-    const parsedTranslation = strip(translation)
-    const parsedTranscripted = strip(recognition.transcript)
-    const mismatched = flagMismatch(parsedTranslation, parsedTranscripted)
-
-    if (!mismatched.length && onSuccess) {
-      onSuccess()
-    }
-
-    return translation.split(' ').map((word, i) => (
-      <Text
-        key={i}
-        style={{ color: mismatched.length ? 'red' : 'green' }}
-        // style={{ color: mismatched.length ? (mismatched.includes(i) ? 'red' : 'black') : 'green' }}
-      >
-        {word + ' '}
-      </Text>
-    ))
-  }
-
-  return <Text>{translation}</Text>
-}
-
 const styles = StyleSheet.create({
   courseControls: {
     width: '100%',
@@ -278,13 +164,6 @@ const styles = StyleSheet.create({
   startButton: {
     position: 'absolute',
     bottom: 70,
-  },
-  courseControlButton: {
-    aspectRatio: 1,
-    display: 'flex',
-    justifyContent: 'center',
-    alignItems: 'center',
-    transform: [{ scale: 1.4 }],
   },
   container: {
     flex: 1,
