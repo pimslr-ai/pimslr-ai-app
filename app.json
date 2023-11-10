@@ -8,8 +8,7 @@
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "backgroundColor": "#713ABE",
-      "resizeMode": "center"
+      "backgroundColor": "#713ABE"
     },
     "assetBundlePatterns": ["**/*"],
     "ios": {
@@ -24,8 +23,7 @@
         "backgroundColor": "#713ABE"
       }
     },
-    "web": {
-    },
+    "web": {},
     "extra": {
       "eas": {
         "projectId": "0198d5ea-e57b-4dac-a697-5bff55527d5f"
