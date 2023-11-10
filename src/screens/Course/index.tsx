@@ -1,28 +1,28 @@
-import { FONTS, THEME } from '../constants'
+import { FONTS, THEME } from '../../constants'
 import { useEffect, useRef, useState } from 'react'
 import { StyleSheet, View, Text, Animated } from 'react-native'
-import { useNavigation, useParams } from '.'
-import useRecognition from '../hooks/useRecognition'
-import useAudio from '../hooks/useAudio'
-import Button from '../components/Button'
-import PrimaryButton from '../components/PrimaryButton'
-import SecondaryButton from '../components/SecondaryButton'
-import ScreenView from '../components/ScreenView'
-import PageView from '../components/PageView'
-import ConfettiCannon from '../components/ConfettiCannon'
-import { useCourses } from '../hooks/useCourses'
+import { useNavigation, useParams } from '../'
+import useRecognition from '../../hooks/useRecognition'
+import useAudio from '../../hooks/useAudio'
+import Button from '../../components/Button'
+import PrimaryButton from '../../components/PrimaryButton'
+import SecondaryButton from '../../components/SecondaryButton'
+import ScreenView from '../../components/ScreenView'
+import PageView from '../../components/PageView'
+import ConfettiCannon from '../../components/ConfettiCannon'
+import { useCourses } from '../../hooks/useCourses'
 
 const audios = [
-  require('../../assets/audio/1.m4a'),
-  require('../../assets/audio/2.m4a'),
-  require('../../assets/audio/3.m4a'),
-  require('../../assets/audio/4.m4a'),
-  require('../../assets/audio/5.m4a'),
-  require('../../assets/audio/6.m4a'),
-  require('../../assets/audio/7.m4a'),
-  require('../../assets/audio/8.m4a'),
-  require('../../assets/audio/9.m4a'),
-  require('../../assets/audio/10.m4a'),
+  require('../../../assets/audio/1.m4a'),
+  require('../../../assets/audio/2.m4a'),
+  require('../../../assets/audio/3.m4a'),
+  require('../../../assets/audio/4.m4a'),
+  require('../../../assets/audio/5.m4a'),
+  require('../../../assets/audio/6.m4a'),
+  require('../../../assets/audio/7.m4a'),
+  require('../../../assets/audio/8.m4a'),
+  require('../../../assets/audio/9.m4a'),
+  require('../../../assets/audio/10.m4a'),
 ]
 
 export default () => {

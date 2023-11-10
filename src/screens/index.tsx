@@ -5,13 +5,8 @@ import { useRoute as useRoute_ } from '@react-navigation/native'
 import { RouteProp } from '@react-navigation/native'
 
 type RootStackParamList = {
-  onboarding: undefined
   dashboard: undefined
-  settings: undefined
   'course:home': {
-    courseId: string
-  }
-  'course:refine_scenario': {
     courseId: string
   }
 }
