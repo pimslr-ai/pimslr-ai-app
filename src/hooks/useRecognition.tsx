@@ -35,14 +35,9 @@ export default (language: string) => {
     return response.data.results.length ? response.data.results[0]!.alternatives[0]! : null
   }
 
-  const clearRecognition = () => {
-    setRecognition(null)
-  }
-
   return {
     startRecording,
     stopRecording,
-    clearRecognition,
     isRecording,
     amplitude,
     recognition,

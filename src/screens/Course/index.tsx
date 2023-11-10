@@ -34,21 +34,18 @@ export default () => {
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
-  const { isPlaying, playAudio, stopAudio } = useAudio()
-  const { startRecording, stopRecording, clearRecognition, recognition, isRecording, isLoading, amplitude } =
+  const { isPlaying, loadAudio, playAudio, stopAudio } = useAudio()
+  const { startRecording, stopRecording, recognition, isRecording, isLoading, amplitude } =
     useRecognition('fr-FR')
 
   useEffect(() => {
     if (isReady) {
-      clearRecognition()
-
-      stopAudio().then(toggleAudio)
+      const audio = audios[course!.sentences[pageNumber - 1].audio - 1!]
+      loadAudio(audio).then(playAudio)
     }
   }, [isReady, pageNumber])
 
   const toggleRecording = () => {
-    clearRecognition()
-
     if (isPlaying) {
       stopAudio()
     }
@@ -60,19 +57,16 @@ export default () => {
   }
 
   const toggleAudio = () => {
-    clearRecognition()
-
     if (!isRecording) {
       if (isPlaying) {
         stopAudio()
       } else {
-        playAudio(audios[course!.sentences[pageNumber - 1].audio - 1!])
+        playAudio()
       }
     }
   }
 
   const handleClose = () => {
-    clearRecognition()
     stopAudio()
     navigation.navigate('dashboard')
   }
@@ -114,6 +108,7 @@ export default () => {
                   hide={pageNumber <= 1}
                   labelStyle={{ opacity: 0.7 }}
                   onClick={pageView?.turnPrevious}
+                  disable={isPlaying}
                 />
                 <Text style={styles.cardControlPagination}>
                   {pageNumber}/{course?.sentences.length}
@@ -123,6 +118,7 @@ export default () => {
                   hide={pageNumber >= course?.sentences.length!}
                   labelStyle={{ opacity: 0.7 }}
                   onClick={pageView?.turnNext}
+                  disable={isPlaying}
                 />
               </View>
             )}

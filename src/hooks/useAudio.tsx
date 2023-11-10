@@ -20,13 +20,12 @@ export default () => {
     })
   }, [])
 
-  const playAudio = async (audioFile: any) => {
-    if (state.isPlaying) {
-      await state.sound.stopAsync()
-    }
-    // too much time spent loading, add setAudio back
+  const loadAudio = async (audioFile: any) => {
     await state.sound.unloadAsync()
     await state.sound.loadAsync(audioFile)
+  }
+
+  const playAudio = async () => {
     await state.sound.setPositionAsync(0)
     await state.sound.playAsync()
     setState(prev => ({ ...prev, isPlaying: true }))
@@ -42,6 +41,7 @@ export default () => {
   return {
     playAudio,
     stopAudio,
+    loadAudio,
     isPlaying: state.isPlaying,
   }
 }

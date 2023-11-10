@@ -9,8 +9,8 @@ interface CardProps {
 
 export default ({ sentence, recognition, onSuccess }: CardProps) => {
   return (
-    <View key={sentence.id} style={styles.card}>
-      <View key={sentence.id} style={styles.cardContent}>
+    <View key={sentence.id} style={styles.container}>
+      <View key={sentence.id} style={styles.wrapper}>
         <Text style={styles.translation}>
           <Sentence onSuccess={onSuccess!} translation={sentence?.translation!} recognition={recognition!} />
         </Text>
@@ -76,13 +76,13 @@ const Sentence = ({ translation, recognition, onSuccess }: SentenceProps) => {
 }
 
 const styles = StyleSheet.create({
-  card: {
+  container: {
     shadowOffset: { width: 0, height: 10 },
     shadowOpacity: 0.1,
     shadowRadius: 20,
     padding: 16,
   },
-  cardContent: {
+  wrapper: {
     elevation: 14,
     borderRadius: 20,
     width: '100%',
@@ -90,6 +90,9 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     paddingVertical: 70,
     paddingHorizontal: 32,
+    minHeight: 250,
+    justifyContent: 'center',
+    alignContent: 'center',
   },
   translation: {
     textAlign: 'center',
