@@ -19,7 +19,7 @@ export default () => {
           {/* <Button icon='settings' label='Settings' /> */}
         </View>
 
-        <SectionView name='Languages' extra='Add language'>
+        {/* <SectionView name='Languages' extra='Add language'>
           <View style={{ marginHorizontal: 16, gap: 16 }}>
             <Card>
               <Text>French</Text>
@@ -32,9 +32,9 @@ export default () => {
             </Card>
           </View>
           <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
-        </SectionView>
+        </SectionView> */}
 
-        <SectionView name='Scenarios' extra='Add scenario'>
+        {/* <SectionView name='Scenarios' extra='Add scenario'>
           <View style={{ marginHorizontal: 16, gap: 16 }}>
             <Card>
               <Text>You are at a bar...</Text>
@@ -44,25 +44,25 @@ export default () => {
             </Card>
           </View>
           <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
-        </SectionView>
+        </SectionView> */}
 
-        <SectionView name='Courses' extra='Generate course'>
+        <SectionView name='Courses'>
           <View style={{ padding: 16, gap: 16 }}>
             {courses?.map(course => (
               <CourseCard key={course.id} {...course} />
             ))}
-            <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
+            {/* <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} /> */}
           </View>
         </SectionView>
 
-        <SectionView name='Saved sentences'>
+        {/* <SectionView name='Saved sentences'>
           <View style={{ padding: 16, gap: 16 }}>
             <Card>
               <Text>This is a saved sentence.</Text>
             </Card>
           </View>
           <Button label='View all' labelStyle={{ marginTop: 16, textAlign: 'center', width: '100%' }} />
-        </SectionView>
+        </SectionView> */}
       </ScrollView>
     </ScreenView>
   )
