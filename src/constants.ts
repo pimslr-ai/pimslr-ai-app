@@ -1,6 +1,6 @@
 const THEME = {
   BACKGROUND: '#f6f5fa',
-  COLOR: '#001524',
+  COLOR: 'black',
   COLOR_ALT: '#0F2C59',
   CTA: '#713ABE',
   ACCENT: '#FF9501',
@@ -109,6 +109,31 @@ const LANGUAGES = [
   { label: 'Belarusian', value: 'be-BY' },
 ]
 
+const LEVELS = [
+  {
+    name: 'begining',
+    descriptions: {
+      short: 'Make simple sentences using everyday words for clear communication.',
+      long: '',
+    },
+  },
+  {
+    name: 'intermediate',
+    descriptions: {
+      short: 'Use different sentence structures and proper punctuation to express ideas clearly.',
+      long: '',
+    },
+  },
+  {
+    name: 'advanced',
+    descriptions: {
+      short:
+        'Master complex structures, employ a precise vocabulary, and use strategies for clear communication of sophisticated concepts.',
+      long: '',
+    },
+  },
+]
+
 const INTERESTS = [
   'Music',
   'Dance',
@@ -163,4 +188,4 @@ const INTERESTS = [
   'Financial Literacy',
 ]
 
-export { FONTS, THEME, LANGUAGES, INTERESTS }
+export { FONTS, THEME, LANGUAGES, INTERESTS, LEVELS }

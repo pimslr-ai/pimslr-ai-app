@@ -1,12 +1,13 @@
-import { FONTS, INTERESTS, LANGUAGES, THEME } from '../constants'
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native'
-import React, { useEffect, useState } from 'react'
-import InteractiveInput from '../components/InteractiveInput'
+import { FONTS, INTERESTS, LANGUAGES, LEVELS, THEME } from '../constants'
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native'
+import React, { useEffect, useRef, useState } from 'react'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 import ScreenView from '../components/ScreenView'
 import Dropdown from '../components/Dropdown'
+
+const AnimatedView = Animated.createAnimatedComponent(View)
 
 export default () => {
   const [pageNumber, setPageNumber] = useState<number>(1)
@@ -18,7 +19,7 @@ export default () => {
   const [profeciency, setProfeciency] = useState<string | null>(null)
   const [interests, setInterests] = useState<string[]>([])
 
-  const [testPageView, setTestPageView] = useState<PageView | null>()
+  const animation = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
     switch (pageNumber) {
@@ -42,12 +43,34 @@ export default () => {
   }, [language])
 
   useEffect(() => {
+    if (profeciency) {
+      showExplanations()
+    } else {
+      hideExplanations()
+    }
+
     setPageCompleted(!!profeciency)
   }, [profeciency])
 
   useEffect(() => {
     setPageCompleted(interests.length >= 3)
   }, [interests])
+
+  const showExplanations = () => {
+    Animated.timing(animation, {
+      duration: 350,
+      toValue: 1,
+      useNativeDriver: false,
+    }).start()
+  }
+
+  const hideExplanations = () => {
+    Animated.timing(animation, {
+      duration: 0,
+      toValue: 0,
+      useNativeDriver: false,
+    }).start()
+  }
 
   return (
     <ScreenView>
@@ -60,20 +83,27 @@ export default () => {
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
           <View style={styles.page}>
-            <Text style={styles.title}>Let's test yourself</Text>
+            <Text style={styles.title}>Choose a level</Text>
             <Text style={styles.subtitle}>Get lessons tailored to your speaking level.</Text>
-            <Text style={styles.subtitle}>Repeat after the me.</Text>
 
-            <PageView ref={setTestPageView}>
-              <Text onPress={testPageView?.turnNext}>First</Text>
-              <Text onPress={testPageView?.turnNext}>Second</Text>
-              <Text onPress={() => setProfeciency('abc')}>Third</Text>
-            </PageView>
+            <Dropdown
+              containerStyle={styles.dropdown}
+              items={LEVELS.map(l => ({ label: capitalize(l.name), value: l.name }))}
+              label='Select prefered level'
+              onSelection={setProfeciency}
+            />
+
+            <AnimatedView style={[styles.explanationsContainer, { opacity: animation }]}>
+              <Text style={styles.explanations}>
+                {LEVELS.filter(l => l.name === profeciency)[0]?.descriptions.short}
+              </Text>
+            </AnimatedView>
           </View>
 
           <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
+
             <Dropdown
               containerStyle={styles.dropdown}
               items={LANGUAGES}
@@ -85,6 +115,7 @@ export default () => {
           <View style={styles.page}>
             <Text style={styles.title}>Tell us about yourself</Text>
             <Text style={styles.subtitle}>Get lessons catered to your interests. Select at least 3.</Text>
+
             <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
               <View style={styles.tags}>
                 {INTERESTS.map(interest => (
@@ -97,6 +128,7 @@ export default () => {
                 ))}
               </View>
             </ScrollView>
+
             <View style={styles.bottomBorder} />
           </View>
         </PageView>
@@ -230,4 +262,26 @@ const styles = StyleSheet.create({
     paddingHorizontal: 25,
     paddingVertical: 16,
   },
+  explanationsContainer: {
+    width: '100%',
+    alignItems: 'center',
+  },
+  explanations: {
+    width: '80%',
+    backgroundColor: 'white',
+    borderRadius: 16,
+    overflow: 'hidden',
+    textAlign: 'center',
+    fontSize: 17,
+    marginTop: 16,
+    marginHorizontal: 'auto',
+    paddingHorizontal: 16,
+    paddingVertical: 32,
+  },
 })
+
+function capitalize(input: string) {
+  const words = input.split(' ')
+  const capitalizedWords = words.map(word => word.charAt(0).toUpperCase() + word.slice(1))
+  return capitalizedWords.join(' ')
+}
