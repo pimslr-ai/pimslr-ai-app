@@ -28,7 +28,7 @@ export default () => {
         setPageCompleted(!!language)
         break
       case 2:
-        setSkippable(true)
+        setSkippable(false)
         setPageCompleted(!!profeciency)
         break
       case 3:
@@ -83,6 +83,18 @@ export default () => {
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
           <View style={styles.page}>
+            <Text style={styles.title}>Choose a language</Text>
+            <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
+
+            <Dropdown
+              containerStyle={styles.dropdown}
+              items={LANGUAGES}
+              label='Select a language'
+              onSelection={setLanguage}
+            />
+          </View>
+
+          <View style={styles.page}>
             <Text style={styles.title}>Choose a level</Text>
             <Text style={styles.subtitle}>Get lessons tailored to your speaking level.</Text>
 
@@ -98,18 +110,6 @@ export default () => {
                 {LEVELS.filter(l => l.name === profeciency)[0]?.descriptions.short}
               </Text>
             </AnimatedView>
-          </View>
-
-          <View style={styles.page}>
-            <Text style={styles.title}>Choose a language</Text>
-            <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
-
-            <Dropdown
-              containerStyle={styles.dropdown}
-              items={LANGUAGES}
-              label='Select a language'
-              onSelection={setLanguage}
-            />
           </View>
 
           <View style={styles.page}>
