@@ -112,25 +112,16 @@ const LANGUAGES = [
 const LEVELS = [
   {
     name: 'begining',
-    descriptions: {
-      short: 'Make simple sentences using everyday words for clear communication.',
-      long: '',
-    },
+    descriptions: 'Make simple sentences using everyday words for clear communication.',
   },
   {
     name: 'intermediate',
-    descriptions: {
-      short: 'Use different sentence structures and proper punctuation to express ideas clearly.',
-      long: '',
-    },
+    descriptions: 'Use different sentence structures and proper punctuation to express ideas clearly.',
   },
   {
     name: 'advanced',
-    descriptions: {
-      short:
-        'Master complex structures, employ a precise vocabulary, and use strategies for clear communication of sophisticated concepts.',
-      long: '',
-    },
+    descriptions:
+      'Master complex structures, employ a precise vocabulary, and use strategies for clear communication of sophisticated concepts.',
   },
 ]
 

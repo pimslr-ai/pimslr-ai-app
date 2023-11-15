@@ -1,11 +1,12 @@
 import { FONTS, INTERESTS, LANGUAGES, LEVELS, THEME } from '../constants'
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, Animated } from 'react-native'
-import React, { useEffect, useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import PrimaryButton from '../components/PrimaryButton'
 import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 import ScreenView from '../components/ScreenView'
 import Dropdown from '../components/Dropdown'
+import { getCompletion } from '../clients/openai'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
@@ -15,11 +16,18 @@ export default () => {
   const [skippable, setSkippable] = useState(true)
   const [pageCompleted, setPageCompleted] = useState(false)
 
-  const [language, setLanguage] = useState<string | null>(null)
-  const [profeciency, setProfeciency] = useState<string | null>(null)
-  const [interests, setInterests] = useState<string[]>([])
+  const [language, setLanguage] = useState<string | null>('fr-FR')
+  const [profeciency, setProfeciency] = useState<string | null>('begining')
+  const [interests, setInterests] = useState<string[]>(['Art', 'Books', 'Movies'])
+
+  const [generated, setGenerated] = useState<null | string>(null)
 
   const animation = useRef(new Animated.Value(0)).current
+
+  useEffect(() => {
+    console.log('calling...')
+    generateCourses()
+  }, [])
 
   useEffect(() => {
     switch (pageNumber) {
@@ -56,6 +64,58 @@ export default () => {
     setPageCompleted(interests.length >= 3)
   }, [interests])
 
+  const generateCourses = () => {
+    const prompt = `Given the following sentence complexity levels:
+
+Level 1: Basic Sentences
+Grammar and Syntax:
+Sentences should have correct grammar and basic syntax.
+Simple sentence structures (subject-verb-object).
+Use of common conjunctions (and, but, or).
+Vocabulary:
+Use of common and everyday words.
+Limited use of specialized or complex vocabulary.
+Clarity:
+Clear and straightforward communication.
+Avoidance of ambiguous or convoluted phrasing.
+
+Level 2: Intermediate Sentences
+Grammar and Syntax:
+More varied sentence structures (e.g., compound and complex sentences).
+Correct use of punctuation for emphasis and clarity.
+Proper use of verb tenses and agreement.
+Vocabulary:
+Expanded vocabulary with a mix of common and more advanced words.
+Use of synonyms and varied expressions.
+Clarity:
+Clear communication with the ability to express more nuanced ideas.
+Awareness of context for effective communication.
+
+Level 3: Advanced Sentences
+Grammar and Syntax:
+Mastery of complex sentence structures (e.g., subordinate clauses, participial phrases).
+Skillful use of rhetorical devices (e.g., parallelism, inversion).
+Varied sentence beginnings for stylistic effect.
+Vocabulary:
+Extensive and precise vocabulary.
+Effective use of domain-specific terminology.
+Ability to convey abstract and sophisticated concepts.
+Clarity:
+Clear communication of complex ideas.
+Use of rhetorical strategies to enhance persuasiveness or engagement.
+
+As users progress through each level, they can expect an increase in linguistic complexity and sophistication. These criteria provide a framework for gradually advancing the difficulty of generated sentences.
+
+For someone learning a new language, can you generate sentences related to the topic of ${interests[0]}.
+
+Can you generate a list of 10 sentences no more than 10 words in ${language} for each complexity levels. 
+
+Please return respond with a json response.
+      `
+
+    getCompletion(prompt).then(setGenerated)
+  }
+
   const showExplanations = () => {
     Animated.timing(animation, {
       duration: 350,
@@ -77,11 +137,22 @@ export default () => {
       <View style={styles.container}>
         <View style={styles.header}>
           <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
-          <Text style={styles.headerTitle}>{pageNumber}/3</Text>
+          <Text style={styles.headerTitle}>{pageNumber}/4</Text>
           <SecondaryButton label='Skip' noticeMe hide={!skippable} onClick={pageView?.turnNext} />
         </View>
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
+          <View>
+            <Text style={styles.title}>Generated courses</Text>
+            <Text style={styles.subtitle}>
+              Placeholder screen for displaying results from generated courses.
+            </Text>
+
+            <View>
+              <Text>{generated}</Text>
+            </View>
+          </View>
+
           <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
@@ -107,7 +178,7 @@ export default () => {
 
             <AnimatedView style={[styles.explanationsContainer, { opacity: animation }]}>
               <Text style={styles.explanations}>
-                {LEVELS.filter(l => l.name === profeciency)[0]?.descriptions.short}
+                {LEVELS.filter(l => l.name === profeciency)[0]?.descriptions}
               </Text>
             </AnimatedView>
           </View>
@@ -275,8 +346,7 @@ const styles = StyleSheet.create({
     fontSize: 17,
     marginTop: 16,
     marginHorizontal: 'auto',
-    paddingHorizontal: 16,
-    paddingVertical: 32,
+    padding: 32,
   },
 })
 
