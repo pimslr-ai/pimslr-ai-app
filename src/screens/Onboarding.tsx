@@ -6,7 +6,7 @@ import SecondaryButton from '../components/SecondaryButton'
 import PageView from '../components/PageView'
 import ScreenView from '../components/ScreenView'
 import Dropdown from '../components/Dropdown'
-import { getCompletion } from '../clients/openai'
+import useCourseGeneration from '../hooks/useCourseGeneration'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
@@ -16,105 +16,46 @@ export default () => {
   const [skippable, setSkippable] = useState(true)
   const [pageCompleted, setPageCompleted] = useState(false)
 
-  const [language, setLanguage] = useState<string | null>('fr-FR')
-  const [profeciency, setProfeciency] = useState<string | null>('begining')
-  const [interests, setInterests] = useState<string[]>(['Art', 'Books', 'Movies'])
-
-  const [generated, setGenerated] = useState<null | string>(null)
+  const [interests, setInterests] = useState<string[]>([])
+  const { info, setInfo, generate, status, course } = useCourseGeneration()
 
   const animation = useRef(new Animated.Value(0)).current
-
-  useEffect(() => {
-    console.log('calling...')
-    generateCourses()
-  }, [])
 
   useEffect(() => {
     switch (pageNumber) {
       case 1:
         setSkippable(false)
-        setPageCompleted(!!language)
+        setPageCompleted(!!info.language)
         break
       case 2:
         setSkippable(false)
-        setPageCompleted(!!profeciency)
+        setPageCompleted(!!info.level)
         break
       case 3:
         setSkippable(true)
         setPageCompleted(interests.length >= 3)
         break
+      case 4:
+        setSkippable(false)
+        const i = Math.floor(Math.random() * interests.length)
+        const topic = interests[i]
+        setInfo(info => ({ ...info, topic }))
+        break
     }
   }, [pageNumber])
 
   useEffect(() => {
-    setPageCompleted(!!language)
-  }, [language])
+    setPageCompleted(!!info.language)
+  }, [info.language])
 
   useEffect(() => {
-    if (profeciency) {
-      showExplanations()
-    } else {
-      hideExplanations()
-    }
-
-    setPageCompleted(!!profeciency)
-  }, [profeciency])
+    info.level ? showExplanations() : hideExplanations()
+    setPageCompleted(!!info.level)
+  }, [info.level])
 
   useEffect(() => {
     setPageCompleted(interests.length >= 3)
   }, [interests])
-
-  const generateCourses = () => {
-    const prompt = `Given the following sentence complexity levels:
-
-Level 1: Basic Sentences
-Grammar and Syntax:
-Sentences should have correct grammar and basic syntax.
-Simple sentence structures (subject-verb-object).
-Use of common conjunctions (and, but, or).
-Vocabulary:
-Use of common and everyday words.
-Limited use of specialized or complex vocabulary.
-Clarity:
-Clear and straightforward communication.
-Avoidance of ambiguous or convoluted phrasing.
-
-Level 2: Intermediate Sentences
-Grammar and Syntax:
-More varied sentence structures (e.g., compound and complex sentences).
-Correct use of punctuation for emphasis and clarity.
-Proper use of verb tenses and agreement.
-Vocabulary:
-Expanded vocabulary with a mix of common and more advanced words.
-Use of synonyms and varied expressions.
-Clarity:
-Clear communication with the ability to express more nuanced ideas.
-Awareness of context for effective communication.
-
-Level 3: Advanced Sentences
-Grammar and Syntax:
-Mastery of complex sentence structures (e.g., subordinate clauses, participial phrases).
-Skillful use of rhetorical devices (e.g., parallelism, inversion).
-Varied sentence beginnings for stylistic effect.
-Vocabulary:
-Extensive and precise vocabulary.
-Effective use of domain-specific terminology.
-Ability to convey abstract and sophisticated concepts.
-Clarity:
-Clear communication of complex ideas.
-Use of rhetorical strategies to enhance persuasiveness or engagement.
-
-As users progress through each level, they can expect an increase in linguistic complexity and sophistication. These criteria provide a framework for gradually advancing the difficulty of generated sentences.
-
-For someone learning a new language, can you generate sentences related to the topic of ${interests[0]}.
-
-Can you generate a list of 10 sentences no more than 10 words in ${language} for each complexity levels. 
-
-Please return respond with a json response.
-      `
-
-    getCompletion(prompt).then(setGenerated)
-  }
 
   const showExplanations = () => {
     Animated.timing(animation, {
@@ -126,10 +67,14 @@ Please return respond with a json response.
 
   const hideExplanations = () => {
     Animated.timing(animation, {
-      duration: 0,
+      duration: 175,
       toValue: 0,
       useNativeDriver: false,
     }).start()
+  }
+
+  const handleClick = () => {
+    pageNumber === 4 ? generate() : pageView?.turnNext()
   }
 
   return (
@@ -142,17 +87,6 @@ Please return respond with a json response.
         </View>
 
         <PageView ref={setPageView} onPageChange={setPageNumber}>
-          <View>
-            <Text style={styles.title}>Generated courses</Text>
-            <Text style={styles.subtitle}>
-              Placeholder screen for displaying results from generated courses.
-            </Text>
-
-            <View>
-              <Text>{generated}</Text>
-            </View>
-          </View>
-
           <View style={styles.page}>
             <Text style={styles.title}>Choose a language</Text>
             <Text style={styles.subtitle}>Learn your first language the PimslrAI way.</Text>
@@ -161,7 +95,7 @@ Please return respond with a json response.
               containerStyle={styles.dropdown}
               items={LANGUAGES}
               label='Select a language'
-              onSelection={setLanguage}
+              onSelection={language => setInfo(info => ({ ...info, language }))}
             />
           </View>
 
@@ -173,12 +107,12 @@ Please return respond with a json response.
               containerStyle={styles.dropdown}
               items={LEVELS.map(l => ({ label: capitalize(l.name), value: l.name }))}
               label='Select prefered level'
-              onSelection={setProfeciency}
+              onSelection={level => setInfo(info => ({ ...info, level }))}
             />
 
             <AnimatedView style={[styles.explanationsContainer, { opacity: animation }]}>
               <Text style={styles.explanations}>
-                {LEVELS.filter(l => l.name === profeciency)[0]?.descriptions}
+                {LEVELS.filter(l => l.name === info.level)[0]?.descriptions}
               </Text>
             </AnimatedView>
           </View>
@@ -202,13 +136,24 @@ Please return respond with a json response.
 
             <View style={styles.bottomBorder} />
           </View>
+
+          <View>
+            <Text style={styles.title}>Generate course</Text>
+            <Text style={styles.subtitle}>Here is your very first course unique to your interests.</Text>
+
+            <View style={{ justifyContent: 'center' }}>
+              <Text>{status?.loading ? 'Loading...' : ''}</Text>
+              <Text>{status?.stage}</Text>
+              <Text>{course && JSON.stringify(course, null, 2)}</Text>
+            </View>
+          </View>
         </PageView>
 
         <PrimaryButton
-          disable={!pageCompleted}
-          label={pageNumber >= 3 ? 'Complete' : 'Next'}
+          disable={status.loading || (pageNumber === 4 ? false : !pageCompleted)}
+          label={pageNumber === 4 ? 'Generate course' : 'Next'}
           containerStyle={styles.button}
-          onClick={pageView?.turnNext}
+          onClick={handleClick}
         />
       </View>
     </ScreenView>

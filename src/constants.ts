@@ -29,8 +29,9 @@ const FONTS = {
   },
 }
 
+// Inner joined list of support languages between 
+// Azure Speech Assessment API and Narakeet TTS API
 const LANGUAGES = [
-  { label: 'English', value: 'en-US' },
   { label: 'Dutch', value: 'nl-NL' },
   { label: 'French', value: 'fr-FR' },
   { label: 'German', value: 'de-DE' },
@@ -107,11 +108,12 @@ const LANGUAGES = [
   { label: 'Kyrgyz', value: 'ky-KG' },
   { label: 'Azerbaijani', value: 'az-AZ' },
   { label: 'Belarusian', value: 'be-BY' },
+  { label: 'English', value: 'en-US' },
 ]
 
 const LEVELS = [
   {
-    name: 'begining',
+    name: 'beginning',
     descriptions: 'Make simple sentences using everyday words for clear communication.',
   },
   {
@@ -124,6 +126,47 @@ const LEVELS = [
       'Master complex structures, employ a precise vocabulary, and use strategies for clear communication of sophisticated concepts.',
   },
 ]
+
+const LEVEL_CRITERIA = `
+Level 1: Basic Sentences
+Grammar and Syntax:
+Sentences should have correct grammar and basic syntax.
+Simple sentence structures (subject-verb-object).
+Use of common conjunctions (and, but, or).
+Vocabulary:
+Use of common and everyday words.
+Limited use of specialized or complex vocabulary.
+Clarity:
+Clear and straightforward communication.
+Avoidance of ambiguous or convoluted phrasing.
+
+Level 2: Intermediate Sentences
+Grammar and Syntax:
+More varied sentence structures (e.g., compound and complex sentences).
+Correct use of punctuation for emphasis and clarity.
+Proper use of verb tenses and agreement.
+Vocabulary:
+Expanded vocabulary with a mix of common and more advanced words.
+Use of synonyms and varied expressions.
+Clarity:
+Clear communication with the ability to express more nuanced ideas.
+Awareness of context for effective communication.
+
+Level 3: Advanced Sentences
+Grammar and Syntax:
+Mastery of complex sentence structures (e.g., subordinate clauses, participial phrases).
+Skillful use of rhetorical devices (e.g., parallelism, inversion).
+Varied sentence beginnings for stylistic effect.
+Vocabulary:
+Extensive and precise vocabulary.
+Effective use of domain-specific terminology.
+Ability to convey abstract and sophisticated concepts.
+Clarity:
+Clear communication of complex ideas.
+Use of rhetorical strategies to enhance persuasiveness or engagement.
+
+As users progress through each level, they can expect an increase in linguistic complexity and sophistication. These criteria provide a framework for gradually advancing the difficulty of generated sentences.
+`
 
 const INTERESTS = [
   'Music',
@@ -179,4 +222,4 @@ const INTERESTS = [
   'Financial Literacy',
 ]
 
-export { FONTS, THEME, LANGUAGES, INTERESTS, LEVELS }
+export { FONTS, THEME, LANGUAGES, INTERESTS, LEVELS, LEVEL_CRITERIA }
