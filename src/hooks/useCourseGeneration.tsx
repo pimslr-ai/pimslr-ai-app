@@ -1,7 +1,7 @@
 import { LEVEL_CRITERIA } from '../constants'
 import { getCompletion } from '../clients/inferences'
 import { generateSpeech } from '../clients/voices'
-import { Level, Course, Sentence } from '../types'
+import { Level, Course } from '../types'
 import { useState } from 'react'
 
 export default () => {
@@ -16,7 +16,7 @@ export default () => {
   const generate = async () => {
     setStatus({ stage: 'Generating course...', loading: true })
     console.log('Generating course...')
-    
+
     if (!info.language && !info.level && !info.topic) {
       throw Error('Course information incomplete: ' + JSON.stringify(info, null, 2))
     }
