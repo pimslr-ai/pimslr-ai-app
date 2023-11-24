@@ -26,7 +26,7 @@ export default () => {
       ${LEVEL_CRITERIA}
       
       For someone learning ${info.language}, can you generate a list of 10 sentences no more than 6 words per sentence for each complexity levels alongside their english translation, related to the following topic:
-      ${info.topic}.
+      \`${info.topic}\`.
       
       Could you provide a short title relating to the topic. 
       

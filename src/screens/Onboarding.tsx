@@ -7,6 +7,7 @@ import PageView from '../components/PageView'
 import ScreenView from '../components/ScreenView'
 import Dropdown from '../components/Dropdown'
 import useCourseGeneration from '../hooks/useCourseGeneration'
+import InteractiveInput from '../components/InteractiveInput'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
@@ -17,6 +18,7 @@ export default () => {
   const [pageCompleted, setPageCompleted] = useState(false)
 
   const [interests, setInterests] = useState<string[]>([])
+  const [fulltextEnabled, enableFulltext] = useState(false)
   const { info, setInfo, generate, status, course } = useCourseGeneration()
 
   const animation = useRef(new Animated.Value(0)).current
@@ -119,22 +121,42 @@ export default () => {
 
           <View style={styles.page}>
             <Text style={styles.title}>Tell us about yourself</Text>
-            <Text style={styles.subtitle}>Get lessons catered to your interests. Select at least 3.</Text>
+            <Text style={styles.subtitle}>
+              Get lessons catered to your interests.{' '}
+              {fulltextEnabled ? 'Write down your interests.' : 'Select at least 3.'}
+            </Text>
 
-            <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
-              <View style={styles.tags}>
-                {INTERESTS.map(interest => (
-                  <Tag
-                    key={interest}
-                    label={interest}
-                    onToggleOn={label => setInterests([...interests, label])}
-                    onToggleOff={label => setInterests(interests.filter(i => i !== label))}
-                  />
-                ))}
-              </View>
-            </ScrollView>
+            {!fulltextEnabled ? (
+              <>
+                <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
+                  <View style={styles.tags}>
+                    {INTERESTS.map(interest => (
+                      <Tag
+                        key={interest}
+                        label={interest}
+                        onToggleOn={label => setInterests([...interests, label])}
+                        onToggleOff={label => setInterests(interests.filter(i => i !== label))}
+                      />
+                    ))}
+                  </View>
+                </ScrollView>
+                <View style={styles.bottomBorder} />
+              </>
+            ) : (
+              <InteractiveInput
+                multiline
+                style={styles.input}
+                placeholder='I am fascinated by fising...'
+                onChange={console.log}
+              />
+            )}
 
-            <View style={styles.bottomBorder} />
+            <View style={styles.writeButtonWrapper}>
+              <SecondaryButton
+                onClick={() => enableFulltext(!fulltextEnabled)}
+                label={fulltextEnabled ? 'Select tags instead' : 'Write something instead'}
+              />
+            </View>
           </View>
 
           <View>
@@ -230,13 +252,17 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.POPPINS.REGULAR,
   },
   input: {
+    marginTop: 40,
     height: '50%',
-    marginTop: 50,
   },
   tagsWrapper: {
-    marginTop: 50,
-    height: '50%',
+    marginTop: 40,
+    height: '40%',
     padding: 8,
+  },
+  writeButtonWrapper: {
+    marginVertical: 20,
+    alignSelf: 'center',
   },
   bottomBorder: {
     borderBottomWidth: 1.5,
@@ -249,7 +275,6 @@ const styles = StyleSheet.create({
     flexWrap: 'wrap',
     gap: 16,
     paddingBottom: 32,
-    // justifyContent: 'center',
   },
   tag: {
     paddingVertical: 8,
