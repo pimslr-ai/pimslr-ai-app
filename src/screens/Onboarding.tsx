@@ -161,7 +161,7 @@ export default () => {
 
           <View>
             <Text style={styles.title}>Generate course</Text>
-            <Text style={styles.subtitle}>Here is your very first course unique to your interests.</Text>
+            <Text style={styles.subtitle}>Generate your very first course unique to your interests.</Text>
 
             <View style={{ justifyContent: 'center' }}>
               <Text>{status?.loading ? 'Loading...' : ''}</Text>
