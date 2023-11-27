@@ -1,14 +1,26 @@
 import { useState } from 'react'
 import { FONTS, LANGUAGES, THEME } from '../constants'
-import { View, Text, StyleSheet, TouchableOpacity, Dimensions } from 'react-native'
-import useSpeech from '../hooks/useSpeech'
+import { View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native'
+import useSpeech from '../hooks/useSpeechV2'
 import RNPickerSelect from 'react-native-picker-select'
+import { useNavigation } from '.'
 
 const screen = Dimensions.get('screen')
 
 export default () => {
-  const [lang, setLang] = useState<string | null>(null)
-  const { startRecording, stopRecording, recognition, hasFailed, isRecording, isLoading } = useSpeech(lang!)
+  const navigation = useNavigation()
+
+  const [language, setLanguage] = useState<string | null>(null)
+  const [reference, setReference] = useState<string | null>(null)
+  // prettier-ignore
+  const { 
+    startRecording, 
+    stopRecording, 
+    recognition,
+    hasFailed, 
+    isRecording, 
+    isLoading,
+  } = useSpeech(language!, reference!)
 
   function getColor(confidence: number): string {
     const colors = [
@@ -26,7 +38,7 @@ export default () => {
 
   return (
     <View style={styles.body}>
-      <View style={{ alignItems: 'center', width: '50%' }}>
+      <View style={{ alignItems: 'center', width: '50%', gap: 10 }}>
         <RNPickerSelect
           placeholder={{ label: 'Select a language', value: null }}
           style={{
@@ -34,8 +46,13 @@ export default () => {
             placeholder: styles.dropdownLabel,
             inputIOS: styles.dropdownLabel,
           }}
-          onValueChange={setLang}
+          onValueChange={setLanguage}
           items={LANGUAGES.map(code => ({ label: code, value: code }))}
+        />
+        <TextInput
+          style={styles.inputContainer}
+          onChangeText={setReference}
+          placeholder='Reference sentence'
         />
       </View>
 
@@ -49,24 +66,24 @@ export default () => {
               : hasFailed
               ? 'Recognition failed.'
               : recognition
-              ? recognition.words.map(w => (
-                  <Text key={w.word} style={{ color: getColor(w.confidence) }}>
-                    {w.word + ' '}
-                  </Text>
-                ))
+              ? 'results'
               : 'Waiting for input'}
           </Text>
         </View>
       </View>
 
       <TouchableOpacity
-        disabled={lang === null}
+        disabled={language === null}
         style={styles.button}
         onPress={isRecording ? stopRecording : startRecording}
       >
         <Text style={styles.buttonLabel}>
-          {lang === null ? 'Select a language first' : isRecording ? 'Stop recording' : 'Start recording'}
+          {language === null ? 'Select a language first' : isRecording ? 'Stop recording' : 'Start recording'}
         </Text>
+      </TouchableOpacity>
+
+      <TouchableOpacity onPress={() => navigation.navigate('speech:v1')}>
+        <Text style={styles.buttonLabelAlt}>To version 1</Text>
       </TouchableOpacity>
     </View>
   )
@@ -91,6 +108,12 @@ const styles = StyleSheet.create({
     textAlign: 'center',
     fontSize: 14,
     color: 'white',
+  },
+  buttonLabelAlt: {
+    fontFamily: FONTS.POPPINS.MEDIUM,
+    textAlign: 'center',
+    fontSize: 14,
+    color: 'black',
   },
   card: {
     width: screen.width,
@@ -121,6 +144,16 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   dropdownLabel: {
+    fontFamily: FONTS.POPPINS.REGULAR,
+    textAlign: 'center',
+    fontSize: 14,
+    color: 'black',
+  },
+  inputContainer: {
+    width: '100%',
+    backgroundColor: 'white',
+    paddingVertical: 15,
+    borderRadius: 10,
     fontFamily: FONTS.POPPINS.REGULAR,
     textAlign: 'center',
     fontSize: 14,
