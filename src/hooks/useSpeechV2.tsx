@@ -6,17 +6,17 @@ import { assessWithReference } from '../clients/speech'
 export default (language: string, reference: string) => {
   const { startRecording, stopRecording, audioRecording, isRecording } = useMic()
   const [state, setState] = useState<{
-    transcript?: string | null
     isLoading: boolean
+    assessement?: AssessmentResult | undefined
     hasFailed?: boolean
-  }>({ isLoading: false })
+  }>({ isLoading: false, hasFailed: false })
 
   useEffect(() => {
     if (audioRecording) {
-      setState({ transcript: null, isLoading: true })
+      setState({ assessement: undefined, isLoading: true })
 
       assessSpeech(audioRecording)
-        .then(data => setState({ transcript: data, isLoading: false, hasFailed: data === null }))
+        .then(data => setState({ assessement: data, isLoading: false, hasFailed: data === null }))
         .finally(() => FileSystem.deleteAsync(audioRecording!))
     }
   }, [audioRecording])
@@ -26,8 +26,7 @@ export default (language: string, reference: string) => {
       const audio = await FileSystem.readAsStringAsync(audioFile, {
         encoding: FileSystem.EncodingType.Base64,
       })
-      const response = await assessWithReference(language, reference, audio)
-      return response as string
+      return await assessWithReference(language, reference, audio)
     }
   }
 
@@ -36,7 +35,7 @@ export default (language: string, reference: string) => {
     stopRecording,
     isRecording,
     isLoading: state.isLoading,
-    recognition: state.transcript,
+    assessement: state.assessement,
     hasFailed: state.hasFailed,
   }
 }

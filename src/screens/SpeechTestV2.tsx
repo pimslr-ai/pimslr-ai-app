@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { FONTS, LANGUAGES, THEME } from '../constants'
 import { View, Text, StyleSheet, TouchableOpacity, Dimensions, TextInput } from 'react-native'
 import useSpeech from '../hooks/useSpeechV2'
@@ -10,13 +10,13 @@ const screen = Dimensions.get('screen')
 export default () => {
   const navigation = useNavigation()
 
-  const [language, setLanguage] = useState<string | null>(null)
-  const [reference, setReference] = useState<string | null>(null)
+  const [language, setLanguage] = useState<string | undefined>('en-US')
+  const [reference, setReference] = useState<string | undefined>('This is a sentence.')
   // prettier-ignore
   const { 
     startRecording, 
     stopRecording, 
-    recognition,
+    assessement,
     hasFailed, 
     isRecording, 
     isLoading,
@@ -36,9 +36,11 @@ export default () => {
     return colors[index]
   }
 
+  console.log(assessement)
+
   return (
     <View style={styles.body}>
-      <View style={{ alignItems: 'center', width: '50%', gap: 10 }}>
+      <View style={{ alignItems: 'center', width: '50%', gap: 20 }}>
         <RNPickerSelect
           placeholder={{ label: 'Select a language', value: null }}
           style={{
@@ -65,20 +67,28 @@ export default () => {
               ? 'Loading...'
               : hasFailed
               ? 'Recognition failed.'
-              : recognition
-              ? 'results'
-              : 'Waiting for input'}
+              : assessement
+              ? assessement.words.map(word => <WordToken {...word} />)
+              : !reference
+              ? 'Enter a reference sentence'
+              : reference}
           </Text>
         </View>
       </View>
 
       <TouchableOpacity
-        disabled={language === null}
+        disabled={!language || !reference}
         style={styles.button}
         onPress={isRecording ? stopRecording : startRecording}
       >
         <Text style={styles.buttonLabel}>
-          {language === null ? 'Select a language first' : isRecording ? 'Stop recording' : 'Start recording'}
+          {!language
+            ? 'Select a language'
+            : !reference
+            ? 'Enter reference text'
+            : isRecording
+            ? 'Stop recording'
+            : 'Start recording'}
         </Text>
       </TouchableOpacity>
 
@@ -87,6 +97,11 @@ export default () => {
       </TouchableOpacity>
     </View>
   )
+}
+
+const WordToken = (word: Word) => {
+  console.log(word)
+  return <Text>{word.word + ' '}</Text>
 }
 
 const styles = StyleSheet.create({
