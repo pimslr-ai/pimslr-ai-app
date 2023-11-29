@@ -69,8 +69,10 @@ export default () => {
               ? 'Recognition failed.'
               : assessement
               ? assessement.words.map(word => <WordToken {...word} />)
+              : !language
+              ? 'Select a language.'
               : !reference
-              ? 'Enter a reference sentence'
+              ? 'Enter a reference text.'
               : reference}
           </Text>
         </View>
