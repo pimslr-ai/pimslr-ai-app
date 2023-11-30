@@ -1,47 +1,61 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AVPlaybackStatusSuccess, Audio } from 'expo-av'
+import { cacheDirectory, writeAsStringAsync } from 'expo-file-system'
 
-export default () => {
-  const [state, setState] = useState<{
-    isPlaying: boolean
-    sound: Audio.Sound
-  }>({ isPlaying: false, sound: new Audio.Sound() })
+export default (base64: string) => {
+  const sound = useRef(new Audio.Sound()).current
+  const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
-    Audio.requestPermissionsAsync()
-    Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: false })
+    Audio.requestPermissionsAsync().then(() =>
+      Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      }),
+    )
 
-    state.sound.setOnPlaybackStatusUpdate(async status => {
+    sound.setOnPlaybackStatusUpdate(async status => {
       const success = status as AVPlaybackStatusSuccess
-
-      if (success.didJustFinish) {
-        setState(prev => ({ ...prev, isPlaying: false }))
-      }
+      setIsPlaying(success.isPlaying)
     })
   }, [])
 
-  const loadAudio = async (audioFile: any) => {
-    await state.sound.unloadAsync()
-    await state.sound.loadAsync(audioFile)
+  useEffect(() => {
+    loadSound()
+  }, [base64])
+
+  const loadSound = async () => {
+    const temporaryFile = `${cacheDirectory}_voice.m4a`
+    await writeAsStringAsync(temporaryFile, base64, { encoding: 'base64' })
+    await sound.loadAsync({ uri: temporaryFile })
   }
 
-  const playAudio = async () => {
-    await state.sound.setPositionAsync(0)
-    await state.sound.playAsync()
-    setState(prev => ({ ...prev, isPlaying: true }))
+  const playSound = async () => {
+    if (sound && !isPlaying) {
+      await sound.playAsync()
+    }
   }
 
-  const stopAudio = async () => {
-    if (state.isPlaying) {
-      await state.sound.stopAsync()
-      setState(prev => ({ ...prev, isPlaying: false }))
+  const stopSound = async () => {
+    if (sound && isPlaying) {
+      await sound.stopAsync()
+    }
+  }
+
+  const toggleSound = async () => {
+    if (sound) {
+      if (isPlaying) {
+        await sound.stopAsync()
+      } else {
+        await sound.playAsync()
+      }
     }
   }
 
   return {
-    playAudio,
-    stopAudio,
-    loadAudio,
-    isPlaying: state.isPlaying,
+    toggleSound,
+    playSound,
+    stopSound,
+    isPlaying,
   }
 }
