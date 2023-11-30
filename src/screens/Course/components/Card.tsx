@@ -1,26 +1,27 @@
 import { View, Text, StyleSheet } from 'react-native'
 import { FONTS } from '../../../constants'
+import { Assessment, Sentence } from '../../../types'
 
 interface CardProps {
   sentence: Sentence
   isCurrent: boolean
-  recognition?: Recognition
+  assessment?: Partial<Assessment>
   onSuccess?: () => void
 }
 
-export default ({ sentence, isCurrent, recognition, onSuccess }: CardProps) => {
+export default ({ sentence, isCurrent, assessment, onSuccess }: CardProps) => {
   return (
-    <View key={sentence.id} style={styles.container}>
-      <View key={sentence.id} style={styles.wrapper}>
+    <View style={styles.container}>
+      <View style={styles.wrapper}>
         <Text style={styles.translation}>
           <Sentence
             onSuccess={onSuccess!}
             isCurrent={isCurrent}
-            translation={sentence?.translation!}
-            recognition={recognition!}
+            translation={sentence?.sentence}
+            assessment={assessment!}
           />
         </Text>
-        <Text style={styles.original}>{sentence.original}</Text>
+        <Text style={styles.original}>{sentence.english}</Text>
       </View>
     </View>
   )
@@ -29,12 +30,12 @@ export default ({ sentence, isCurrent, recognition, onSuccess }: CardProps) => {
 interface SentenceProps {
   isCurrent: boolean
   translation: string
-  recognition?: Recognition
+  assessment?: Partial<Assessment>
   onSuccess?: () => void
 }
 
-const Sentence = ({ translation, isCurrent, recognition, onSuccess }: SentenceProps) => {
-  if (recognition && isCurrent) {
+const Sentence = ({ translation, isCurrent, assessment, onSuccess }: SentenceProps) => {
+  if (assessment && isCurrent) {
     const strip = (input: string) => {
       return input
         .replace(/[.,\/#!$%\^&\*;:{}=\\?_`~()]/g, '')
@@ -64,7 +65,7 @@ const Sentence = ({ translation, isCurrent, recognition, onSuccess }: SentencePr
     }
 
     const originalWords = translation.split(' ').map(w => ({ word: w, stripped: strip(w) }))
-    const scoredWords = recognition?.words.map(w => ({ word: strip(w.word), score: w.confidence }))
+    const scoredWords = assessment?.words?.map(w => ({ word: strip(w.word), score: w.accuracyScore }))
 
     const matched = isMatch(
       originalWords.filter(w => w.stripped !== '').map(w => w.stripped),

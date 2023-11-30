@@ -1,6 +1,7 @@
 import { ViewStyle, TouchableOpacity, View, StyleSheet, Text } from 'react-native'
 import { useNavigation } from '../..'
 import { FONTS } from '../../../constants'
+import { Course } from '../../../types'
 
 export default (course: Course) => {
   const navigation = useNavigation()
@@ -32,10 +33,9 @@ export default (course: Course) => {
   return (
     <TouchableOpacity onPress={() => navigation.navigate('course:home')} style={styles.container}>
       <View style={styles.courseCard}>
-        <Text style={styles.courseTitle}>{course.scenario.title}</Text>
-        <Text style={styles.courseDate}>{formatHumanDateTime(course.createdAt)}</Text>
+        <Text style={styles.courseTitle}>{course.title}</Text>
         <View style={styles.courseDetails}>
-          <Text style={styles.tag}>{course.language.name}</Text>
+          <Text style={styles.tag}>{course.language}</Text>
           <Text style={styles.tag}>85% native speaking</Text>
           <Text style={styles.tag}>6/10 completed</Text>
         </View>

@@ -1,5 +1,18 @@
 import { useEffect, useState } from 'react'
 import { Audio } from 'expo-av'
+import { RecordingOptions } from 'expo-av/build/Audio'
+
+const recordingOptions: RecordingOptions = {
+  ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
+  android: {
+    ...Audio.RecordingOptionsPresets.HIGH_QUALITY.android,
+    extension: '.wav',
+  },
+  ios: {
+    ...Audio.RecordingOptionsPresets.HIGH_QUALITY.ios,
+    extension: '.wav',
+  },
+}
 
 export default () => {
   const [state, setState] = useState<{
@@ -9,14 +22,15 @@ export default () => {
   }>({})
 
   useEffect(() => {
-    Audio.requestPermissionsAsync()
-    Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
+    Audio.requestPermissionsAsync().then(() =>
+      Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true }),
+    )
   }, [])
 
   const startRecording = async () => {
     if (!state.recording) {
       Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      const { recording } = await Audio.Recording.createAsync(recordingOptions)
       recording.setOnRecordingStatusUpdate(status => {
         setState(prev => ({ ...prev, amplitude: status.metering }))
       })

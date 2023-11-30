@@ -1,13 +1,12 @@
-import { TEST_COURSE } from '../../constants'
-import { StyleSheet, View, ScrollView } from 'react-native'
+import { View, ScrollView } from 'react-native'
 import SectionView from '../../components/SectionView'
 import ScreenView from '../../components/ScreenView'
 import Logo from '../../components/Logo'
 import CourseCard from './components/CourseCard'
+import { styles } from './style'
 
 export default () => {
   // const { courses } = useCourses()
-  const courses = [TEST_COURSE]
 
   return (
     <ScreenView>
@@ -65,13 +64,3 @@ export default () => {
     </ScreenView>
   )
 }
-
-const styles = StyleSheet.create({
-  header: {
-    marginTop: 50,
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    flexDirection: 'row',
-    padding: 24,
-  },
-})
