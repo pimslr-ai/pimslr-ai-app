@@ -31,24 +31,24 @@ export default (base64: string) => {
   }
 
   const playSound = async () => {
-    if (sound && !isPlaying) {
+    if (!isPlaying) {
+      await sound.setPositionAsync(0)
       await sound.playAsync()
     }
   }
 
   const stopSound = async () => {
-    if (sound && isPlaying) {
+    if (isPlaying) {
       await sound.stopAsync()
     }
   }
 
   const toggleSound = async () => {
-    if (sound) {
-      if (isPlaying) {
-        await sound.stopAsync()
-      } else {
-        await sound.playAsync()
-      }
+    if (isPlaying) {
+      await sound.stopAsync()
+    } else {
+      await sound.setPositionAsync(0)
+      await sound.playAsync()
     }
   }
 
