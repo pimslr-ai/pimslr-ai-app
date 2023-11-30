@@ -1,58 +1,71 @@
 import { useEffect, useState } from 'react'
 import { Audio } from 'expo-av'
-import { RecordingOptions } from 'expo-av/build/Audio'
+import { AndroidOutputFormat, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio'
 
 const recordingOptions: RecordingOptions = {
   ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
   android: {
     ...Audio.RecordingOptionsPresets.HIGH_QUALITY.android,
     extension: '.wav',
+    outputFormat: AndroidOutputFormat.DEFAULT,
   },
   ios: {
     ...Audio.RecordingOptionsPresets.HIGH_QUALITY.ios,
     extension: '.wav',
+    outputFormat: IOSOutputFormat.LINEARPCM,
   },
 }
 
 export default () => {
-  const [state, setState] = useState<{
-    recording?: Audio.Recording
-    uri?: string
-    amplitude?: number
-  }>({})
+  const [recording, setRecording] = useState<Audio.Recording>()
+  const [isRecording, setIsRecording] = useState(false)
 
   useEffect(() => {
-    Audio.requestPermissionsAsync().then(() =>
-      Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true }),
-    )
+    Audio.requestPermissionsAsync().then(() => {
+      Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      })
+    })
   }, [])
 
   const startRecording = async () => {
-    if (!state.recording) {
-      Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await Audio.Recording.createAsync(recordingOptions)
-      recording.setOnRecordingStatusUpdate(status => {
-        setState(prev => ({ ...prev, amplitude: status.metering }))
-      })
-      setState({ recording, uri: undefined })
+    if (!isRecording) {
+      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      setRecording(recording)
+      setIsRecording(true)
     }
   }
 
   const stopRecording = async () => {
-    if (state.recording) {
-      setState({ recording: undefined })
-      await state.recording.stopAndUnloadAsync()
-      await Audio.setAudioModeAsync({ allowsRecordingIOS: false })
-      const uri = state.recording?.getURI()!
-      setState({ uri })
+    if (isRecording) {
+      setTimeout(async () => {
+        await recording?.stopAndUnloadAsync()
+        setRecording(undefined)
+        setIsRecording(false)
+      }, 500)
+    }
+  }
+
+  const toggleRecording = async () => {
+    if (!isRecording) {
+      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      setRecording(recording)
+      setIsRecording(true)
+    } else {
+      setTimeout(async () => {
+        await recording?.stopAndUnloadAsync()
+        setRecording(undefined)
+        setIsRecording(false)
+      }, 500)
     }
   }
 
   return {
+    toggleRecording,
     startRecording,
     stopRecording,
-    audioRecording: state.uri,
-    isRecording: !!state.recording,
-    amplitude: state.amplitude,
+    isRecording,
+    recording: recording?.getURI(),
   }
 }
