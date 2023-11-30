@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
-import { Audio } from 'expo-av'
 import { AndroidOutputFormat, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio'
+import { Audio } from 'expo-av'
 
 const recordingOptions: RecordingOptions = {
   ...Audio.RecordingOptionsPresets.HIGH_QUALITY,

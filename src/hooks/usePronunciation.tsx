@@ -1,47 +1,47 @@
 import { useEffect, useState } from 'react'
-import * as FileSystem from 'expo-file-system'
+import { readAsStringAsync, deleteAsync } from 'expo-file-system'
 import { Assessment } from '../types'
 import { getAssessement } from '../clients/pronunciation'
 import useMicrophone from './useMicrophone'
 
 export default (language: string, reference: string) => {
-  const { startRecording, stopRecording, audioRecording, isRecording } = useMicrophone()
-  const [state, setState] = useState<{
-    isLoading: boolean
-    assessement?: Partial<Assessment>
-    hasFailed?: boolean
-  }>({ isLoading: false, hasFailed: false })
+  const { toggleRecording, startRecording, stopRecording, isRecording, recording } = useMicrophone()
+  const [isAssessing, setIsLoading] = useState(false)
+  const [hasFailed, setIsAssessing] = useState(false)
+  const [assessment, setAssessment] = useState<Assessment | undefined>(undefined)
 
   useEffect(() => {
-    if (audioRecording) {
-      setState({ assessement: undefined, isLoading: true })
-
-      assessSpeech(audioRecording)
-        .then(assessement => setState({ assessement, isLoading: false, hasFailed: assessement === null }))
-        .finally(() => FileSystem.deleteAsync(audioRecording))
+    if (recording) {
+      setIsAssessing(false)
+      setIsLoading(true)
+      assessSpeech(recording)
+        .then(setAssessment)
+        .catch(() => setIsAssessing(true))
+        // .finally(() => deleteAsync(recording))
+      setIsLoading(false)
     }
-  }, [audioRecording])
+  }, [recording])
 
-  const assessSpeech = async (audioFile: string) => {
+  console.log('isAssessing', isAssessing)
+  console.log('isRecording', isRecording)
+
+  const assessSpeech = async (recording: string) => {
     if (language && reference) {
-      const audio = await FileSystem.readAsStringAsync(audioFile, {
-        encoding: FileSystem.EncodingType.Base64,
-      })
-      return await getAssessement(language, reference, audio)
+      const audio = await readAsStringAsync(recording, { encoding: 'base64' })
+      console.log(audio)
+      console.log(recording)
+      // return await getAssessement(language, reference, audio)
+      return undefined
     }
-  }
-
-  const clearAssessment = () => {
-    setState(prev => ({ ...prev, assessement: undefined }))
   }
 
   return {
+    toggleRecording,
     startRecording,
     stopRecording,
-    clearAssessment,
     isRecording,
-    isLoading: state.isLoading,
-    assessement: state.assessement,
-    hasFailed: state.hasFailed,
+    isAssessing,
+    assessment,
+    hasFailed,
   }
 }
