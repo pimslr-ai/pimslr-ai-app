@@ -40,10 +40,10 @@ export default () => {
 
   const stopRecording = async () => {
     if (isRecording) {
+      setIsRecording(false)
       setTimeout(async () => {
         await recorder?.stopAndUnloadAsync()
         setRecorder(undefined)
-        setIsRecording(false)
         setRecording(recorder?.getURI())
       }, 500)
     }
