@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { AndroidOutputFormat, IOSOutputFormat, RecordingOptions } from 'expo-av/build/Audio'
 import { Audio } from 'expo-av'
 
@@ -32,29 +32,47 @@ export default () => {
 
   const startRecording = async () => {
     if (!isRecording) {
-      const { recording } = await Audio.Recording.createAsync(recordingOptions)
-      setRecorder(recording)
       setIsRecording(true)
+      const recorder = new Audio.Recording()
+      await recorder.prepareToRecordAsync(recordingOptions)
+      await recorder.startAsync()
+      setRecorder(recorder)
     }
   }
 
   const stopRecording = async () => {
-    if (isRecording) {
+    if (isRecording && recorder) {
       setIsRecording(false)
       setTimeout(async () => {
-        await recorder?.stopAndUnloadAsync()
+        await recorder.stopAndUnloadAsync()
         setRecorder(undefined)
-        setRecording(recorder?.getURI())
+        setRecording(recorder.getURI())
       }, 500)
     }
   }
 
   const toggleRecording = async () => {
-    if (!isRecording) {
-      await startRecording()
-    } else {
-      await stopRecording()
-    }
+    setIsRecording(isRecording => {
+      if (isRecording) {
+        setRecorder(recorder => {
+          setTimeout(() => {
+            recorder?.stopAndUnloadAsync().then(() => {
+              setRecording(recorder.getURI())
+            })
+          }, 500)
+          return undefined
+        })
+      } else {
+        setRecorder(_ => {
+          const recorder = new Audio.Recording()
+          recorder.prepareToRecordAsync(recordingOptions).then(() => {
+            recorder.startAsync()
+          })
+          return recorder
+        })
+      }
+      return !isRecording
+    })
   }
 
   return {

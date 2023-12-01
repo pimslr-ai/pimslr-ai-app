@@ -7,16 +7,19 @@ export default (base64: string) => {
   const [isPlaying, setIsPlaying] = useState(false)
 
   useEffect(() => {
-    Audio.requestPermissionsAsync().then(() =>
+    Audio.requestPermissionsAsync().then(() => {
       Audio.setAudioModeAsync({
         allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
-      }),
-    )
+      })
+    })
 
     sound.setOnPlaybackStatusUpdate(async status => {
       const success = status as AVPlaybackStatusSuccess
-      setIsPlaying(success.isPlaying)
+
+      if (success.didJustFinish) {
+        setIsPlaying(false)
+      }
     })
   }, [])
 
@@ -32,24 +35,27 @@ export default (base64: string) => {
 
   const playSound = async () => {
     if (!isPlaying) {
-      await sound.setPositionAsync(0)
-      await sound.playAsync()
+      setIsPlaying(true)
+      await sound.replayAsync()
     }
   }
 
   const stopSound = async () => {
     if (isPlaying) {
+      setIsPlaying(false)
       await sound.stopAsync()
     }
   }
 
   const toggleSound = async () => {
-    if (isPlaying) {
-      await sound.stopAsync()
-    } else {
-      await sound.setPositionAsync(0)
-      await sound.playAsync()
-    }
+    setIsPlaying(isPlaying => {
+      if (isPlaying) {
+        sound.stopAsync()
+      } else {
+        sound.replayAsync()
+      }
+      return !isPlaying
+    })
   }
 
   return {
