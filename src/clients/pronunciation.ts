@@ -1,7 +1,7 @@
 import axios from 'axios'
-import { Assessment, Voice } from '../types'
+import { Assessment } from '../types'
 
-export const getAssessement = async (
+export const assessAudio = async (
   language: string,
   reference: string,
   audio: string,
