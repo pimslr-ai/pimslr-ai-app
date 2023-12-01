@@ -17,8 +17,9 @@ const recordingOptions: RecordingOptions = {
 }
 
 export default () => {
-  const [recording, setRecording] = useState<Audio.Recording>()
+  const [recorder, setRecorder] = useState<Audio.Recording>()
   const [isRecording, setIsRecording] = useState(false)
+  const [recording, setRecording] = useState<string | null>()
 
   useEffect(() => {
     Audio.requestPermissionsAsync().then(() => {
@@ -31,8 +32,8 @@ export default () => {
 
   const startRecording = async () => {
     if (!isRecording) {
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
-      setRecording(recording)
+      const { recording } = await Audio.Recording.createAsync(recordingOptions)
+      setRecorder(recording)
       setIsRecording(true)
     }
   }
@@ -40,24 +41,19 @@ export default () => {
   const stopRecording = async () => {
     if (isRecording) {
       setTimeout(async () => {
-        await recording?.stopAndUnloadAsync()
-        setRecording(undefined)
+        await recorder?.stopAndUnloadAsync()
+        setRecorder(undefined)
         setIsRecording(false)
+        setRecording(recorder?.getURI())
       }, 500)
     }
   }
 
   const toggleRecording = async () => {
     if (!isRecording) {
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
-      setRecording(recording)
-      setIsRecording(true)
+      await startRecording()
     } else {
-      setTimeout(async () => {
-        await recording?.stopAndUnloadAsync()
-        setRecording(undefined)
-        setIsRecording(false)
-      }, 500)
+      await stopRecording()
     }
   }
 
@@ -66,6 +62,6 @@ export default () => {
     startRecording,
     stopRecording,
     isRecording,
-    recording: recording?.getURI(),
+    recording,
   }
 }

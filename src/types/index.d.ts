@@ -13,7 +13,7 @@ export interface Sentence {
   sentence: string
   english: string
   level: Level
-  voice?: Voice
+  voice: Voice
   score?: Score
 }
 
