@@ -10,14 +10,14 @@ export default (props: SecondaryButtonProps) => {
   const { noticeMe, hide, labelStyle, containerStyle } = props
 
   const labelStyle_ = {
-    ...labelStyle,
     fontFamily: noticeMe ? FONTS.POPPINS.MEDIUM : FONTS.POPPINS.SEMI_BOLD,
     color: hide ?? false ? 'transparent' : noticeMe ? 'white' : 'black',
+    ...labelStyle,
   }
 
   const containerStyle_ = {
-    ...containerStyle,
     backgroundColor: !noticeMe || (hide ?? false) ? 'transparent' : THEME.ACCENT,
+    ...containerStyle,
   }
 
   return <Button {...props} disable={hide} labelStyle={labelStyle_} containerStyle={containerStyle_} />
