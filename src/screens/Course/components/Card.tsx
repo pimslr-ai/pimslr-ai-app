@@ -1,80 +1,19 @@
 import { FONTS } from '../../../constants'
 import { View, Text, StyleSheet } from 'react-native'
 import { Sentence } from '../../../types'
-import useAudio from '../../../hooks/useAudio'
-import usePronunciation from '../../../hooks/usePronunciation'
-import SecondaryButton from '../../../components/SecondaryButton'
-import { Ref, forwardRef, useEffect, useImperativeHandle } from 'react'
+import { Dimensions } from 'react-native'
+
+const { width } = Dimensions.get('screen')
 
 interface CardProps {
-  language: string
-  sentence: Sentence
-  onSuccess?: () => void
-  onSound?: (isPlaying: boolean) => void
-  onRecording?: (isRecording: boolean) => void
-  onAssessment?: (isAssessing: boolean) => void
+  sentence: Partial<Sentence>
 }
 
-export interface CardRef {
-  toggleRecording: () => void
-  toggleSound: () => void
-}
-
-const Card = ({ language, sentence, onSound, onRecording, onAssessment }: CardProps, ref: Ref<CardRef>) => {
-  console.log(sentence.sentence, ref)
-  const { toggleSound, isPlaying } = useAudio(sentence.voice.audio)
-  const { toggleRecording, isRecording, isAssessing, assessment } = usePronunciation(
-    language,
-    sentence.sentence,
-  )
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      toggleRecording,
-      toggleSound,
-    }),
-    [],
-  )
-
-  useEffect(() => {
-    if (onSound) {
-      onSound(isPlaying)
-    }
-  }, [isPlaying])
-
-  useEffect(() => {
-    if (onRecording) {
-      onRecording(isRecording)
-    }
-  }, [isRecording])
-
-  useEffect(() => {
-    if (onAssessment) {
-      onAssessment(isAssessing)
-    }
-  }, [isAssessing])
-
-  useEffect(() => {
-    if (assessment) {
-      console.log(JSON.stringify(assessment, null, 2))
-    }
-  }, [assessment])
-
+export default ({ sentence }: CardProps) => {
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.content}>
-          <SecondaryButton
-            label='Record'
-            labelStyle={{ color: isRecording ? 'red' : 'black' }}
-            onClick={toggleRecording}
-          />
-          <SecondaryButton
-            label='Audio'
-            labelStyle={{ color: isPlaying ? 'red' : 'black' }}
-            onClick={toggleSound}
-          />
           <Text style={styles.translation}>{sentence.sentence}</Text>
           <Text style={styles.original}>{sentence.english}</Text>
         </View>
@@ -83,12 +22,11 @@ const Card = ({ language, sentence, onSound, onRecording, onAssessment }: CardPr
   )
 }
 
-export default forwardRef<CardRef, CardProps>(Card)
-
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
     paddingVertical: 32,
+    width: width,
   },
   wrapper: {
     shadowOffset: { width: 0, height: 10 },
