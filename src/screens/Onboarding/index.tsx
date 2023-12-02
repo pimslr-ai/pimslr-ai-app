@@ -124,7 +124,7 @@ export default () => {
           <View style={styles.page}>
             <Text style={styles.title}>Tell us about yourself</Text>
             <Text style={styles.subtitle}>
-              Get lessons catered to your interests.{' '}
+              Get lessons catered to your interests.
               {freetextEnabled ? 'Write down your interests.' : 'Select at least 3.'}
             </Text>
 
