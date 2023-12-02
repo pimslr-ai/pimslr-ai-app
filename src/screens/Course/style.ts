@@ -35,22 +35,7 @@ export const styles = StyleSheet.create({
     paddingHorizontal: 30,
     marginVertical: 40,
   },
-  card: {
-    shadowOffset: { width: 0, height: 10 },
-    shadowOpacity: 0.1,
-    shadowRadius: 20,
-    padding: 16,
-  },
-  cardContent: {
-    elevation: 14,
-    borderRadius: 20,
-    width: '100%',
-    backgroundColor: 'white',
-    overflow: 'hidden',
-    paddingVertical: 70,
-    paddingHorizontal: 32,
-  },
-  cardControls: {
+  controls: {
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -59,7 +44,7 @@ export const styles = StyleSheet.create({
     marginTop: 20,
     paddingHorizontal: 30,
   },
-  cardControlPagination: {
+  controlPagination: {
     color: THEME.COLOR,
     fontSize: 14,
     alignSelf: 'center',
