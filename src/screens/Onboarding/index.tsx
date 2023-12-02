@@ -20,7 +20,7 @@ export default () => {
   const [pageCompleted, setPageCompleted] = useState(false)
 
   const [interests, setInterests] = useState<string[]>([])
-  const [fulltextEnabled, enableFulltext] = useState(false)
+  const [freetextEnabled, enableFreetext] = useState(false)
   const { info, setInfo, generate, status, course } = useCourseGeneration()
 
   const animation = useRef(new Animated.Value(0)).current
@@ -36,8 +36,8 @@ export default () => {
         setPageCompleted(!!info.level)
         break
       case 3:
-        setSkippable(true)
-        setPageCompleted(interests.length >= 3)
+        setSkippable(false)
+        setPageCompleted(interests.length > 2 || (freetextEnabled && interests.length > 0))
         break
       case 4:
         setSkippable(false)
@@ -58,7 +58,7 @@ export default () => {
   }, [info.level])
 
   useEffect(() => {
-    setPageCompleted(interests.length >= 3)
+    setPageCompleted(interests.length > 2 || (freetextEnabled && interests.length > 0))
   }, [interests])
 
   const showExplanations = () => {
@@ -125,10 +125,10 @@ export default () => {
             <Text style={styles.title}>Tell us about yourself</Text>
             <Text style={styles.subtitle}>
               Get lessons catered to your interests.{' '}
-              {fulltextEnabled ? 'Write down your interests.' : 'Select at least 3.'}
+              {freetextEnabled ? 'Write down your interests.' : 'Select at least 3.'}
             </Text>
 
-            {!fulltextEnabled ? (
+            {!freetextEnabled ? (
               <>
                 <ScrollView style={styles.tagsWrapper} showsVerticalScrollIndicator={false}>
                   <View style={styles.tags}>
@@ -149,14 +149,14 @@ export default () => {
                 multiline
                 style={styles.input}
                 placeholder='I am fascinated by fising...'
-                onChange={console.log}
+                onChange={input => setInterests([input])}
               />
             )}
 
             <View style={styles.writeButtonWrapper}>
               <SecondaryButton
-                onClick={() => enableFulltext(!fulltextEnabled)}
-                label={fulltextEnabled ? 'Select tags instead' : 'Write something instead'}
+                onClick={() => enableFreetext(!freetextEnabled)}
+                label={freetextEnabled ? 'Select tags instead' : 'Write something instead'}
               />
             </View>
           </View>
@@ -166,9 +166,8 @@ export default () => {
             <Text style={styles.subtitle}>Generate your very first course unique to your interests.</Text>
 
             <View style={{ justifyContent: 'center' }}>
-              <Text>{status?.isLoading && status.stage?.step}</Text>
               <Text>
-                {status.stage?.step}/{status?.stage?.count}
+                {status.stage?.step}/{status?.stage?.count}: {status?.isLoading && status.stage?.label}
               </Text>
               <Text>{course && JSON.stringify(course, null, 2)}</Text>
             </View>
