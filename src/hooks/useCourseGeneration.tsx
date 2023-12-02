@@ -5,12 +5,12 @@ import { Level, Course } from '../types'
 import { useState } from 'react'
 
 interface Status {
+  isLoading: boolean
   stage?: {
     step: number
     count: number
     label: string
   }
-  loading: boolean
 }
 
 interface Info {
@@ -20,13 +20,13 @@ interface Info {
 }
 
 export default () => {
-  const [status, setStatus] = useState<Status>({ loading: false })
+  const [status, setStatus] = useState<Status>({ isLoading: false })
   const [course, setCourse] = useState<Course | null>(null)
   const [info, setInfo] = useState<Info>({})
 
   const generate = async () => {
     console.log('Generating course...')
-    setStatus({ stage: { step: 1, count: 1, label: 'Generating course...' }, loading: true })
+    setStatus({ stage: { step: 1, count: 1, label: 'Generating course...' }, isLoading: true })
 
     if (!info.language && !info.level && !info.topic) {
       throw Error('Course information incomplete: ' + JSON.stringify(info, null, 2))
@@ -66,7 +66,7 @@ export default () => {
 
     for (let i = 0; i < count; i += 1) {
       console.log(`Generating ${i + 1} of ${count} voices...`)
-      setStatus({ stage: { step: i + 1, count, label: `Generating voices...` }, loading: true })
+      setStatus({ stage: { step: i + 1, count, label: `Generating voices...` }, isLoading: true })
       // @ts-ignore
       const sentence = course[level][i].sentence
       // @ts-ignore
@@ -74,7 +74,7 @@ export default () => {
     }
 
     console.log('Course generated.')
-    setStatus({ stage: undefined, loading: false })
+    setStatus({ stage: undefined, isLoading: false })
     setCourse(course)
   }
 
