@@ -7,9 +7,10 @@ interface AnimatedButtonProps {
   icon: string
   onClick?: () => void
   toggle?: boolean
+  disable?: boolean
 }
 
-export default ({ icon, onClick, toggle }: AnimatedButtonProps) => {
+export default ({ icon, onClick, toggle, disable }: AnimatedButtonProps) => {
   const animation = useRef(new Animated.Value(0)).current
 
   useEffect(() => {
@@ -30,17 +31,19 @@ export default ({ icon, onClick, toggle }: AnimatedButtonProps) => {
     Animated.timing(animation, {
       duration: 200,
       toValue: toggle ? 1 : 0,
-      useNativeDriver: true,
+      useNativeDriver: false,
     }).start()
   }
 
   return (
     <Button
+      disable={disable}
       icon={icon}
-      onClick={onClick}
+      onClick={() => (!disable ? onClick!() : null)}
       labelStyle={{ color: toggle ? 'white' : 'grey' }}
       containerStyle={{
         ...styles.courseControlButton,
+        // opacity: disable ? 0.7 : 1,
         transform: [{ scale }],
         backgroundColor,
       }}
