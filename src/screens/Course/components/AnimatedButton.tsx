@@ -43,7 +43,7 @@ export default ({ icon, onClick, toggle, disable }: AnimatedButtonProps) => {
       labelStyle={{ color: toggle ? 'white' : 'grey' }}
       containerStyle={{
         ...styles.courseControlButton,
-        // opacity: disable ? 0.7 : 1,
+        opacity: disable ? 0.7 : 1,
         transform: [{ scale }],
         backgroundColor,
       }}

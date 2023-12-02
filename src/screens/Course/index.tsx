@@ -66,7 +66,7 @@ export default () => {
 
   useEffect(() => {
     if (isReady) {
-      toggleSound()
+      setTimeout(toggleSound, 250)
     }
   }, [isReady])
 
@@ -128,8 +128,9 @@ export default () => {
               icon={isAssessing ? 'loop' : isRecording ? 'stop' : 'mic'}
               onClick={toggleRecording}
               toggle={!isPlaying}
+              disable={isLoading}
             />
-            <AnimatedButton icon='star' />
+            <AnimatedButton icon='star' disable={isLoading} />
           </View>
         )}
       </View>
