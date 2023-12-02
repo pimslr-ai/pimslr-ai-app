@@ -1,89 +1,68 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { View, Text } from 'react-native'
+import { Sentence } from '../../types'
 import { styles } from './style'
 import { useNavigation } from '../'
-import usePronunciation from '../../hooks/usePronunciation'
-import useAudio from '../../hooks/useAudio'
+import { course } from './test'
+import Card from './components/Card'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import ScreenView from '../../components/ScreenView'
-import PageView from '../../components/PageView'
 import ConfettiCannon from '../../components/ConfettiCannon'
 import AnimatedButton from './components/AnimatedButton'
-import Card from './components/Card'
-import { Course, Sentence } from '../../types'
+import useAudio from '../../hooks/useAudio'
+import usePronunciation from '../../hooks/usePronunciation'
+import HorizontalPageView, { HorizontalPageViewRef } from '../../components/HorizontalPageView'
 
 export default () => {
   const navigation = useNavigation()
-
-  const course: Partial<Course> = {}
-  const [sentences, setSentences] = useState<Sentence[]>([])
-
   const [cannon, setCannon] = useState<ConfettiCannon | null>()
-  const [pageView, setPageView] = useState<PageView | null>()
-  const [pageNumber, setPageNumber] = useState<number>(1)
   const [isReady, setIsReady] = useState(false)
+  const [sentences, setSentences] = useState<Sentence[]>()
+  const [pageIndex, setPageIndex] = useState(0)
+  const pageView = useRef<HorizontalPageViewRef>(null)
 
   // prettier-ignore
   const { 
+    loadSound, 
+    toggleSound, 
     isPlaying, 
-    loadAudio, 
-    playAudio, 
-    stopAudio 
+    isLoading 
   } = useAudio()
-
   // prettier-ignore
   const { 
-    startRecording, 
-    stopRecording, 
-    clearAssessment, 
-    assessement, 
+    setReference, 
+    toggleRecording, 
     isRecording, 
-    isLoading, 
-  } = usePronunciation('fr-FR', 'reference')
+    isAssessing,
+    assessment 
+  } = usePronunciation(course.language)
+
+  // prettier-ignore
+  const isStateBlocked = [
+    isPlaying, 
+    isAssessing, 
+    isRecording, 
+    isLoading].some(s => s)
 
   useEffect(() => {
-    if (isReady) {
-      // @ts-ignore
-      setSentences(course[course.currentLevel as string])
-
-      // const selectedSentence = course!.sentences[pageNumber - 1]
-      // const audio = audios[selectedSentence.audio - 1!]
-      // loadAudio(audio).then(playAudio)
-      // clearAssessment()
+    if (assessment) {
+      console.log(JSON.stringify(assessment, null, 2))
     }
-  }, [isReady, pageNumber])
+  }, [assessment])
 
-  const toggleRecording = () => {
-    clearAssessment()
+  useEffect(() => {
+    // @ts-ignore
+    setSentences(course[course.currentLevel as string])
+  }, [])
 
-    if (isPlaying) {
-      stopAudio()
+  useEffect(() => {
+    if (sentences) {
+      const currentSentence = sentences[pageIndex]
+      setReference(currentSentence.english)
+      loadSound(currentSentence.voice.audio)
     }
-    if (isRecording) {
-      stopRecording()
-    } else {
-      startRecording()
-    }
-  }
-
-  const toggleAudio = () => {
-    clearAssessment()
-
-    if (isRecording) {
-      stopRecording()
-    }
-    if (isPlaying) {
-      stopAudio()
-    } else {
-      playAudio()
-    }
-  }
-
-  const handleClose = () => {
-    stopAudio()
-    navigation.navigate('dashboard')
-  }
+  }, [sentences, pageIndex])
 
   return (
     <ScreenView>
@@ -93,74 +72,56 @@ export default () => {
         <View style={styles.header}>
           <SecondaryButton
             icon='close'
-            onClick={handleClose}
+            onClick={() => navigation.navigate('dashboard')}
             containerStyle={{ transform: [{ scale: 1.4 }] }}
           />
-          {/* <SecondaryButton
-              icon='edit'
-              label='Refine Scenario'
-              noticeMe
-              labelFirst
-              onClick={() => navigation.navigate('course:refine_scenario', { courseId })}
-            /> */}
         </View>
 
-        <Text style={styles.title}>{course?.title}</Text>
+        <Text style={styles.title}>{course.title}</Text>
 
         <View>
-          <PageView ref={setPageView} onPageChange={setPageNumber}>
+          <HorizontalPageView ref={pageView} onPageTurn={setPageIndex}>
             {sentences?.map((sentence, i) => (
-              <Card
-                key={i}
-                isCurrent={pageNumber - 1 === i}
-                sentence={sentence}
-                assessment={assessement}
-                onSuccess={cannon?.shoot}
-              />
+              <Card key={i} sentence={sentence} />
             ))}
-          </PageView>
+          </HorizontalPageView>
 
           {isReady && (
-            <View style={styles.cardControls}>
+            <View style={styles.controls}>
               <SecondaryButton
                 label='Back'
-                hide={pageNumber <= 1}
                 labelStyle={{ opacity: 0.7 }}
-                onClick={pageView?.turnPrevious}
-                disable={isPlaying}
+                hide={pageIndex <= 0}
+                onClick={() => pageView.current?.turnTo(pageIndex - 1)}
+                disable={isStateBlocked}
               />
-              <Text style={styles.cardControlPagination}>
-                {pageNumber}/{sentences.length}
+              <Text style={styles.controlPagination}>
+                {pageIndex + 1}/{pageView.current?.pageCount!}
               </Text>
               <SecondaryButton
                 label='Next'
-                hide={pageNumber >= sentences.length}
                 labelStyle={{ opacity: 0.7 }}
-                onClick={pageView?.turnNext}
-                disable={isPlaying}
+                hide={pageIndex >= pageView.current?.pageCount! - 1}
+                onClick={() => pageView.current?.turnTo(pageIndex + 1)}
+                disable={isStateBlocked}
               />
             </View>
           )}
         </View>
 
         {!isReady ? (
-          <>
-            <Text style={{ bottom: 150, textAlign: 'center', position: 'absolute', width: '100%' }}>
-              Please disable silent mode 😊
-            </Text>
-            <PrimaryButton
-              label='Start!'
-              containerStyle={styles.startButton}
-              onClick={() => setIsReady(true)}
-            />
-          </>
+          <PrimaryButton
+            label='Start!'
+            containerStyle={styles.startButton}
+            onClick={() => setIsReady(true)}
+          />
         ) : (
           <View style={styles.courseControls}>
-            <AnimatedButton icon='audiotrack' onClick={toggleAudio} toggle={isPlaying} />
+            <AnimatedButton icon='audiotrack' onClick={toggleSound} toggle={isPlaying} disable={isLoading} />
             <AnimatedButton
-              icon={isLoading ? 'loop' : isRecording ? 'stop' : 'mic'}
+              icon={isAssessing ? 'loop' : isRecording ? 'stop' : 'mic'}
               onClick={toggleRecording}
-              toggle={!isPlaying}
+              toggle={isRecording}
             />
             <AnimatedButton icon='star' />
           </View>
