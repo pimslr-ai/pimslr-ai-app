@@ -7,6 +7,7 @@ import { RouteProp } from '@react-navigation/native'
 type RootStackParamList = {
   dashboard: undefined
   course: undefined
+  onboarding: undefined
 }
 
 export type Screens = keyof RootStackParamList
