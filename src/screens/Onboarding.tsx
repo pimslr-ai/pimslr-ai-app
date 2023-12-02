@@ -147,7 +147,7 @@ export default () => {
                 multiline
                 style={styles.input}
                 placeholder='I am fascinated by fising...'
-                onChange={console.log}
+                onChange={input => setInterests([input])}
               />
             )}
 
