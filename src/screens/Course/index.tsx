@@ -121,7 +121,7 @@ export default () => {
             <AnimatedButton
               icon={isAssessing ? 'loop' : isRecording ? 'stop' : 'mic'}
               onClick={toggleRecording}
-              toggle={isRecording}
+              toggle={!isPlaying}
             />
             <AnimatedButton icon='star' />
           </View>
