@@ -64,6 +64,12 @@ export default () => {
     }
   }, [sentences, pageIndex])
 
+  useEffect(() => {
+    if (isReady) {
+      toggleSound()
+    }
+  }, [isReady])
+
   return (
     <ScreenView>
       <ConfettiCannon ref={setCannon} />
