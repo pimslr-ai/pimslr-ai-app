@@ -1,9 +1,9 @@
 import { ViewStyle, TouchableOpacity, View, StyleSheet, Text } from 'react-native'
 import { useNavigation } from '../..'
-import { FONTS } from '../../../constants'
+import { FONTS, LANGUAGES } from '../../../constants'
 import { Course } from '../../../types'
 
-export default (course: Course) => {
+export default ({ course }: { course: Course }) => {
   const navigation = useNavigation()
   const backgroundCards = new Array(3).fill(null)
 
@@ -31,11 +31,11 @@ export default (course: Course) => {
   })
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('course:home')} style={styles.container}>
+    <TouchableOpacity onPress={() => navigation.navigate('course')} style={styles.container}>
       <View style={styles.courseCard}>
         <Text style={styles.courseTitle}>{course.title}</Text>
         <View style={styles.courseDetails}>
-          <Text style={styles.tag}>{course.language}</Text>
+          <Text style={styles.tag}>{LANGUAGES.filter(l => l.value === course.language)[0].label}</Text>
           <Text style={styles.tag}>85% native speaking</Text>
           <Text style={styles.tag}>6/10 completed</Text>
         </View>
