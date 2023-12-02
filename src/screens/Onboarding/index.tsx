@@ -1,5 +1,5 @@
 import { INTERESTS, LANGUAGES, LEVELS } from '../../constants'
-import { View, Text, ScrollView, TouchableOpacity, Animated } from 'react-native'
+import { View, Text, ScrollView, Animated } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import { styles } from './styles'
 import PrimaryButton from '../../components/PrimaryButton'
@@ -9,6 +9,7 @@ import ScreenView from '../../components/ScreenView'
 import Dropdown from '../../components/Dropdown'
 import InteractiveInput from '../../components/InteractiveInput'
 import useCourseGeneration from '../../hooks/useCourseGeneration'
+import Tag from './components/Tag'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
@@ -182,41 +183,6 @@ export default () => {
         />
       </View>
     </ScreenView>
-  )
-}
-
-const Tag = ({
-  label,
-  onToggleOn,
-  onToggleOff,
-}: {
-  label: string
-  onToggleOn?: (label: string) => void
-  onToggleOff?: (label: string) => void
-}) => {
-  const [toggle, setToggled] = useState<boolean>()
-
-  const style = toggle
-    ? {
-        ...styles.tag,
-        ...styles.tagActive,
-      }
-    : styles.tag
-
-  const handleToggle = () => {
-    if (toggle) {
-      setToggled(false)
-      onToggleOff!(label)
-    } else {
-      setToggled(true)
-      onToggleOn!(label)
-    }
-  }
-
-  return (
-    <TouchableOpacity onPress={handleToggle}>
-      <Text style={style}>{label}</Text>
-    </TouchableOpacity>
   )
 }
 
