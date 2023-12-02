@@ -73,7 +73,7 @@ const textInputStyle = (borderColor: any): TextStyle => ({
   borderWidth: 2,
   borderRadius: 16,
   borderColor: borderColor,
-  backgroundColor: 'rgba(0, 0, 0, 0.07)',
+  backgroundColor: 'white',
   fontFamily: FONTS.POPPINS.MEDIUM,
   fontSize: 16,
 })
