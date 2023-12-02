@@ -4,11 +4,12 @@ import { Assessment } from '../types'
 import { assessAudio } from '../clients/pronunciation'
 import useMicrophone from './useMicrophone'
 
-export default (language: string, reference: string) => {
+export default (language: string) => {
   const { toggleRecording, startRecording, stopRecording, isRecording, recording } = useMicrophone()
   const [assessment, setAssessment] = useState<Assessment | null>()
   const [isAssessing, setIsAssessing] = useState(false)
   const [hasFailed, setHasFailed] = useState(false)
+  const [reference, setReference] = useState('')
 
   useEffect(() => {
     if (recording) {
@@ -30,6 +31,7 @@ export default (language: string, reference: string) => {
   }
 
   return {
+    setReference,
     toggleRecording,
     startRecording,
     stopRecording,
