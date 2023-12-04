@@ -28,7 +28,7 @@ export default () => {
     console.log('Loading sound...')
     setIsPlaying(false)
     setIsLoading(true)
-    const temporaryFile = `${cacheDirectory}_voice.m4a`
+    const temporaryFile = `${cacheDirectory}_voice.mp3`
     await writeAsStringAsync(temporaryFile, base64, { encoding: 'base64' })
     await sound.unloadAsync()
     await sound.loadAsync({ uri: temporaryFile })

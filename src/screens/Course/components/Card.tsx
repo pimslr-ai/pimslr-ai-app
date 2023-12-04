@@ -1,4 +1,4 @@
-import { FONTS } from '../../../constants'
+import { FONTS, THEME } from '../../../constants'
 import { View, Text, StyleSheet } from 'react-native'
 import { Sentence } from '../../../types'
 import { Dimensions } from 'react-native'
@@ -49,11 +49,13 @@ const styles = StyleSheet.create({
     fontFamily: FONTS.POPPINS.BOLD,
     fontSize: 20,
     marginBottom: 24,
+    color: THEME.COLOR_ALT,
   },
   original: {
     textAlign: 'center',
     fontFamily: FONTS.POPPINS.REGULAR,
     fontSize: 16,
     opacity: 0.5,
+    color: THEME.COLOR_ALT,
   },
 })

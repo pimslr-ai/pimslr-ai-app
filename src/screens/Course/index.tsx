@@ -70,16 +70,16 @@ export default () => {
   useEffect(() => {
     if (sentences) {
       const currentSentence = sentences[pageIndex]
-      setReference(currentSentence.english)
+      setReference(currentSentence.sentence)
       loadSound(currentSentence.voice.audio)
     }
   }, [sentences, pageIndex])
 
-  // useEffect(() => {
-  //   if (isReady) {
-  //     setTimeout(toggleSound, 250)
-  //   }
-  // }, [isReady])
+  useEffect(() => {
+    if (isReady) {
+      setTimeout(toggleSound, 250)
+    }
+  }, [isReady])
 
   return (
     <ScreenView>

@@ -58,5 +58,6 @@ const styles = StyleSheet.create({
     marginLeft: 16,
     fontSize: 20,
     fontFamily: FONTS.POPPINS.SEMI_BOLD,
+    color: THEME.COLOR_ALT,
   },
 })

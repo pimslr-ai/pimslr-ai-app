@@ -28,7 +28,7 @@ export const styles = StyleSheet.create({
     marginTop: 50,
   },
   title: {
-    color: THEME.COLOR,
+    color: THEME.COLOR_ALT,
     fontFamily: FONTS.POPPINS.BOLD,
     fontSize: 27,
     textAlign: 'center',

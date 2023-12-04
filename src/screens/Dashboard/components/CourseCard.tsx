@@ -74,6 +74,7 @@ const styles = StyleSheet.create({
   courseTitle: {
     fontSize: 24,
     fontFamily: FONTS.POPPINS.BOLD,
+    color: THEME.COLOR_ALT,
     textAlign: 'center',
   },
   courseDate: {
