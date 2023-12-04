@@ -17,11 +17,13 @@ export default (language: string) => {
       setIsAssessing(true)
       assessSpeech(recording)
         .then(setAssessment)
-        .catch(() => setIsAssessing(true))
+        .catch(() => setHasFailed(true))
         .finally(() => deleteAsync(recording))
-      setIsAssessing(false)
+        .finally(() => setIsAssessing(false))
     }
   }, [recording])
+
+  console.log(isAssessing)
 
   const assessSpeech = async (recording: string) => {
     if (language && reference) {
