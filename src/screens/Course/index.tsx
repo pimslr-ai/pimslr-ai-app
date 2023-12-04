@@ -1,9 +1,8 @@
 import { useEffect, useRef, useState } from 'react'
 import { View, Text } from 'react-native'
-import { Sentence } from '../../types'
+import { Course, Sentence } from '../../types'
 import { styles } from './style'
-import { useNavigation } from '../'
-import { course } from './test'
+import { useNavigation, useParams } from '../'
 import Card from './components/Card'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
@@ -13,14 +12,20 @@ import AnimatedButton from './components/AnimatedButton'
 import useAudio from '../../hooks/useAudio'
 import usePronunciation from '../../hooks/usePronunciation'
 import HorizontalPageView, { HorizontalPageViewRef } from '../../components/HorizontalPageView'
+import { useCourses } from '../../contexts/CourseProvider'
 
 export default () => {
   const navigation = useNavigation()
-  const [cannon, setCannon] = useState<ConfettiCannon | null>()
+  const { id } = useParams('course')
+  const { get } = useCourses()
+
   const [isReady, setIsReady] = useState(false)
   const [sentences, setSentences] = useState<Sentence[]>()
-  const [pageIndex, setPageIndex] = useState(0)
+
   const pageView = useRef<HorizontalPageViewRef>(null)
+  const [pageIndex, setPageIndex] = useState(0)
+  const [cannon, setCannon] = useState<ConfettiCannon | null>()
+  const [course, setCourse] = useState<Course>()
 
   // prettier-ignore
   const { 
@@ -36,7 +41,7 @@ export default () => {
     isRecording, 
     isAssessing,
     assessment 
-  } = usePronunciation(course.language)
+  } = usePronunciation(course?.language!)
 
   // prettier-ignore
   const isStateBlocked = [
@@ -46,15 +51,21 @@ export default () => {
     isLoading].some(s => s)
 
   useEffect(() => {
+    setCourse(get(id))
+  }, [])
+
+  useEffect(() => {
+    if (course) {
+      // @ts-ignore
+      setSentences(course[course.currentLevel as string])
+    }
+  }, [course])
+
+  useEffect(() => {
     if (assessment) {
       console.log(JSON.stringify(assessment, null, 2))
     }
   }, [assessment])
-
-  useEffect(() => {
-    // @ts-ignore
-    setSentences(course[course.currentLevel as string])
-  }, [])
 
   useEffect(() => {
     if (sentences) {
@@ -64,11 +75,11 @@ export default () => {
     }
   }, [sentences, pageIndex])
 
-  useEffect(() => {
-    if (isReady) {
-      setTimeout(toggleSound, 250)
-    }
-  }, [isReady])
+  // useEffect(() => {
+  //   if (isReady) {
+  //     setTimeout(toggleSound, 250)
+  //   }
+  // }, [isReady])
 
   return (
     <ScreenView>
@@ -83,7 +94,7 @@ export default () => {
           />
         </View>
 
-        <Text style={styles.title}>{course.title}</Text>
+        <Text style={styles.title}>{course?.title}</Text>
 
         <View>
           <HorizontalPageView ref={pageView} onPageTurn={setPageIndex}>

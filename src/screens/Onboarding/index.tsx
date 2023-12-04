@@ -9,8 +9,9 @@ import PageView from '../../components/PageView'
 import ScreenView from '../../components/ScreenView'
 import Dropdown from '../../components/Dropdown'
 import InteractiveInput from '../../components/InteractiveInput'
-import useCourseGeneration from '../../hooks/useCourseGeneration'
 import Tag from './components/Tag'
+import { useCourses } from '../../contexts/CourseProvider'
+import { Level } from '../../types'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
@@ -20,9 +21,13 @@ export default () => {
   const [skippable, setSkippable] = useState(true)
   const [pageCompleted, setPageCompleted] = useState(false)
 
+  const [language, setLanguage] = useState<string>()
+  const [level, setLevel] = useState<Level>()
   const [interests, setInterests] = useState<string[]>([])
+  const [topic, setTopic] = useState<string>()
   const [freetextEnabled, enableFreetext] = useState(false)
-  const { info, setInfo, generate, status, course } = useCourseGeneration()
+
+  const { status, generate } = useCourses()
 
   const animation = useRef(new Animated.Value(0)).current
 
@@ -30,39 +35,48 @@ export default () => {
     switch (pageNumber) {
       case 1:
         setSkippable(false)
-        setPageCompleted(!!info.language)
+        setPageCompleted(!!language)
         break
       case 2:
         setSkippable(false)
-        setPageCompleted(!!info.level)
+        setPageCompleted(!!level)
         break
       case 3:
         setSkippable(false)
-        setPageCompleted(interests.length > 3 || (freetextEnabled && interests.length > 0) || !!info.topic)
+        setPageCompleted((!freetextEnabled && interests.length >= 3) || (freetextEnabled && !!topic))
         break
       case 4:
-        generate()
+        const i = Math.floor(Math.random() * interests.length)
+        const randomInterest = interests[i]
+        generate(language!, level!, topic ?? randomInterest)
         break
     }
   }, [pageNumber])
 
   useEffect(() => {
-    setPageCompleted(!!info.language)
-  }, [info.language])
+    setPageCompleted(!!language)
+  }, [language])
 
   useEffect(() => {
-    info.level ? showExplanations() : hideExplanations()
-    setPageCompleted(!!info.level)
-  }, [info.level])
+    level ? showExplanations() : hideExplanations()
+    setPageCompleted(!!level)
+  }, [level])
 
   useEffect(() => {
-    if (interests.length) {
-      const i = Math.floor(Math.random() * interests.length)
-      const topic = interests[i]
-      setInfo(info => ({ ...info, topic }))
-    }
-    setPageCompleted(interests.length > 3 || (freetextEnabled && interests.length > 0) || !!info.topic)
+    setPageCompleted(!freetextEnabled && interests.length >= 3)
   }, [interests])
+
+  useEffect(() => {
+    setPageCompleted(freetextEnabled && !!topic)
+  }, [topic])
+
+  useEffect(() => {
+    if (freetextEnabled) {
+      setInterests([])
+    } else {
+      setTopic(undefined)
+    }
+  }, [freetextEnabled])
 
   const showExplanations = () => {
     Animated.timing(animation, {
@@ -102,7 +116,7 @@ export default () => {
               containerStyle={styles.dropdown}
               items={LANGUAGES}
               label='Select a language'
-              onSelection={language => setInfo(info => ({ ...info, language }))}
+              onSelection={setLanguage}
             />
           </View>
 
@@ -114,13 +128,11 @@ export default () => {
               containerStyle={styles.dropdown}
               items={LEVELS.map(l => ({ label: capitalize(l.name), value: l.name }))}
               label='Select prefered level'
-              onSelection={level => setInfo(info => ({ ...info, level }))}
+              onSelection={setLevel}
             />
 
             <AnimatedView style={[styles.explanationsContainer, { opacity: animation }]}>
-              <Text style={styles.explanations}>
-                {LEVELS.filter(l => l.name === info.level)[0]?.descriptions}
-              </Text>
+              <Text style={styles.explanations}>{LEVELS.filter(l => l.name === level)[0]?.descriptions}</Text>
             </AnimatedView>
           </View>
 
@@ -152,7 +164,7 @@ export default () => {
                 multiline
                 style={styles.input}
                 placeholder='I am fascinated by fising...'
-                onChange={input => setInterests([input])}
+                onChange={setTopic}
               />
             )}
 

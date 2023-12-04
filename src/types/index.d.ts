@@ -1,6 +1,7 @@
 export type Level = 'beginning' | 'intermediate' | 'advanced'
 
 export interface Course {
+  id: string
   title: string
   language: string
   currentLevel: Level

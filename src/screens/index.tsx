@@ -6,7 +6,7 @@ import { RouteProp } from '@react-navigation/native'
 
 type RootStackParamList = {
   dashboard: undefined
-  course: undefined
+  course: { id: string }
   onboarding: undefined
 }
 

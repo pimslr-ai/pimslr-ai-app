@@ -1,6 +1,6 @@
 import { ViewStyle, TouchableOpacity, View, StyleSheet, Text } from 'react-native'
 import { useNavigation } from '../..'
-import { FONTS, LANGUAGES } from '../../../constants'
+import { FONTS, LANGUAGES, THEME } from '../../../constants'
 import { Course } from '../../../types'
 
 export default ({ course }: { course: Course }) => {
@@ -21,8 +21,8 @@ export default ({ course }: { course: Course }) => {
   const backgroundCardStyle = (index: number): ViewStyle => ({
     width: '100%',
     height: '100%',
-    backgroundColor: `lightgrey`,
-    opacity: 0.25 * (index + 1),
+    backgroundColor: THEME.CTA,
+    opacity: 0.1 * (index + 1),
     transform: [{ rotateZ: `${getRandom([7, 6, 5, 4, -4, -5, -6, -7])}deg` }],
     margin: 20,
     position: 'absolute',
@@ -31,7 +31,10 @@ export default ({ course }: { course: Course }) => {
   })
 
   return (
-    <TouchableOpacity onPress={() => navigation.navigate('course')} style={styles.container}>
+    <TouchableOpacity
+      onPress={() => navigation.navigate('course', { id: course.id })}
+      style={styles.container}
+    >
       <View style={styles.courseCard}>
         <Text style={styles.courseTitle}>{course.title}</Text>
         <View style={styles.courseDetails}>
