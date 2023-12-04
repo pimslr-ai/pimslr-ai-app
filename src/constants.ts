@@ -29,17 +29,10 @@ const FONTS = {
   },
 }
 
-const DATA = {
-  SETUP_COMPLETE: 'onboarding:complete',
-  USER_DATA: 'data:preferences',
-  COURSES: 'data:courses',
-  SCENARIOS: 'data:scenarios',
-}
-
 // Inner joined list of support languages between
 // Azure Speech Assessment API and Narakeet TTS API
 const LANGUAGES = [
-  { label: 'German (Germany)', value: 'de-DE' },
+  { label: 'German', value: 'de-DE' },
   { label: 'Tamil (India)', value: 'ta-IN1' },
   { label: 'Arabic (Saudi Arabia)', value: 'ar-SA' },
   { label: 'French (Canada)', value: 'fr-CA' },
