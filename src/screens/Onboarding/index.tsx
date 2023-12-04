@@ -11,11 +11,13 @@ import Dropdown from '../../components/Dropdown'
 import InteractiveInput from '../../components/InteractiveInput'
 import Tag from './components/Tag'
 import { useCourses } from '../../contexts/CourseProvider'
-import { Level } from '../../types'
+import { Course, Level } from '../../types'
+import { useNavigation } from '..'
 
 const AnimatedView = Animated.createAnimatedComponent(View)
 
 export default () => {
+  const navigation = useNavigation()
   const [pageNumber, setPageNumber] = useState<number>(1)
   const [pageView, setPageView] = useState<PageView | null>()
   const [skippable, setSkippable] = useState(true)
@@ -28,6 +30,7 @@ export default () => {
   const [freetextEnabled, enableFreetext] = useState(false)
 
   const { status, generate } = useCourses()
+  const [course, setCourse] = useState<Course>()
 
   const animation = useRef(new Animated.Value(0)).current
 
@@ -48,10 +51,16 @@ export default () => {
       case 4:
         const i = Math.floor(Math.random() * interests.length)
         const randomInterest = interests[i]
-        generate(language!, level!, topic ?? randomInterest)
+        generate(language!, level!, topic ?? randomInterest).then(setCourse)
         break
     }
   }, [pageNumber])
+
+  useEffect(() => {
+    if (course) {
+      navigation.navigate('course', { id: course.id })
+    }
+  }, [course])
 
   useEffect(() => {
     setPageCompleted(!!language)
