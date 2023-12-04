@@ -1,7 +1,8 @@
-import { INTERESTS, LANGUAGES, LEVELS } from '../../constants'
+import { INTERESTS, LANGUAGES, LEVELS, THEME } from '../../constants'
 import { View, Text, ScrollView, Animated } from 'react-native'
 import { useEffect, useRef, useState } from 'react'
 import { styles } from './styles'
+import { PulseIndicator } from 'react-native-indicators'
 import PrimaryButton from '../../components/PrimaryButton'
 import SecondaryButton from '../../components/SecondaryButton'
 import PageView from '../../components/PageView'
@@ -37,13 +38,10 @@ export default () => {
         break
       case 3:
         setSkippable(false)
-        setPageCompleted(interests.length > 2 || (freetextEnabled && interests.length > 0))
+        setPageCompleted(interests.length > 3 || (freetextEnabled && interests.length > 0) || !!info.topic)
         break
       case 4:
-        setSkippable(false)
-        const i = Math.floor(Math.random() * interests.length)
-        const topic = interests[i]
-        setInfo(info => ({ ...info, topic }))
+        generate()
         break
     }
   }, [pageNumber])
@@ -58,7 +56,12 @@ export default () => {
   }, [info.level])
 
   useEffect(() => {
-    setPageCompleted(interests.length > 2 || (freetextEnabled && interests.length > 0))
+    if (interests.length) {
+      const i = Math.floor(Math.random() * interests.length)
+      const topic = interests[i]
+      setInfo(info => ({ ...info, topic }))
+    }
+    setPageCompleted(interests.length > 3 || (freetextEnabled && interests.length > 0) || !!info.topic)
   }, [interests])
 
   const showExplanations = () => {
@@ -77,15 +80,15 @@ export default () => {
     }).start()
   }
 
-  const handleClick = () => {
-    pageNumber === 4 ? generate() : pageView?.turnNext()
-  }
-
   return (
     <ScreenView>
       <View style={styles.container}>
         <View style={styles.header}>
-          <SecondaryButton hide={pageNumber <= 1} label='Back' onClick={pageView?.turnPrevious} />
+          <SecondaryButton
+            hide={pageNumber <= 1 || pageNumber > 3}
+            label='Back'
+            onClick={pageView?.turnPrevious}
+          />
           <Text style={styles.headerTitle}>{pageNumber}/4</Text>
           <SecondaryButton label='Skip' noticeMe hide={!skippable} onClick={pageView?.turnNext} />
         </View>
@@ -162,24 +165,27 @@ export default () => {
           </View>
 
           <View>
-            <Text style={styles.title}>Generate course</Text>
-            <Text style={styles.subtitle}>Generate your very first course unique to your interests.</Text>
-
-            <View style={{ justifyContent: 'center' }}>
-              <Text>
-                {status.stage?.step}/{status?.stage?.count}: {status?.isLoading && status.stage?.label}
-              </Text>
-              <Text>{course && JSON.stringify(course, null, 2)}</Text>
-            </View>
+            <Text style={styles.title}>{status.isLoading ? status.stage?.label : 'Generate course'} </Text>
+            <Text style={styles.subtitle}>Generating your very first course unique to your interests.</Text>
+            {status.isLoading && (
+              <>
+                <Text style={[styles.subtitle, { marginTop: 10 }]}>
+                  {status.stage?.step} / {status.stage?.count}
+                </Text>
+                <PulseIndicator style={styles.loadingIndicator} color={THEME.CTA} />
+              </>
+            )}
           </View>
         </PageView>
 
-        <PrimaryButton
-          disable={status.isLoading || (pageNumber === 4 ? false : !pageCompleted)}
-          label={pageNumber === 4 ? 'Generate course' : 'Next'}
-          containerStyle={styles.button}
-          onClick={handleClick}
-        />
+        {pageNumber < 4 && (
+          <PrimaryButton
+            disable={!pageCompleted}
+            label={pageNumber === 3 ? 'Generate course' : 'Next'}
+            containerStyle={styles.button}
+            onClick={pageView?.turnNext}
+          />
+        )}
       </View>
     </ScreenView>
   )

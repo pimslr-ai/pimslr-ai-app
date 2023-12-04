@@ -102,4 +102,31 @@ export const styles = StyleSheet.create({
     marginHorizontal: 'auto',
     padding: 32,
   },
+  loadingContainer: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: 32,
+    gap: 20,
+  },
+  stageLabel: {
+    fontSize: 18,
+    fontFamily: FONTS.POPPINS.MEDIUM,
+    color: THEME.COLOR,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  stageStep: {
+    fontSize: 16,
+    fontFamily: FONTS.POPPINS.REGULAR,
+    color: THEME.COLOR,
+    alignSelf: 'center',
+    textAlign: 'center',
+  },
+  loadingIndicator: {
+    opacity: 0.8,
+    justifyContent: 'center',
+    alignContent: 'center',
+    padding: 64,
+    transform: [{ scale: 2 }],
+  },
 })
