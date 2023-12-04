@@ -14,7 +14,7 @@ export default ({ name, extra, extraRedirection, children }: SectionViewProps) =
   const navigation = useNavigation()
 
   const handleRedirection = () => {
-    console.log('press...')
+    navigation.navigate('onboarding')
   }
 
   return (
@@ -25,7 +25,7 @@ export default ({ name, extra, extraRedirection, children }: SectionViewProps) =
           <Button
             labelFirst
             label={extra}
-            labelStyle={{ color: THEME.CTA, fontSize: 12, fontFamily: FONTS.POPPINS.MEDIUM }}
+            labelStyle={{ color: THEME.COLOR_ALT, fontSize: 12, fontFamily: FONTS.POPPINS.MEDIUM }}
             onClick={handleRedirection}
           />
         </View>

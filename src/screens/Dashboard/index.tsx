@@ -14,10 +14,9 @@ export default () => {
       <ScrollView showsHorizontalScrollIndicator={false} showsVerticalScrollIndicator={false}>
         <View style={styles.header}>
           <Logo />
-          {/* <Button icon='settings' label='Settings' /> */}
         </View>
 
-        <SectionView name='Courses'>
+        <SectionView name='Courses' extra='Add new'>
           <View style={{ padding: 16, gap: 16 }}>
             {courses?.map(course => (
               <CourseCard key={course.id} course={course} />
