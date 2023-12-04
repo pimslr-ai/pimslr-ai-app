@@ -1,5 +1,3 @@
-import { Course } from './types'
-
 const THEME = {
   BACKGROUND: '#f6f5fa',
   COLOR: '#001524',
