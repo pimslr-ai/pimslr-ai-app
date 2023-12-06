@@ -7,6 +7,5 @@ export const assessWithReference = async (
 ): Promise<AssessmentResult> => {
   const url = 'https://pimslrai.greffchandler.net/speech/assess/' + language
   const response = await axios.post<AssessmentResult>(url, { audio, reference })
-  console.log(response.data)
   return response.data
 }
