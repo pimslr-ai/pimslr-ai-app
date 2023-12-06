@@ -1,5 +1,20 @@
 import { useEffect, useState } from 'react'
 import { Audio } from 'expo-av'
+import { RecordingOptions, AndroidOutputFormat, IOSOutputFormat } from 'expo-av/build/Audio'
+
+const recordingOptions: RecordingOptions = {
+  ...Audio.RecordingOptionsPresets.HIGH_QUALITY,
+  android: {
+    ...Audio.RecordingOptionsPresets.HIGH_QUALITY.android,
+    extension: '.wav',
+    outputFormat: AndroidOutputFormat.DEFAULT,
+  },
+  ios: {
+    ...Audio.RecordingOptionsPresets.HIGH_QUALITY.ios,
+    extension: '.wav',
+    outputFormat: IOSOutputFormat.LINEARPCM,
+  },
+}
 
 export default () => {
   const [state, setState] = useState<{
@@ -14,7 +29,7 @@ export default () => {
   const startRecording = async () => {
     if (!state.recording) {
       await Audio.setAudioModeAsync({ allowsRecordingIOS: true, playsInSilentModeIOS: true })
-      const { recording } = await Audio.Recording.createAsync(Audio.RecordingOptionsPresets.HIGH_QUALITY)
+      const { recording } = await Audio.Recording.createAsync(recordingOptions)
       setState({ recording, uri: undefined })
     }
   }
