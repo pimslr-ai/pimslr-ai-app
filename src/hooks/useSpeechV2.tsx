@@ -7,25 +7,23 @@ export default (language: string, reference: string) => {
   const { startRecording, stopRecording, audioRecording, isRecording } = useMic()
   const [state, setState] = useState<{
     isLoading: boolean
-    assessement?: AssessmentResult | undefined
+    assessment?: AssessmentResult | undefined
     hasFailed?: boolean
   }>({ isLoading: false, hasFailed: false })
 
   useEffect(() => {
     if (audioRecording) {
-      setState({ assessement: undefined, isLoading: true })
+      setState({ assessment: undefined, isLoading: true })
 
       assessSpeech(audioRecording)
-        .then(data => setState({ assessement: data, isLoading: false, hasFailed: data === null }))
+        .then(data => setState({ assessment: data, isLoading: false, hasFailed: data === null }))
         .finally(() => FileSystem.deleteAsync(audioRecording!))
     }
   }, [audioRecording])
 
   const assessSpeech = async (audioFile: string) => {
     if (language && reference) {
-      const audio = await FileSystem.readAsStringAsync(audioFile, {
-        encoding: FileSystem.EncodingType.Base64,
-      })
+      const audio = await FileSystem.readAsStringAsync(audioFile, { encoding: 'base64' })
       return await assessWithReference(language, reference, audio)
     }
   }
@@ -35,7 +33,7 @@ export default (language: string, reference: string) => {
     stopRecording,
     isRecording,
     isLoading: state.isLoading,
-    assessement: state.assessement,
+    assessment: state.assessment,
     hasFailed: state.hasFailed,
   }
 }
