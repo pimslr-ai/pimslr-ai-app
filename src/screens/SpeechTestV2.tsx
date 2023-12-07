@@ -7,7 +7,6 @@ import {
   TouchableOpacity,
   Dimensions,
   TextInput,
-  TextStyle,
   ColorValue,
   TextProps,
   NativeSyntheticEvent,
@@ -23,7 +22,6 @@ const screen = Dimensions.get('screen')
 
 export default () => {
   const navigation = useNavigation()
-
   const [language, setLanguage] = useState<string | undefined>()
   const [reference, setReference] = useState<string | undefined>()
   // prettier-ignore
@@ -37,13 +35,12 @@ export default () => {
   } = useSpeech(language!, reference!)
 
   const [colors, setColors] = useState<string[]>([])
-  const [lines, setLines] = useState<string[]>([])
-  const [layoutReceived, setLayoutReceived] = useState(false)
 
   useEffect(() => {
     if (assessment) {
       assessment.words.forEach(word => {
         word.syllables.forEach(syllable => {
+          console.log(JSON.stringify(syllable, null, 2))
           const candidate = toColor(syllable.accuracyScore)
           const colors = Array.from({ length: syllable.syllable.length }, () => candidate)
           setColors(prev => [...prev, ...colors])
@@ -63,32 +60,6 @@ export default () => {
     const index = Math.floor((score / 100) * (gradient.length - 1))
     return gradient[index]
   }
-
-  const handleTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
-    const { lines } = event.nativeEvent
-    setLines(lines.map(line => line.text))
-    setLayoutReceived(true)
-  }
-
-  const totalLength = lines.reduce((acc, line) => {
-    return acc + line.length
-  }, 0)
-
-  const processedLines = lines.map((line, i, lines) => {
-    const startLength = lines.slice(0, i).reduce((acc, item) => acc + item.length, 0) / totalLength
-    const stopLength = startLength + line.length / totalLength
-
-    const startIndex = Math.floor(startLength * colors.length)
-    const stopIndex = Math.floor(stopLength * colors.length)
-
-    const colors_ = colors.slice(startIndex, stopIndex)
-
-    return { line, colors: colors_ }
-  })
-
-  useEffect(() => {
-    setLayoutReceived(false)
-  }, [reference])
 
   return (
     <View style={styles.body}>
@@ -113,36 +84,20 @@ export default () => {
 
       <View style={styles.card}>
         <View style={styles.cardWrapper}>
-          {isRecording ? (
-            <Text style={styles.recongized}>Listening...</Text>
-          ) : isLoading ? (
-            <Text style={styles.recongized}>Loading...</Text>
-          ) : hasFailed ? (
+          {hasFailed ? (
             <Text style={styles.recongized}>Recognition failed...</Text>
           ) : !language ? (
             <Text style={styles.recongized}>Select a language...</Text>
           ) : !reference ? (
             <Text style={styles.recongized}>Enter a reference sentence...</Text>
-          ) : layoutReceived ? (
-            <>
-              {processedLines.map((line, i) => {
-                return (
-                  <GradientText key={i} style={styles.recongized} colors={line.colors}>
-                    {line.line}
-                  </GradientText>
-                )
-              })}
-            </>
           ) : (
-            <Text style={styles.recongized} onTextLayout={handleTextLayout}>
-              {reference}
-            </Text>
+            <MultilineGradientText colors={colors} children={reference} style={styles.recongized} />
           )}
         </View>
       </View>
 
       <TouchableOpacity
-        disabled={!language || !reference}
+        disabled={!language || !reference || isLoading}
         style={styles.button}
         onPress={isRecording ? stopRecording : startRecording}
       >
@@ -151,6 +106,8 @@ export default () => {
             ? 'Select a language'
             : !reference
             ? 'Enter reference text'
+            : isLoading
+            ? 'Loading...'
             : isRecording
             ? 'Stop recording'
             : 'Start recording'}
@@ -169,9 +126,9 @@ interface GradientTextProps extends TextProps {
 }
 
 const GradientText = (props: GradientTextProps) => {
-  const gradient = props.colors?.length
-    ? (props.colors as string[])
-    : [((props?.style as TextStyle).color as string) ?? 'black']
+  const gradient = props.colors && props.colors.length ? (props.colors as string[]) : ['black']
+
+  console.log(props.children, props.colors?.length)
 
   return (
     <MaskedView maskElement={<Text {...props} />}>
@@ -179,6 +136,47 @@ const GradientText = (props: GradientTextProps) => {
         <Text {...props} style={[props.style, { opacity: 0 }]} />
       </LinearGradient>
     </MaskedView>
+  )
+}
+
+interface MultilineGradientTextProps extends GradientTextProps {}
+
+const MultilineGradientText = (props: MultilineGradientTextProps) => {
+  const [isLayoutComputed, setIsLayoutComputed] = useState(false)
+  const [lines, setLines] = useState<string[]>([])
+
+  useEffect(() => {
+    setIsLayoutComputed(false)
+  }, [props.children])
+
+  const totalLength = lines.reduce((acc, line) => acc + line.length, 0)
+
+  const processedLines = lines.map((line, i, lines) => {
+    const startLength = lines.slice(0, i).reduce((acc, item) => acc + item.length, 0) / totalLength
+    const stopLength = startLength + line.length / totalLength
+
+    const startIndex = Math.floor(startLength * props?.colors?.length!)
+    const stopIndex = Math.floor(stopLength * props?.colors?.length!)
+
+    const colors_ = props?.colors?.slice(startIndex, stopIndex)
+
+    return { line, colors: colors_ }
+  })
+
+  const handleTextLayout = (event: NativeSyntheticEvent<TextLayoutEventData>) => {
+    const { lines } = event.nativeEvent
+    setLines(lines.map(line => line.text))
+    setIsLayoutComputed(true)
+  }
+
+  return isLayoutComputed ? (
+    <>
+      {processedLines.map((line, i) => (
+        <GradientText key={line.line} {...props} children={line.line} colors={line.colors} />
+      ))}
+    </>
+  ) : (
+    <Text style={styles.recongized} onTextLayout={handleTextLayout} {...props} />
   )
 }
 
@@ -253,19 +251,3 @@ const styles = StyleSheet.create({
     color: 'black',
   },
 })
-
-function sliceByPercentage(array: any[], startPercentage: number, stopPercentage: number) {
-  if (!Array.isArray(array) || typeof startPercentage !== 'number' || typeof stopPercentage !== 'number') {
-    throw new Error('Invalid input. Please provide a valid array and numeric start/stop percentages.')
-  }
-
-  if (startPercentage < 0 || startPercentage > 1 || stopPercentage < 0 || stopPercentage > 1) {
-    throw new Error('Percentage values must be between 0 and 1.')
-  }
-
-  const totalLength = array.length
-  const startIndex = Math.floor(startPercentage * totalLength)
-  const stopIndex = Math.ceil(stopPercentage * totalLength)
-
-  return array.slice(startIndex, stopIndex)
-}
