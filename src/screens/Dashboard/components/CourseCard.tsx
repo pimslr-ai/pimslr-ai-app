@@ -13,6 +13,11 @@ export default ({ course }: { course: Course }) => {
     return `${datePart} | ${timePart}`
   }
 
+  function capitalize(str: string) {
+    if (str.length === 0) return ''
+    return str.charAt(0).toUpperCase() + str.slice(1)
+  }
+
   function getRandom(arr: number[]) {
     const randomIndex = Math.floor(Math.random() * arr.length)
     return arr[randomIndex]
@@ -30,6 +35,11 @@ export default ({ course }: { course: Course }) => {
     zIndex: -index,
   })
 
+  const sentences = course![course!.currentLevel]
+  const completedSentences = sentences.reduce((acc, s) => acc + (s && s.score ? 1 : 0), 0)
+  const totalScore = sentences.reduce((sum, assessment) => sum + (assessment.score?.accuracyScore || 0), 0)
+  const score = totalScore / sentences.length
+
   return (
     <TouchableOpacity
       onPress={() => navigation.navigate('course', { id: course.id })}
@@ -39,8 +49,11 @@ export default ({ course }: { course: Course }) => {
         <Text style={styles.courseTitle}>{course.title}</Text>
         <View style={styles.courseDetails}>
           <Text style={styles.tag}>{LANGUAGES.filter(l => l.value === course.language)[0].label}</Text>
-          <Text style={styles.tag}>85% native speaking</Text>
-          <Text style={styles.tag}>6/10 completed</Text>
+          <Text style={styles.tag}>{capitalize(course.currentLevel)}</Text>
+          <Text style={styles.tag}>
+            {completedSentences}/{sentences.length} Completed
+          </Text>
+          <Text style={styles.tag}>{Math.round(score * 100)}% Score</Text>
         </View>
       </View>
       {backgroundCards.map((_, i) => (
