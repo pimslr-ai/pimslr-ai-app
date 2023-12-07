@@ -40,7 +40,6 @@ export default () => {
     if (assessment) {
       assessment.words.forEach(word => {
         word.syllables.forEach(syllable => {
-          console.log(JSON.stringify(syllable, null, 2))
           const candidate = toColor(syllable.accuracyScore)
           const colors = Array.from({ length: syllable.syllable.length }, () => candidate)
           setColors(prev => [...prev, ...colors])
@@ -127,8 +126,6 @@ interface GradientTextProps extends TextProps {
 
 const GradientText = (props: GradientTextProps) => {
   const gradient = props.colors && props.colors.length ? (props.colors as string[]) : ['black']
-
-  console.log(props.children, props.colors?.length)
 
   return (
     <MaskedView maskElement={<Text {...props} />}>
