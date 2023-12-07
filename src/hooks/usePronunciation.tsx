@@ -23,8 +23,6 @@ export default (language: string) => {
     }
   }, [recording])
 
-  console.log(isAssessing)
-
   const assessSpeech = async (recording: string) => {
     if (language && reference) {
       const audio = await readAsStringAsync(recording, { encoding: 'base64' })
