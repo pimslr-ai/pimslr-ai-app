@@ -15,11 +15,7 @@ export interface Sentence {
   english: string
   level: Level
   voice: Voice
-  score?: Score
-}
-
-export interface Score {
-  pronunciation: number
+  score?: Assessment
 }
 
 export interface Voice {
