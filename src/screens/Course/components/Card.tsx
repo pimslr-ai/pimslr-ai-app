@@ -2,19 +2,46 @@ import { FONTS, THEME } from '../../../constants'
 import { View, Text, StyleSheet } from 'react-native'
 import { Sentence } from '../../../types'
 import { Dimensions } from 'react-native'
+import MultilineGradientText from '../../../components/MultilineGradientText'
 
 const { width } = Dimensions.get('screen')
 
 interface CardProps {
-  sentence: Partial<Sentence>
+  sentence: Sentence
 }
 
 export default ({ sentence }: CardProps) => {
+  let colors: string[] = []
+
+  const toColor = (score: number) => {
+    const gradient = [
+      'rgb(252, 54, 17)',
+      'rgb(252, 122, 19)',
+      'rgb(247, 169, 40)',
+      'rgb(156, 167, 40)',
+      'rgb(89, 168, 60)',
+    ]
+    const index = Math.floor((score / 100) * (gradient.length - 1))
+    return gradient[index]
+  }
+
+  if (sentence.score) {
+    sentence.score.words.forEach(word => {
+      word.syllables.forEach(syllable => {
+        console.log('SYLLABLE', JSON.stringify(syllable, null, 2))
+        const candidate = toColor(syllable.accuracyScore)
+        const length = syllable.syllable ? syllable.syllable.length : word.word.length
+        const newColors = Array.from({ length }, () => candidate)
+        colors = [...colors, ...newColors]
+      })
+    })
+  }
+
   return (
     <View style={styles.container}>
       <View style={styles.wrapper}>
         <View style={styles.content}>
-          <Text style={styles.translation}>{sentence.sentence}</Text>
+          <MultilineGradientText style={styles.translation} colors={colors} children={sentence.sentence} />
           <Text style={styles.original}>{sentence.english}</Text>
         </View>
       </View>

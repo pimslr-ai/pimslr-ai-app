@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from 'react'
 import { View, Text } from 'react-native'
-import { Course, Sentence } from '../../types'
 import { styles } from './style'
 import { useNavigation, useParams } from '../'
 import Card from './components/Card'
@@ -17,15 +16,16 @@ import { useCourses } from '../../contexts/CourseProvider'
 export default () => {
   const navigation = useNavigation()
   const { id } = useParams('course')
-  const { get } = useCourses()
-
-  const [isReady, setIsReady] = useState(false)
-  const [sentences, setSentences] = useState<Sentence[]>()
+  const { get, update } = useCourses()
 
   const pageView = useRef<HorizontalPageViewRef>(null)
+  const cannon = useRef<ConfettiCannon>(null)
+
+  const [isReady, setIsReady] = useState(false)
   const [pageIndex, setPageIndex] = useState(0)
-  const [cannon, setCannon] = useState<ConfettiCannon | null>()
-  const [course, setCourse] = useState<Course>()
+
+  const course = get(id)
+  const sentences = course![course!.currentLevel]
 
   // prettier-ignore
   const { 
@@ -48,22 +48,13 @@ export default () => {
     isPlaying, 
     isAssessing, 
     isRecording, 
-    isLoading].some(s => s)
+    isLoading].some(Boolean)
 
   useEffect(() => {
-    setCourse(get(id))
-  }, [])
-
-  useEffect(() => {
-    if (course) {
-      // @ts-ignore
-      setSentences(course[course.currentLevel as string])
-    }
-  }, [course])
-
-  useEffect(() => {
-    if (assessment) {
-      console.log(JSON.stringify(assessment, null, 2))
+    if (assessment && assessment.accuracyScore > 80) {
+      cannon?.current?.shoot()
+      course![course!.currentLevel][pageIndex].score = assessment
+      update(course)
     }
   }, [assessment])
 
@@ -71,7 +62,11 @@ export default () => {
     if (sentences) {
       const currentSentence = sentences[pageIndex]
       setReference(currentSentence.sentence)
-      loadSound(currentSentence.voice.audio)
+      loadSound(currentSentence.voice.audio).then(() => {
+        if (isReady) {
+          toggleSound()
+        }
+      })
     }
   }, [sentences, pageIndex])
 
@@ -83,7 +78,7 @@ export default () => {
 
   return (
     <ScreenView>
-      <ConfettiCannon ref={setCannon} />
+      <ConfettiCannon ref={cannon} />
 
       <View style={styles.container}>
         <View style={styles.header}>
