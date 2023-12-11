@@ -53,7 +53,7 @@ export default ({ course }: { course: Course }) => {
           <Text style={styles.tag}>
             {completedSentences}/{sentences.length} Completed
           </Text>
-          <Text style={styles.tag}>{Math.round(score * 100)}% Score</Text>
+          <Text style={styles.tag}>{Math.round(score)}% Score</Text>
         </View>
       </View>
       {backgroundCards.map((_, i) => (

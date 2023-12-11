@@ -47,7 +47,7 @@ export const CourseProvider = ({ children }: PropsWithChildren) => {
     const filtered = courses.filter(c => c.id !== course.id)
     const updated = [...filtered, course]
     setCourses(updated)
-    await AsyncStorage.mergeItem(key, JSON.stringify(updated))
+    await AsyncStorage.setItem(key, JSON.stringify(updated))
   }
 
   const remove = async (course: Course) => {

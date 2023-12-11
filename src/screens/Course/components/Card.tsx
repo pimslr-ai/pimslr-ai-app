@@ -28,7 +28,6 @@ export default ({ sentence }: CardProps) => {
   if (sentence.score) {
     sentence.score.words.forEach(word => {
       word.syllables.forEach(syllable => {
-        console.log('SYLLABLE', JSON.stringify(syllable, null, 2))
         const candidate = toColor(syllable.accuracyScore)
         const length = syllable.syllable ? syllable.syllable.length : word.word.length
         const newColors = Array.from({ length }, () => candidate)

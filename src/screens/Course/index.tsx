@@ -54,7 +54,7 @@ export default () => {
     if (assessment && assessment.accuracyScore > 80) {
       cannon?.current?.shoot()
       course[course.currentLevel][pageIndex].score = assessment
-      // update(course)
+      update(course)
     }
   }, [assessment])
 
