@@ -53,8 +53,8 @@ export default () => {
   useEffect(() => {
     if (assessment && assessment.accuracyScore > 80) {
       cannon?.current?.shoot()
-      course![course!.currentLevel][pageIndex].score = assessment
-      update(course)
+      course[course.currentLevel][pageIndex].score = assessment
+      // update(course)
     }
   }, [assessment])
 

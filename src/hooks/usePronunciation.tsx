@@ -6,7 +6,7 @@ import useMicrophone from './useMicrophone'
 
 export default (language: string) => {
   const { toggleRecording, startRecording, stopRecording, isRecording, recording } = useMicrophone()
-  const [assessment, setAssessment] = useState<Assessment | null>()
+  const [assessment, setAssessment] = useState<Assessment | undefined>()
   const [isAssessing, setIsAssessing] = useState(false)
   const [hasFailed, setHasFailed] = useState(false)
   const [reference, setReference] = useState('')
@@ -15,6 +15,7 @@ export default (language: string) => {
     if (recording) {
       setHasFailed(false)
       setIsAssessing(true)
+      setAssessment(undefined)
       assessSpeech(recording)
         .then(setAssessment)
         .catch(() => setHasFailed(true))
