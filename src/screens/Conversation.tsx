@@ -8,7 +8,7 @@ import SecondaryButton from '../components/SecondaryButton'
 export default () => {
   const navigation = useNavigation()
   const { conversation } = useParams('conversation')
-  const [revealedBubbleIndex, setRevealedBubbleIndex] = useState(10)
+  const [revealedBubbleIndex, setRevealedBubbleIndex] = useState(0)
   const [currentConversation, _] = useState(parseConversation(conversation))
 
   const handleRevealNextBubble = () => {

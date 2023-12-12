@@ -12,7 +12,6 @@ export default () => {
 
   useEffect(() => {
     if (conversation) {
-      console.log(conversation)
       navigation.navigate('conversation', { conversation })
     }
   }, [conversation])
