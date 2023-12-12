@@ -5,8 +5,7 @@ import { useRoute as useRoute_ } from '@react-navigation/native'
 import { RouteProp } from '@react-navigation/native'
 
 type RootStackParamList = {
-  'speech:v1': undefined
-  'speech:v2': undefined
+  'speech': undefined
 }
 
 export type Screens = keyof RootStackParamList

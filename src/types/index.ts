@@ -31,3 +31,9 @@ interface AssessmentResult {
   contentAssessmentResult: null | string
   words: Word[]
 }
+
+interface FeedbackPrompt {
+  lowerPercentage: number,
+  upperPercentage: number,
+  promptPool: string[]
+}

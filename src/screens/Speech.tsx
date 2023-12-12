@@ -1,4 +1,4 @@
-import { FONTS, LANGUAGES, THEME } from '../constants'
+import { FEEDBACK_PROMPTS, FONTS, LANGUAGES, THEME } from '../constants'
 import { useEffect, useState } from 'react'
 import {
   View,
@@ -12,8 +12,7 @@ import {
   NativeSyntheticEvent,
   TextLayoutEventData,
 } from 'react-native'
-import { useNavigation } from '.'
-import useSpeech from '../hooks/useSpeechV2'
+import useSpeech from '../hooks/useSpeech'
 import RNPickerSelect from 'react-native-picker-select'
 import { LinearGradient } from 'expo-linear-gradient'
 import MaskedView from '@react-native-masked-view/masked-view'
@@ -21,7 +20,6 @@ import MaskedView from '@react-native-masked-view/masked-view'
 const screen = Dimensions.get('screen')
 
 export default () => {
-  const navigation = useNavigation()
   const [language, setLanguage] = useState<string | undefined>()
   const [reference, setReference] = useState<string | undefined>()
   // prettier-ignore
@@ -35,6 +33,7 @@ export default () => {
   } = useSpeech(language!, reference!)
 
   const [colors, setColors] = useState<string[]>([])
+  const [feedback, setFeedback] = useState<string | undefined>()
 
   useEffect(() => {
     if (assessment) {
@@ -45,6 +44,8 @@ export default () => {
           setColors(prev => [...prev, ...colors])
         })
       })
+
+      setFeedback(toPrompt(assessment.accuracyScore)!)
     }
   }, [assessment])
 
@@ -58,6 +59,17 @@ export default () => {
     ]
     const index = Math.floor((score / 100) * (gradient.length - 1))
     return gradient[index]
+  }
+
+  const toPrompt = (score: number) => {
+    const matchingPromptItem = FEEDBACK_PROMPTS.find(
+      item => score >= item.lowerPercentage && score <= item.upperPercentage,
+    )
+
+    if (matchingPromptItem) {
+      const randomIndex = Math.floor(Math.random() * matchingPromptItem.promptPool.length)
+      return matchingPromptItem.promptPool[randomIndex]
+    }
   }
 
   return (
@@ -95,6 +107,8 @@ export default () => {
         </View>
       </View>
 
+      {feedback && <Text>{feedback}</Text>}
+
       <TouchableOpacity
         disabled={!language || !reference || isLoading}
         style={styles.button}
@@ -111,10 +125,6 @@ export default () => {
             ? 'Stop recording'
             : 'Start recording'}
         </Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity onPress={() => navigation.navigate('speech:v1')}>
-        <Text style={styles.buttonLabelAlt}>To version 1</Text>
       </TouchableOpacity>
     </View>
   )
