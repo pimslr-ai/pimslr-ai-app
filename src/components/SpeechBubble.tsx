@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { FONTS, THEME } from '../constants'
 
-interface SentenceProps {
+interface SpeechBubbleProps {
   order: number
   sentence: string
   language: string
@@ -10,7 +10,7 @@ interface SentenceProps {
   onReaction?: (reaction: string) => void
 }
 
-export default ({ order, sentence, isVisible = true, onReaction }: SentenceProps) => {
+export default ({ order, sentence, isVisible = true, onReaction }: SpeechBubbleProps) => {
   const [selectedReaction, setSelectedReaction] = useState<string | null>(null)
 
   const handleReactionPress = (reaction: string) => {
@@ -20,21 +20,23 @@ export default ({ order, sentence, isVisible = true, onReaction }: SentenceProps
     }
   }
 
+  const reactions = ['🤩', '🐌', '🤨', '🤢', '🤖']
+
   return isVisible ? (
     <View style={bubble(order).container}>
       <Text style={bubble(order).text}>{sentence}</Text>
       <View style={styles.reactionButtons}>
         {selectedReaction === null && (
           <View style={styles.reactions}>
-            <TouchableOpacity onPress={() => handleReactionPress('😀')} style={styles.reactionButton}>
-              <Text>😀</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleReactionPress('😐')} style={styles.reactionButton}>
-              <Text>😐</Text>
-            </TouchableOpacity>
-            <TouchableOpacity onPress={() => handleReactionPress('🤨')} style={styles.reactionButton}>
-              <Text>🤨</Text>
-            </TouchableOpacity>
+            {reactions.map((reaction, i) => (
+              <TouchableOpacity
+                key={i}
+                onPress={() => handleReactionPress(reaction)}
+                style={styles.reactionButton}
+              >
+                <Text>{reaction}</Text>
+              </TouchableOpacity>
+            ))}
           </View>
         )}
         {selectedReaction && <Text style={styles.selectedReaction}>{selectedReaction}</Text>}

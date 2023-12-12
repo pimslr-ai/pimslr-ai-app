@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { useNavigation, useParams } from '.'
 
-import Sentence from '../components/Sentence'
+import SpeechBubble from '../components/SpeechBubble'
 import SecondaryButton from '../components/SecondaryButton'
 
 export default () => {
@@ -28,7 +28,7 @@ export default () => {
       <ScrollView>
         <View style={styles.conversation}>
           {currentConversation.map((s, index) => (
-            <Sentence
+            <SpeechBubble
               key={s.order}
               {...s}
               isVisible={index <= revealedBubbleIndex}
