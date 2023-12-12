@@ -3,6 +3,7 @@ const THEME = {
   COLOR: '#001524',
   COLOR_ALT: '#0F2C59',
   CTA: '#713ABE',
+  CTA_ALT: 'white',
   ACCENT: '#FF9501',
 }
 
@@ -28,6 +29,45 @@ const FONTS = {
     BLACK_ITALIC: 'Poppins_900Black_Italic',
   },
 }
+
+const LEVEL_CRITERIA = `
+Level 1: Basic Sentences
+Grammar and Syntax:
+Sentences should have correct grammar and basic syntax.
+Simple sentence structures (subject-verb-object).
+Use of common conjunctions (and, but, or).
+Vocabulary:
+Use of common and everyday words.
+Limited use of specialized or complex vocabulary.
+Clarity:
+Clear and straightforward communication.
+Avoidance of ambiguous or convoluted phrasing.
+
+Level 2: Intermediate Sentences
+Grammar and Syntax:
+More varied sentence structures (e.g., compound and complex sentences).
+Correct use of punctuation for emphasis and clarity.
+Proper use of verb tenses and agreement.
+Vocabulary:
+Expanded vocabulary with a mix of common and more advanced words.
+Use of synonyms and varied expressions.
+Clarity:
+Clear communication with the ability to express more nuanced ideas.
+Awareness of context for effective communication.
+
+Level 3: Advanced Sentences
+Grammar and Syntax:
+Mastery of complex sentence structures (e.g., subordinate clauses, participial phrases).
+Skillful use of rhetorical devices (e.g., parallelism, inversion).
+Varied sentence beginnings for stylistic effect.
+Vocabulary:
+Extensive and precise vocabulary.
+Effective use of domain-specific terminology.
+Ability to convey abstract and sophisticated concepts.
+Clarity:
+Clear communication of complex ideas.
+Use of rhetorical strategies to enhance persuasiveness or engagement.
+`
 
 const LANGUAGES = [
   'en-US',
@@ -111,107 +151,4 @@ const LANGUAGES = [
   'be-BY',
 ]
 
-const FEEDBACK_PROMPTS: FeedbackPrompt[] = [
-  {
-    lowerPercentage: 90,
-    upperPercentage: 100,
-    promptPool: [
-      'Excellent pronunciation!',
-      'Mastered it perfectly!',
-      'Flawless pronunciation!',
-      'Impressive! Near perfection!',
-    ],
-  },
-  {
-    lowerPercentage: 80,
-    upperPercentage: 89,
-    promptPool: [
-      'Great job! Pronunciation on point!',
-      'Fantastic work! Nearly perfect!',
-      'Well done! Close to mastering!',
-      'Excelling! Just a bit more!',
-    ],
-  },
-  {
-    lowerPercentage: 70,
-    upperPercentage: 79,
-    promptPool: [
-      'Doing well! Keep refining!',
-      'Good effort! More practice!',
-      'Nice work! Solid and improving!',
-      'Keep it up! Great strides!',
-    ],
-  },
-  {
-    lowerPercentage: 60,
-    upperPercentage: 69,
-    promptPool: [
-      'Getting there! Focus on nuances.',
-      'Nice try! Fine-tuning needed.',
-      'On the right track! Work on it.',
-      'Improvement evident! Keep practicing!',
-    ],
-  },
-  {
-    lowerPercentage: 50,
-    upperPercentage: 59,
-    promptPool: [
-      'A bit more effort!',
-      'Not bad! Keep practicing.',
-      'Making progress! Refine sounds.',
-      'Good start! Consistency pays off.',
-    ],
-  },
-  {
-    lowerPercentage: 40,
-    upperPercentage: 49,
-    promptPool: [
-      'Making progress! Identify challenges.',
-      'Keep it up! Focus on improvement.',
-      'Solid effort! Pinpoint areas.',
-      'On the journey! Consistent practice!',
-    ],
-  },
-  {
-    lowerPercentage: 30,
-    upperPercentage: 39,
-    promptPool: [
-      'Room for improvement. Identify areas.',
-      'Keep practicing! Growth with effort.',
-      'Break it down. Master basics.',
-      'Making strides! Build core skills.',
-    ],
-  },
-  {
-    lowerPercentage: 20,
-    upperPercentage: 29,
-    promptPool: [
-      'Focus on basics. Fundamental sounds.',
-      'A start! Core elements.',
-      'Foundations first! Essential sounds.',
-      'Identify basics! Building blocks.',
-    ],
-  },
-  {
-    lowerPercentage: 10,
-    upperPercentage: 19,
-    promptPool: [
-      'Work to do. Start with basics.',
-      'Keep practicing! Consistency helps.',
-      'Foundational challenges. Step by step.',
-      "Don't be discouraged! Building up.",
-    ],
-  },
-  {
-    lowerPercentage: 0,
-    upperPercentage: 9,
-    promptPool: [
-      'Identified challenges. Start with basics.',
-      "Don't worry, everyone starts. Build up.",
-      'Foundational work. Address issues.',
-      'Beginning! Work together for improvement.',
-    ],
-  },
-]
-
-export { FONTS, THEME, LANGUAGES, FEEDBACK_PROMPTS }
+export { FONTS, THEME, LANGUAGES, LEVEL_CRITERIA }
