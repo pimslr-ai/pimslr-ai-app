@@ -18,9 +18,10 @@ export default () => {
 
   return (
     <View style={styles.body}>
-      {/* <View style={styles.header}>
+      <View style={styles.inputs}>
         <Text style={styles.title}>Learning Companion</Text>
-        <Text style={styles.subtitle}>
+
+        {/* <Text style={styles.subtitle}>
           Get paired with someone learning a language another is native speaking through conversation.
         </Text>
         <Text style={styles.subtitle}>
@@ -28,11 +29,7 @@ export default () => {
         </Text>
         <Text style={styles.subtitle}>
           Follow along the conversation and assess other's speaking by reacting with emojis.
-        </Text>
-      </View> */}
-
-      <View style={styles.inputs}>
-        <Text style={styles.title}>Setup Conversation</Text>
+        </Text> */}
 
         <Text style={styles.subtitle}>
           Get paired with a native speaker and get assess on your pronunciation thru emojis.
