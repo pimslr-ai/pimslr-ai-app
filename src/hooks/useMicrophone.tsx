@@ -24,14 +24,18 @@ export default () => {
   useEffect(() => {
     Audio.requestPermissionsAsync().then(() => {
       Audio.setAudioModeAsync({
-        allowsRecordingIOS: true,
         playsInSilentModeIOS: true,
       })
     })
   }, [])
 
   const startRecording = async () => {
+    console.log('Recording...')
     if (!isRecording) {
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: true,
+        playsInSilentModeIOS: true,
+      })
       setIsRecording(true)
       const recorder = new Audio.Recording()
       await recorder.prepareToRecordAsync(recordingOptions)
@@ -42,18 +46,28 @@ export default () => {
 
   const stopRecording = async () => {
     if (isRecording && recorder) {
+      console.log('Stopping recording...')
       setIsRecording(false)
       setTimeout(async () => {
         await recorder.stopAndUnloadAsync()
         setRecorder(undefined)
         setRecording(recorder.getURI())
       }, 500)
+      await Audio.setAudioModeAsync({
+        allowsRecordingIOS: false,
+        playsInSilentModeIOS: true,
+      })
     }
   }
 
   const toggleRecording = async () => {
     setIsRecording(isRecording => {
       if (isRecording) {
+        console.log('Stopping recording...')
+        Audio.setAudioModeAsync({
+          allowsRecordingIOS: false,
+          playsInSilentModeIOS: true,
+        })
         setRecorder(recorder => {
           setTimeout(() => {
             recorder?.stopAndUnloadAsync().then(() => {
@@ -63,6 +77,11 @@ export default () => {
           return undefined
         })
       } else {
+        console.log('Starting recording...')
+        Audio.setAudioModeAsync({
+          allowsRecordingIOS: true,
+          playsInSilentModeIOS: true,
+        })
         setRecorder(_ => {
           const recorder = new Audio.Recording()
           recorder.prepareToRecordAsync(recordingOptions).then(() => {

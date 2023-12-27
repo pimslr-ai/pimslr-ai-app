@@ -29,19 +29,19 @@ export default () => {
 
   // prettier-ignore
   const { 
-    loadSound, 
-    toggleSound, 
-    isPlaying, 
-    isLoading 
-  } = useAudio()
-  // prettier-ignore
-  const { 
     setReference, 
     toggleRecording, 
     isRecording, 
     isAssessing,
     assessment 
   } = usePronunciation(course?.language!)
+  // prettier-ignore
+  const { 
+    loadSound, 
+    toggleSound, 
+    isPlaying, 
+    isLoading 
+  } = useAudio()
 
   // prettier-ignore
   const isStateBlocked = [

@@ -10,7 +10,6 @@ export default () => {
   useEffect(() => {
     Audio.requestPermissionsAsync().then(() => {
       Audio.setAudioModeAsync({
-        allowsRecordingIOS: false,
         playsInSilentModeIOS: true,
       })
     })

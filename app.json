@@ -1,8 +1,8 @@
 {
   "expo": {
-    "name": "pimslr-ai",
+    "name": "PimslrAI",
     "slug": "pimslr-ai",
-    "version": "0.0.11",
+    "version": "1.0.5",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
