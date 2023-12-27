@@ -15,16 +15,22 @@ export default ({ onSelection, items, label, labelStyle, containerStyle }: Dropd
   const labelStyle_: TextStyle = { ...styles.dropdownLabel, ...labelStyle }
   const containerStyle_: ViewStyle = { ...styles.dropdown, ...containerStyle }
 
+  const handleSelection = (value: string) => {
+    if (onSelection) {
+      onSelection(value)
+    }
+  }
+
   return (
     <RNPickerSelect
-      placeholder={{ label, value: null }}
+      placeholder={{ label, value: '' }}
       style={{
         viewContainer: containerStyle_,
         placeholder: labelStyle_,
         inputIOS: labelStyle_,
         inputAndroid: labelStyle_,
       }}
-      onValueChange={onSelection!}
+      onValueChange={handleSelection}
       items={items}
     />
   )
