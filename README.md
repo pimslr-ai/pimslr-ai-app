@@ -29,3 +29,5 @@ The first iteration of this prototype makes use of [Google Cloud Speech-To-Text]
 This second iteration of the prototype makes use of [Azure's Cognitive Services](https://learn.microsoft.com/en-us/legal/cognitive-services/speech-service/pronunciation-assessment/transparency-note-pronunciation-assessment) for pronunciation assessment. This API provides in-depth assessments of each words down to the syllables of the words, allowing for much greater granularity in score. Please see the [backend](https://github.com/pimslr-ai/language-service) which implements this API for more information. 
 
 Another improvement on the previous prototype is the heatmap; the previous design featured very choppy color separation between words and disregarded punctuation altogether. This design now as proper color blending with linear gradient which also flows over punctuation.
+
+The second iteraction of this prototype was successfully implemented in the final version of the application.
