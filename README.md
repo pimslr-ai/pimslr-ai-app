@@ -1,31 +1,29 @@
 # Pimslr AI
 
-## Pronunciation Assessment Prototype
+## Learning Companion Prototype
 
-This version of the application is a prototype that serves two purposes: to test the **candidate voice recognition API** and to display and **convey pronouciation accuracy** to users.
+This version of the application is a prototype for a feature for a **learning companion**. This prototype came about after spending time looking at the Octalisis framework to introduce gamification features.
 
-In this prototype, the user can select a language to recognize and can record himself spelling words. Recognition is made after the user stops the recording and the pronunciation results are then displayed in the white card. The words spelled out are colored to represent the pronouciation confidence.
+### Existing Qualitites
 
-A big part of the application relies on users being able to know when they make mistakes in how to pronouce words as well as when they pronouce words well. Prior to this prototype, the full sentence was highlighted when a user mispronouced one word which did not properly convey which word was mispronouced.
+Prior to creating this prototype, the existing app was assessed for Octalysis aspects. While a lot of qualities can be assossieted, here are the most prominent ones:
 
-With this prototype, a design for conveying this was made where each word is attributed a color depending on the pronunciation accuracy. Greener colors represent well pronouced words while reder colors, mispronouced ones. The design stemmed from a heatmap-like visualization most people are familiar with. To give perspective, results from native speakers display a completely green color palette while beginners show a lot more red colors.
+**Empowerment** - PimslrAI lets its user's learn a new language. This is after all its main goal. 
 
-### Version 1
+**Ownership** - The courses are unique for each users. They are generated using the user's own interests, choice of language, and level of understanding.
+
+**Accomplishment** - PimslrAI has a basic scoring system that make use of a per-course percentage to track a user's progress. This percentage increments depending on the fluency scores for each sentences uttered. A score of 100% can be interpreted as being native sounding for the sentences uttered.  
+
+### New Feature
+
+Given all the above and the fact that all content on PimslrAI is generated using AI, something I felt was missing was some sort of social interaction that could accompany the language learning process, fitting the Social Influence of the Octalysis framework. 
+
+Originally, the idea of a tug of war in pronunciation was conceptualized where two users compete between each other in pronunciation score of sentences. However, this idea involved competition which may not be the best fit for this application. 
+
+Instead, a new feature was thought of: a learning companion. Pronunciation can be assessed by AI but also by other users. As a native speaker in your own language, you can get paired with another user, native speaking in the language you wish to learn. You along the other user go back and forth in a generated conversation on a topic of your choosing in a similar setting as an instant messaging app. Rate each other's pronunciation using emojis only. Some emojis can convey meaning such as the robot face conveying that your sentences was spoken to robotically or a snail conveying your sentence was too slow, etc.
+
+The video below showcases the prototype:
 
 <div align="center">
-  <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/08d8f023-df04-4827-8a67-6f5c3d00f63e" width="400" />
+  <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/b2acb87c-d58f-4c6e-8557-eef47cfaabe4" width="400" />
 </div>
-
-The first iteration of this prototype makes use of [Google Cloud Speech-To-Text](https://cloud.google.com/speech-to-text?hl=en) API and makes use of the word-level confidence as a measurement for pronunciation score. This prototype was fundamentally flawed as it made use of an ASR model or Automated Speech Recognition model as a source of assessment. ASR models are designed to recognize both well pronunced and mispronunced words from a speaker and certain words could be commonly mispronuced resulting in the ASR model returning high confidence for those words despite mispronuciation.
-
-### Version 2
-
-<div align="center">
-  <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/931ca88c-6bce-4ce1-bca1-5e25256d6b09" width="400" />
-</div>
-
-> Previous version can be accessed within the new prototype still by pressing *To Version 1* and vice versa
-
-This second iteration of the prototype makes use of [Azure's Cognitive Services](https://learn.microsoft.com/en-us/legal/cognitive-services/speech-service/pronunciation-assessment/transparency-note-pronunciation-assessment) for pronunciation assessment. This API provides in-depth assessments of each words down to the syllables of the words, allowing for much greater granularity in score. Please see the [backend](https://github.com/pimslr-ai/language-service) which implements this API for more information. 
-
-Another improvement on the previous prototype is the heatmap; the previous design featured very choppy color separation between words and disregarded punctuation altogether. This design now as proper color blending with linear gradient which also flows over punctuation.
