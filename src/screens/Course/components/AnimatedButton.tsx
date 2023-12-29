@@ -35,11 +35,17 @@ export default ({ icon, onClick, toggle, disable }: AnimatedButtonProps) => {
     }).start()
   }
 
+  const handleClick = () => {
+    if (!disable && onClick) {
+      onClick!()
+    }
+  }
+
   return (
     <Button
       disable={disable}
       icon={icon}
-      onClick={() => (!disable ? onClick!() : null)}
+      onClick={handleClick}
       labelStyle={{ color: toggle ? 'white' : 'grey' }}
       containerStyle={{
         ...styles.courseControlButton,

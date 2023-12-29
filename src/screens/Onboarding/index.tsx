@@ -149,7 +149,7 @@ export default () => {
             <Text style={styles.title}>Tell us about yourself</Text>
             <Text style={styles.subtitle}>
               Get lessons catered to your interests.
-              {freetextEnabled ? 'Write down your interests.' : 'Select at least 3.'}
+              {freetextEnabled ? ' Write down your interests.' : ' Select at least 3.'}
             </Text>
 
             {!freetextEnabled ? (

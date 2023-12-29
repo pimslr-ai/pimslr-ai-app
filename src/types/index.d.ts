@@ -15,6 +15,7 @@ export interface Sentence {
   english: string
   level: Level
   voice: Voice
+  starred?: boolean
   score?: Assessment
 }
 

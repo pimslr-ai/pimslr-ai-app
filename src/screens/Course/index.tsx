@@ -12,6 +12,7 @@ import useAudio from '../../hooks/useAudio'
 import usePronunciation from '../../hooks/usePronunciation'
 import HorizontalPageView, { HorizontalPageViewRef } from '../../components/HorizontalPageView'
 import { useCourses } from '../../contexts/CourseProvider'
+import AnimatedStarButton from './components/AnimatedStarButton'
 
 export default () => {
   const navigation = useNavigation()
@@ -76,6 +77,12 @@ export default () => {
     }
   }, [isReady])
 
+  const handleStarToggle = () => {
+    const isStarred = course[course.currentLevel][pageIndex].starred
+    course[course.currentLevel][pageIndex].starred = !isStarred
+    update(course)
+  }
+
   return (
     <ScreenView>
       <ConfettiCannon ref={cannon} />
@@ -136,7 +143,12 @@ export default () => {
               toggle={!isPlaying}
               disable={isLoading}
             />
-            <AnimatedButton icon='star' disable={isLoading} />
+            <AnimatedStarButton
+              icon='star'
+              disable={isLoading}
+              toggle={sentences[pageIndex].starred}
+              onClick={handleStarToggle}
+            />
           </View>
         )}
       </View>
