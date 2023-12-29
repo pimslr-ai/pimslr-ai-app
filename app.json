@@ -28,6 +28,14 @@
         "projectId": "0198d5ea-e57b-4dac-a697-5bff55527d5f"
       }
     },
-    "owner": "ichandler"
+    "owner": "ichandler",
+    "plugins": [
+      [
+        "expo-av",
+        {
+          "microphonePermission": "PimslrAI will use your microphone to assess your pronunciation and fluency."
+        }
+      ]
+    ]
   }
 }
