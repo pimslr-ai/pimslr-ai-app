@@ -30,4 +30,10 @@ This second iteration of the prototype makes use of [Azure's Cognitive Services]
 
 Another improvement on the previous prototype is the heatmap; the previous design featured very choppy color separation between words and disregarded punctuation altogether. This design now as proper color blending with linear gradient which also flows over punctuation.
 
-The second iteraction of this prototype was successfully implemented in the final version of the application.
+### Implementation
+
+Below is an image showcasing the prototype's implementation in the PimslrAI app:
+
+<div align="center">
+  <img src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/c423e6b6-3542-4090-997e-7ddda87f06d4" width="400" />
+</div>
