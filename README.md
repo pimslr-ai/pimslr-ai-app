@@ -12,5 +12,5 @@
 <br />
 
 <div align="center">
-  <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/233809ab-02fb-4284-b4b4-a21d441efcf9" width="400" />
+  <video src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/59c2c218-3839-469f-9611-1d8a9ed89a42" width="400" />
 </div>
