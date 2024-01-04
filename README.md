@@ -36,6 +36,6 @@ Below is an image displying a heatmap score of the uttered sentence by a learner
   <img src="https://github.com/pimslr-ai/pimslr-ai-app/assets/56337726/c423e6b6-3542-4090-997e-7ddda87f06d4" width="300" />
 </div>
 
-# Prototypes
+## Prototypes
 
 The app was developed in iterations. Some of its prototypes can be found under branches with the `proto` alias.
