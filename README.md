@@ -19,7 +19,7 @@ The app was developed on React Native and is paired with an ASP.NET backend. Mor
 
 The app was made available for download on the [iOS App Store](https://apps.apple.com/nl/app/pimslrai/id6467199290?l=en-GB) and [Android](https://appdistribution.firebase.dev/i/e1d52b48e2500372) through Firebase side loading. 
 
-> ⚠️ If you are reading this after January 2023, the app may no longer be in working condition.
+> ⚠️ If you are reading this after January 2024, the app may no longer be in working condition.
 
 Below is a demo that showcases the current state of the app and its functional features:
 
